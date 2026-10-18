@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ras Beirut Pharmacy | Digital Healthcare Portal</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            200: '#99f6e4',
+                            300: '#5eead4',
+                            400: '#2dd4bf',
+                            500: '#14b8a6', // Primary Turquoise
+                            600: '#0d9488',
+                            700: '#0f766e',
+                            800: '#115e59',
+                            900: '#134e4a',
+                            950: '#042f2e',
+                        },
+                        navy: {
+                            800: '#062c38',
+                            900: '#041d26',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+        .hero-gradient {
+            background: radial-gradient(circle at 90% 10%, rgba(45, 212, 191, 0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 10% 90%, rgba(13, 148, 136, 0.1) 0%, transparent 50%);
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-turq-500 selection:text-white">
+
+    <!-- TOP ANNOUNCEMENT BAR -->
+    <div class="bg-turq-900 text-turq-100 px-4 py-2 text-xs md:text-sm font-medium">
+        <div class="max-w-7xl mx-auto flex flex-wrap justify-between items-center gap-2">
+            <div class="flex items-center space-x-2">
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-turq-500 text-white animate-pulse">
+                    LIVE
+                </span>
+                <span>⚡ Express Delivery active in Hamra, Bliss, Manara & Raouche!</span>
+            </div>
+            <div class="flex items-center space-x-6">
+                <a href="tel:+9611370000" class="hover:text-white flex items-center gap-1 transition">
+                    <i data-lucide="phone" class="w-3.5 h-3.5"></i> +961 1 370 000
+                </a>
+                <a href="#admin" onclick="alert('Admin Panel HTML will be generated in the next step!')" class="text-turq-300 hover:text-white flex items-center gap-1 font-semibold underline">
+                    <i data-lucide="lock" class="w-3.5 h-3.5"></i> Staff Login
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN NAVBAR -->
+    <header class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-turq-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- BRAND LOGO -->
+                <div class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
+                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
+                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
+                    </div>
+                </div>
+
+                <!-- DESKTOP NAVIGATION -->
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-turq-600 font-semibold text-sm">Home</a>
+                    <a href="#digital-services" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
+                    <a href="#catalog" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Products Hub</a>
+                    <a href="#refill" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Auto-Refill</a>
+                    <a href="#about" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Bliss Store</a>
+                </nav>
+
+                <!-- ACTION BUTTONS -->
+                <div class="hidden sm:flex items-center space-x-3">
+                    <button onclick="toggleModal('prescription-modal')" class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-turq-50 text-turq-700 font-semibold text-sm hover:bg-turq-100 border border-turq-200 transition shadow-sm">
+                        <i data-lucide="file-up" class="w-4 h-4 text-turq-600"></i>
+                        Upload RX
+                    </button>
+                    <button onclick="toggleModal('cart-modal')" class="relative p-2.5 rounded-xl bg-slate-100 text-slate-700 hover:bg-turq-50 hover:text-turq-600 transition">
+                        <i data-lucide="shopping-bag" class="w-5 h-5"></i>
+                        <span class="absolute -top-1 -right-1 w-5 h-5 bg-turq-500 text-white rounded-full text-xs font-bold flex items-center justify-center shadow-md">2</span>
+                    </button>
+                </div>
+
+                <!-- MOBILE MENU BUTTON -->
+                <button class="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100">
+                    <i data-lucide="menu" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section id="home" class="relative overflow-hidden hero-gradient pt-12 pb-20 lg:pt-20 lg:pb-28">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <!-- LEFT CONTENT -->
+                <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                    <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-turq-100 text-turq-800 text-xs font-bold tracking-wide uppercase">
+                        <i data-lucide="sparkles" class="w-4 h-4 text-turq-600"></i>
+                        The Future of Care in Ras Beirut
+                    </div>
+
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-none">
+                        Your Trusted Pharmacy, <br class="hidden sm:block"/>
+                        <span class="text-transparent bg-clip-text bg-gradient-to-r from-turq-600 via-turq-500 to-teal-400">
+                            Now Fully Digitized.
+                        </span>
+                    </h1>
+
+                    <p class="text-lg text-slate-600 max-w-2xl mx-auto lg:mx-0 leading-relaxed">
+                        Experience seamless online medication orders, Instant AI prescription scanning, live delivery tracking across Beirut, and direct consultation with your Bliss Street pharmacists.
+                    </p>
+
+                    <!-- QUICK ACTIONS HERO CTA -->
+                    <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-4">
+                        <button onclick="toggleModal('prescription-modal')" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-turq-500 text-white font-bold text-base hover:bg-turq-600 transition shadow-xl shadow-turq-500/25 flex items-center justify-center gap-3">
+                            <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                            Order via Prescription Scan
+                        </button>
+                        <a href="#catalog" class="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-slate-700 border border-slate-200 font-bold text-base hover:border-turq-300 hover:text-turq-600 transition shadow-sm flex items-center justify-center gap-2">
+                            <i data-lucide="search" class="w-5 h-5 text-slate-400"></i>
+                            Browse Catalog
+                        </a>
+                    </div>
+
+                    <!-- TRUST STATS -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-200/80 max-w-lg mx-auto lg:mx-0">
+                        <div>
+                            <div class="text-2xl font-extrabold text-slate-900">15-30 Mins</div>
+                            <div class="text-xs text-slate-500 font-medium">Local Beirut Delivery</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-extrabold text-slate-900">100%</div>
+                            <div class="text-xs text-slate-500 font-medium">Verified Medications</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-extrabold text-slate-900">24 / 7</div>
+                            <div class="text-xs text-slate-500 font-medium">Pharmacist Support</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT INTERACTIVE WIDGET -->
+                <div class="lg:col-span-5">
+                    <div class="glass-panel p-6 sm:p-8 rounded-3xl border border-white/80 shadow-2xl relative">
+                        <div class="absolute -top-3 -right-3 bg-turq-500 text-white text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
+                            Smart Delivery
+                        </div>
+
+                        <h3 class="text-xl font-bold text-slate-900 mb-2">Check Delivery Time</h3>
+                        <p class="text-xs text-slate-500 mb-6">Enter your neighborhood in Beirut to estimate arrival time.</p>
+
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 uppercase tracking-wider mb-2">Select Neighborhood</label>
+                                <select id="area-select" onchange="calculateDelivery()" class="w-full px-4 py-3 rounded-xl border border-slate-200 bg-white text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 font-medium">
+                                    <option value="bliss">Bliss Street / AUB Area (⚡ 10 mins)</option>
+                                    <option value="hamra">Hamra Main Street (⚡ 15 mins)</option>
+                                    <option value="manara">Al Manara / Corniche (⚡ 20 mins)</option>
+                                    <option value="raouche">Raouche & Verdun (⚡ 25 mins)</option>
+                                    <option value="koraytem">Koraytem & Sakiet El Janziz (⚡ 20 mins)</option>
+                                </select>
+                            </div>
+
+                            <!-- ESTIMATE DISPLAY CARD -->
+                            <div class="bg-turq-50/70 rounded-2xl p-4 border border-turq-100 flex items-center justify-between">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-turq-500 text-white flex items-center justify-center">
+                                        <i data-lucide="bike" class="w-5 h-5"></i>
+                                    </div>
+                                    <div>
+                                        <div class="text-xs text-slate-500 font-medium">Estimated Arrival</div>
+                                        <div id="delivery-time" class="text-lg font-bold text-turq-900">10-15 Minutes</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-bold bg-white text-turq-700 px-2.5 py-1 rounded-lg border border-turq-200">Express Rider</span>
+                            </div>
+
+                            <!-- QUICK ORDER PREVIEW -->
+                            <div class="border-t border-slate-100 pt-4">
+                                <div class="flex justify-between items-center text-sm mb-3">
+                                    <span class="text-slate-600 font-medium">Quick Emergency Pack</span>
+                                    <span class="font-bold text-slate-900">$12.50</span>
+                                </div>
+                                <button onclick="alert('Quick pack added to your cart!')" class="w-full py-3 rounded-xl bg-slate-900 hover:bg-turq-600 text-white text-sm font-bold transition flex items-center justify-center gap-2 shadow-md">
+                                    <i data-lucide="zap" class="w-4 h-4 text-turq-400"></i>
+                                    Instant 1-Click Order
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- DIGITAL TRANSFORMATION PILLARS -->
+    <section id="digital-services" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-2">Modern Healthcare Experience</span>
+                <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900">How We Transformed Your Neighborhood Pharmacy</h2>
+                <p class="text-slate-600 mt-3 text-base">Combining 30+ years of trusted community service on Bliss Street with modern digital health conveniences.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                
+                <!-- PILLAR 1 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-14 h-14 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mb-6 group-hover:bg-turq-500 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="scan-line" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Digital Prescription Scan</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Snap a photo of doctor prescriptions. Our AI & licensed team instantly process dosages and stock verification.</p>
+                </div>
+
+                <!-- PILLAR 2 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-14 h-14 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mb-6 group-hover:bg-turq-500 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="truck" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Temperature-Controlled Delivery</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Specialized cold-chain delivery for sensitive medicines, insulin, and skincare directly to your door in Ras Beirut.</p>
+                </div>
+
+                <!-- PILLAR 3 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-14 h-14 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mb-6 group-hover:bg-turq-500 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="bell-ring" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">Automated Refill Reminders</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Never run out of essential monthly chronic care medications. Get WhatsApp automated refill alerts prior to depletion.</p>
+                </div>
+
+                <!-- PILLAR 4 -->
+                <div class="p-6 rounded-2xl bg-slate-50 border border-slate-100 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-14 h-14 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mb-6 group-hover:bg-turq-500 group-hover:text-white transition-colors duration-300">
+                        <i data-lucide="message-square-heart" class="w-7 h-7"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-slate-900 mb-2">24/7 Pharmacist Tele-Consult</h3>
+                    <p class="text-sm text-slate-600 leading-relaxed">Direct WhatsApp line to speak directly with our registered pharmacists regarding drug interactions and advice.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURED PRODUCTS & CATEGORIES -->
+    <section id="catalog" class="py-20 bg-slate-50 border-t border-b border-slate-200/60">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                <div>
+                    <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-1">Online Store</span>
+                    <h2 class="text-3xl font-extrabold text-slate-900">Explore Essential Health Categories</h2>
+                </div>
+                <div class="mt-4 md:mt-0 flex gap-2 overflow-x-auto pb-2">
+                    <button class="px-4 py-2 rounded-xl bg-turq-500 text-white font-semibold text-sm shadow-sm whitespace-nowrap">All Products</button>
+                    <button class="px-4 py-2 rounded-xl bg-white text-slate-600 hover:bg-slate-100 font-medium text-sm whitespace-nowrap">Vitamins & Supplements</button>
+                    <button class="px-4 py-2 rounded-xl bg-white text-slate-600 hover:bg-slate-100 font-medium text-sm whitespace-nowrap">Dermo-Cosmetics</button>
+                    <button class="px-4 py-2 rounded-xl bg-white text-slate-600 hover:bg-slate-100 font-medium text-sm whitespace-nowrap">Baby Care</button>
+                </div>
+            </div>
+
+            <!-- PRODUCT GRID -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <!-- PRODUCT CARD 1 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+                    <div class="h-48 bg-slate-100 relative flex items-center justify-center p-6">
+                        <span class="absolute top-3 left-3 bg-red-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">In Stock</span>
+                        <i data-lucide="pill" class="w-20 h-20 text-turq-300 group-hover:scale-110 transition duration-300"></i>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs text-slate-400 font-medium uppercase">Vitamins</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Vitamin C 1000mg Effervescent</h4>
+                        <p class="text-xs text-slate-500 mb-4">Immune system support - 20 Tablets</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-extrabold text-turq-700">$6.50</span>
+                            <button onclick="alert('Added Vitamin C to cart!')" class="p-2.5 rounded-xl bg-turq-50 text-turq-600 hover:bg-turq-500 hover:text-white transition">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUCT CARD 2 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+                    <div class="h-48 bg-slate-100 relative flex items-center justify-center p-6">
+                        <span class="absolute top-3 left-3 bg-turq-500 text-white text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded">Popular</span>
+                        <i data-lucide="sparkles" class="w-20 h-20 text-turq-300 group-hover:scale-110 transition duration-300"></i>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs text-slate-400 font-medium uppercase">Dermo-Skincare</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Hydrating Thermal Water Spray</h4>
+                        <p class="text-xs text-slate-500 mb-4">Soothes sensitive skin - 150ml</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-extrabold text-turq-700">$14.00</span>
+                            <button onclick="alert('Added Thermal Spray to cart!')" class="p-2.5 rounded-xl bg-turq-50 text-turq-600 hover:bg-turq-500 hover:text-white transition">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUCT CARD 3 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+                    <div class="h-48 bg-slate-100 relative flex items-center justify-center p-6">
+                        <i data-lucide="activity" class="w-20 h-20 text-turq-300 group-hover:scale-110 transition duration-300"></i>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs text-slate-400 font-medium uppercase">Digital Devices</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Digital Blood Pressure Monitor</h4>
+                        <p class="text-xs text-slate-500 mb-4">Automatic upper arm cuff</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-extrabold text-turq-700">$45.00</span>
+                            <button onclick="alert('Added Monitor to cart!')" class="p-2.5 rounded-xl bg-turq-50 text-turq-600 hover:bg-turq-500 hover:text-white transition">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUCT CARD 4 -->
+                <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden hover:shadow-lg transition group">
+                    <div class="h-48 bg-slate-100 relative flex items-center justify-center p-6">
+                        <i data-lucide="shield-check" class="w-20 h-20 text-turq-300 group-hover:scale-110 transition duration-300"></i>
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs text-slate-400 font-medium uppercase">First Aid</span>
+                        <h4 class="font-bold text-slate-900 text-base mt-1 mb-2">Comprehensive First Aid Kit</h4>
+                        <p class="text-xs text-slate-500 mb-4">50 Essential emergency pieces</p>
+                        <div class="flex items-center justify-between">
+                            <span class="text-lg font-extrabold text-turq-700">$18.50</span>
+                            <button onclick="alert('Added First Aid Kit to cart!')" class="p-2.5 rounded-xl bg-turq-50 text-turq-600 hover:bg-turq-500 hover:text-white transition">
+                                <i data-lucide="plus" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- LOCATION & CONTACT BANNER -->
+    <section id="about" class="py-16 bg-navy-900 text-white relative overflow-hidden">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="text-turq-400 font-bold text-xs uppercase tracking-widest block mb-2">Visit Our Physical Location</span>
+                    <h2 class="text-3xl font-bold mb-4">Ras Beirut Pharmacy Flagship</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed mb-6">
+                        Located conveniently in the heart of Bliss Street right across from AUB. Serving the Ras Beirut neighborhood with pride, care, and continuous innovation.
+                    </p>
+                    <div class="space-y-3 text-sm">
+                        <div class="flex items-center gap-3 text-slate-200">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-turq-400"></i>
+                            <span>Bliss Street, Facing AUB Gate, Ras Beirut, Lebanon</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-200">
+                            <i data-lucide="clock" class="w-5 h-5 text-turq-400"></i>
+                            <span>Open Daily: 7:30 AM – 11:30 PM (24/7 Delivery Available)</span>
+                        </div>
+                        <div class="flex items-center gap-3 text-slate-200">
+                            <i data-lucide="phone-call" class="w-5 h-5 text-turq-400"></i>
+                            <span>+961 1 370 000 | WhatsApp: +961 70 000 000</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-navy-800 p-6 rounded-3xl border border-turq-900/50">
+                    <h3 class="text-lg font-bold text-white mb-4">Ask a Registered Pharmacist</h3>
+                    <form onsubmit="event.preventDefault(); alert('Message sent! A pharmacist will reply shortly.');" class="space-y-4">
+                        <input type="text" placeholder="Your Name" class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-turq-400" required>
+                        <input type="tel" placeholder="Phone Number (WhatsApp)" class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-turq-400" required>
+                        <textarea placeholder="How can we help you today? (Medication inquiry, stock query...)" rows="3" class="w-full px-4 py-3 rounded-xl bg-navy-900 border border-slate-700 text-white placeholder-slate-400 text-sm focus:outline-none focus:border-turq-400" required></textarea>
+                        <button type="submit" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition text-sm">Send Direct Inquiry</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div>
+                <p class="text-sm">&copy; 2026 Ras Beirut Pharmacy. Digital Healthcare Platform.</p>
+                <p class="text-xs text-slate-500 mt-1">Bliss Street, Beirut, Lebanon.</p>
+            </div>
+            <div class="flex items-center space-x-6 text-sm">
+                <a href="#" class="hover:text-turq-400 transition">Privacy Policy</a>
+                <a href="#" class="hover:text-turq-400 transition">Terms of Service</a>
+                <a href="#admin" onclick="alert('Admin Panel Page script will be created separately next!')" class="text-turq-400 font-semibold hover:underline">Admin Dashboard</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- MODAL: UPLOAD PRESCRIPTION -->
+    <div id="prescription-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="toggleModal('prescription-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mx-auto mb-3">
+                    <i data-lucide="file-text" class="w-6 h-6"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900">Upload Prescription</h3>
+                <p class="text-xs text-slate-500 mt-1">Take a clear picture of your doctor's order.</p>
+            </div>
+
+            <form onsubmit="handlePrescriptionSubmit(event)" class="space-y-4">
+                <div class="border-2 border-dashed border-turq-200 rounded-2xl p-6 text-center hover:bg-turq-50/50 transition cursor-pointer">
+                    <i data-lucide="image-plus" class="w-10 h-10 text-turq-400 mx-auto mb-2"></i>
+                    <p class="text-xs font-semibold text-slate-700">Click to attach photo or drag file here</p>
+                    <p class="text-[10px] text-slate-400 mt-1">Supports PNG, JPG or PDF up to 10MB</p>
+                    <input type="file" class="hidden" id="rx-file">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Your Full Name</label>
+                    <input type="text" required placeholder="e.g. Karim El-Khoury" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Phone Number (For WhatsApp Confirmation)</label>
+                    <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition text-sm shadow-md">
+                    Submit Order Request
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Modal Toggle Handler
+        function toggleModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.toggle('hidden');
+            }
+        }
+
+        // Delivery Calculation Simulation
+        function calculateDelivery() {
+            const area = document.getElementById('area-select').value;
+            const display = document.getElementById('delivery-time');
+            
+            const times = {
+                'bliss': '10-12 Minutes',
+                'hamra': '12-18 Minutes',
+                'manara': '15-22 Minutes',
+                'raouche': '20-25 Minutes',
+                'koraytem': '15-20 Minutes'
+            };
+
+            display.innerText = times[area] || '15-20 Minutes';
+        }
+
+        // Prescription Submit
+        function handlePrescriptionSubmit(e) {
+            e.preventDefault();
+            alert('Prescription uploaded successfully! Pharmacist on Bliss Street will review and message you via WhatsApp within 5 minutes.');
+            toggleModal('prescription-modal');
+        }
+    </script>
+</body>
+</html>
