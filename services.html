@@ -3,33 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Pharmacist Chatbot | Ras Beirut Pharmacy</title>
-    <!-- Tailwind CSS -->
+    <title>Digital Services | Ras Beirut Pharmacy</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        turq: { 
-                            50: '#f0fdfa', 
-                            100: '#ccfbf1', 
-                            200: '#99f6e4', 
-                            300: '#5eead4', 
-                            400: '#2dd4bf', 
-                            500: '#14b8a6', 
-                            600: '#0d9488', 
-                            700: '#0f766e', 
-                            800: '#115e59', 
-                            900: '#134e4a',
-                            950: '#042f2e'
-                        },
-                        navy: { 
-                            800: '#062c38', 
-                            900: '#041d26' 
-                        }
+                        turq: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a', 950: '#042f2e' },
+                        navy: { 800: '#062c38', 900: '#041d26' }
                     }
                 }
             }
@@ -53,10 +36,10 @@
     }
 </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-turq-500 selection:text-white relative">
 
     <!-- UNIFIED NAVBAR -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm shrink-0">
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html" class="flex items-center space-x-3">
@@ -71,9 +54,11 @@
 
                 <nav class="hidden lg:flex items-center space-x-8">
                     <a href="index.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Home</a>
-                    <a href="services.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
+                    <a href="services.html" class="text-turq-600 font-bold text-sm">Digital Services</a>
                     <a href="search.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Search Medicine</a>
-                    <a href="chatbot.html" class="text-turq-600 font-bold text-sm">AI Pharmacist</a>
+                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
+                    </a>
                     <a href="contact.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Contact Us</a>
                     <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin</a>
                 </nav>
@@ -88,233 +73,214 @@
         </div>
     </header>
 
-    <!-- EXPANDED CHAT CONTAINER -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-between">
-        
-        <!-- LARGER CHAT WINDOW BOX -->
-        <div class="flex-1 h-[75vh] flex flex-col bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-4">
-            
-            <!-- CHAT HEADER BANNER -->
-            <div class="bg-navy-900 text-white px-6 py-5 flex items-center justify-between border-b border-navy-800 shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="relative">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-md">
-                            <i data-lucide="bot" class="w-6 h-6"></i>
-                        </div>
-                        <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-navy-900 animate-pulse"></span>
-                    </div>
-                    <div>
-                        <h2 class="font-bold text-base text-white">Ras Beirut Clinical AI Assistant</h2>
-                        <span class="text-xs text-turq-300 font-mono">Online • 100+ Phrase Engine Active</span>
-                    </div>
-                </div>
-                <div class="hidden sm:flex items-center gap-2 text-xs text-slate-300 bg-navy-800/80 px-4 py-2 rounded-xl border border-navy-700">
-                    <i data-lucide="shield-check" class="w-4 h-4 text-turq-400"></i>
-                    <span>Secure & Confidential</span>
-                </div>
+    <!-- NEW HERO GRADIENT BANNER -->
+    <section class="relative bg-gradient-to-br from-navy-900 via-[#073847] to-navy-900 py-20 px-4 sm:px-6 lg:px-8 overflow-hidden border-b border-navy-800">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#2dd4bf_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+
+        <div class="max-w-4xl mx-auto text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-turq-500/10 border border-turq-500/20 text-turq-300 text-xs font-bold uppercase tracking-widest mb-4 shadow-inner">
+                <span class="w-2 h-2 rounded-full bg-turq-400 animate-pulse"></span>
+                Advanced Healthcare Suite
             </div>
 
-            <!-- MESSAGES SCROLL AREA -->
-            <div id="chat-window" class="flex-1 overflow-y-auto space-y-6 p-6 sm:p-8 bg-slate-50/50">
-                
-                <!-- BOT GREETING -->
-                <div class="flex items-start space-x-4">
-                    <div class="w-10 h-10 rounded-2xl bg-turq-500 text-white flex items-center justify-center shrink-0 shadow-md">
-                        <i data-lucide="bot" class="w-6 h-6"></i>
-                    </div>
-                    <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-5 text-sm text-slate-700 max-w-2xl leading-relaxed shadow-sm">
-                        <p class="font-bold text-turq-800 text-base mb-1.5">Hello! Welcome to Ras Beirut Pharmacy. 👋</p>
-                        <p>I can help you assess symptoms (like headaches, fevers, or coughs), recommend safe OTC doses, check our location facing LAU lower gate, or set up WhatsApp refills. What can I help you with today?</p>
-                    </div>
-                </div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-4 leading-tight">
+                Our Comprehensive <span class="text-transparent bg-clip-text bg-gradient-to-r from-turq-300 to-turq-500">Digital Services</span>
+            </h1>
 
-            </div>
-
-            <!-- INPUT FORM ATTACHED AT BOTTOM OF CHAT BOX -->
-            <form onsubmit="handleChat(event)" class="p-4 bg-white border-t border-slate-200 flex gap-3 shrink-0">
-                <input type="text" id="chat-input" placeholder="Type your symptom or question here..." class="flex-1 px-5 py-3.5 text-sm focus:outline-none bg-slate-50 border border-slate-200 rounded-2xl focus:border-turq-500 transition">
-                <button type="submit" class="px-7 py-3.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-2xl text-sm transition flex items-center gap-2 shadow-md cursor-pointer">
-                    <span>Send</span>
-                    <i data-lucide="send" class="w-4 h-4"></i>
-                </button>
-            </form>
+            <p class="text-slate-300 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed">
+                Explore virtual consultations, AI clinical assessments, WhatsApp reminders, and our mobile app ecosystem.
+            </p>
         </div>
-    </main>
+    </section>
 
-    <!-- ADVANCED 100+ PHRASE INTENT ENGINE -->
+    <!-- 1. EXPERT CLINICAL ADVICE / BOOK PHARMACIST CONSULT SECTION -->
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="w-full lg:w-auto bg-turq-50/70 border border-turq-100 rounded-2xl p-6 sm:p-8 flex flex-col space-y-4 max-w-sm shrink-0 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-turq-500 text-white flex items-center justify-center shadow-md">
+                    <i data-lucide="video" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">Book Pharmacist Consult</h3>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">Schedule a secure 15-minute video call with our on-duty Ras Beirut clinical pharmacists to review your drug regimen or symptoms.</p>
+                </div>
+                <button onclick="alert('Booking calendar opened! Select your preferred time slot.');" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
+                    Book Consultation Slot
+                </button>
+            </div>
+
+            <div class="max-w-xl space-y-4 order-first lg:order-none">
+                <span class="px-3.5 py-1 rounded-full bg-turq-100 text-turq-800 text-[10px] font-extrabold uppercase tracking-widest inline-block">Professional Guidance</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">Expert Clinical Advice From Home</h2>
+                <p class="text-slate-500 text-xs sm:text-sm leading-relaxed">Unsure about side effects, drug-to-drug interactions, or correct pediatric dosing? Our licensed team is available for scheduled virtual meetings. Choose an open time slot, fill out your inquiry, and receive a secure video conference link straight to your email and WhatsApp.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. WHATSAPP INTEGRATION FEATURE BANNER -->
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-8">
+            <div class="max-w-xl space-y-4">
+                <span class="px-3.5 py-1 rounded-full bg-turq-100 text-turq-800 text-[10px] font-extrabold uppercase tracking-widest inline-block">Chronic Care Automation</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight leading-snug">Remind Me of My Medicine (WhatsApp Integration)</h2>
+                <p class="text-slate-500 text-xs sm:text-sm leading-relaxed">Never skip a dose or run out of monthly chronic medications. Link your prescription schedule to our automated WhatsApp bot, which sends timely refill alerts and allows one-click reordering directly through chat. Combined with our 24/7 AI chatbot assessor, you get instant answers and safety checks around the clock.</p>
+                <div class="pt-2">
+                    <a href="chatbot.html" class="inline-flex items-center gap-2 px-6 py-3.5 bg-navy-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow-md">
+                        <i data-lucide="bot" class="w-4 h-4 text-turq-400"></i> Try AI Chatbot & Assessor Now &rarr;
+                    </a>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-auto bg-turq-50/70 border border-turq-100 rounded-2xl p-6 sm:p-8 flex flex-col space-y-4 max-w-sm shrink-0 shadow-sm">
+                <div class="w-12 h-12 rounded-2xl bg-turq-500 text-white flex items-center justify-center shadow-md">
+                    <i data-lucide="message-square" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h3 class="text-base font-bold text-slate-900">WhatsApp Refill Link</h3>
+                    <p class="text-xs text-slate-500 mt-1 leading-relaxed">Connect your phone number for automated dosage reminders and instant courier dispatch.</p>
+                </div>
+                <button onclick="alert('WhatsApp pairing link generated! Check your phone.');" class="w-full py-3 bg-navy-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
+                    Link WhatsApp Refills
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. DIGITAL SERVICES GRID -->
+    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <!-- Service 1 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="bot" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">AI Pharmacist Consultation</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Instantly query drug interactions, side effects, dosage protocols, and generic substitutes using our trained clinical AI model.</p>
+                <a href="chatbot.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Launch Assistant <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="search" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Live Inventory Search</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Browse 50+ live in-stock pharmaceutical items, check chronic vs prescription status, and place express local orders directly.</p>
+                <a href="search.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Explore Catalog <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="truck" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Ras Beirut Express Courier</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Neighborhood dispatch right from our branch facing LAU lower gate. Delivery guaranteed within 30 minutes in Ras Beirut.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Request Courier <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="bell" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">WhatsApp Refill Alerts</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Never miss a dose of chronic medications. Subscribe to automated monthly refill reminders straight to your phone.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Setup Reminders <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="file-text" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Prescription Review</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Upload doctor prescriptions for quick verification by our licensed staff before pickup or delivery.</p>
+                <a href="contact.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Upload Rx <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="bg-white rounded-3xl p-8 border border-slate-200 hover:shadow-xl transition transform hover:-translate-y-1">
+                <div class="w-14 h-14 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center mb-6">
+                    <i data-lucide="shield-check" class="w-7 h-7"></i>
+                </div>
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Patient Records Portal</h3>
+                <p class="text-xs text-slate-500 leading-relaxed mb-6">Track your medication history, past invoices, and upcoming refills in one encrypted dashboard.</p>
+                <a href="admin.html" class="inline-flex items-center gap-2 text-xs font-bold text-turq-600 hover:text-turq-700">Access Portal <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- 4. MOBILE APP ECOSYSTEM SECTION -->
+    <section class="py-16 bg-white border-t border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gradient-to-r from-navy-900 to-turq-900 rounded-3xl p-8 sm:p-12 text-white shadow-2xl relative overflow-hidden flex flex-col lg:flex-row items-center justify-between gap-8">
+                <div class="max-w-xl space-y-4 text-center lg:text-left z-10">
+                    <span class="px-3 py-1 rounded-full bg-turq-500/20 text-turq-300 text-xs font-bold uppercase tracking-widest inline-block border border-turq-500/30">Mobile Ecosystem</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold tracking-tight">Ras Beirut Mobile App</h2>
+                    <p class="text-slate-300 text-sm leading-relaxed">Download our mobile companion app to scan physical prescriptions, track live courier deliveries across Ras Beirut on an interactive map, and receive instant pill reminders.</p>
+                    <div class="pt-4 flex flex-wrap justify-center lg:justify-start gap-4">
+                        <button onclick="alert('iOS App download link sent! Check your App Store.')" class="px-6 py-3.5 bg-white text-slate-900 rounded-2xl font-bold text-xs flex items-center gap-3 hover:bg-turq-50 transition cursor-pointer shadow-lg">
+                            <i data-lucide="apple" class="w-5 h-5 fill-current"></i> Apple App Store
+                        </button>
+                        <button onclick="alert('Android APK download started!')" class="px-6 py-3.5 bg-turq-500 text-white rounded-2xl font-bold text-xs flex items-center gap-3 hover:bg-turq-600 transition cursor-pointer shadow-lg">
+                            <i data-lucide="smartphone" class="w-5 h-5"></i> Google Play Store
+                        </button>
+                    </div>
+                </div>
+
+                <div class="relative z-10 flex items-center justify-center">
+                    <div class="w-64 h-72 bg-navy-800/80 backdrop-blur-md rounded-3xl border border-turq-500/30 p-6 flex flex-col justify-between shadow-2xl transform rotate-2 hover:rotate-0 transition duration-300">
+                        <div class="flex justify-between items-center">
+                            <div class="flex items-center gap-2">
+                                <div class="w-3 h-3 rounded-full bg-turq-400"></div>
+                                <span class="text-xs font-bold tracking-wide">Live Courier</span>
+                            </div>
+                            <span class="text-[10px] text-turq-300 font-mono">3 MIN AWAY</span>
+                        </div>
+                        <div class="text-center py-6">
+                            <i data-lucide="map-pin" class="w-10 h-10 text-turq-400 mx-auto animate-bounce mb-2"></i>
+                            <div class="text-xs font-bold text-white">Facing LAU Lower Gate</div>
+                            <div class="text-[10px] text-slate-400 mt-0.5">En route to your location</div>
+                        </div>
+                        <div class="bg-turq-500/20 rounded-xl p-2 text-center text-[10px] text-turq-200 font-semibold border border-turq-500/30">
+                            Express Delivery Active
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-center text-xs">
+        &copy; 2026 Ras Beirut Pharmacy | Ras Beirut, Facing LAU Lower Gate, Lebanon.
+    </footer>
+
     <script>
         lucide.createIcons();
 
-        async function handleChat(e) {
-            e.preventDefault();
-            const input = document.getElementById('chat-input');
-            const chatWindow = document.getElementById('chat-window');
-            const message = input.value.trim();
+        window.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('page-loaded');
+        });
 
-            if (!message) return;
+        document.addEventListener('click', e => {
+            const link = e.target.closest('a');
+            if (!link) return;
 
-            // 1. Render User Message
-            chatWindow.innerHTML += `
-                <div class="flex items-start justify-end space-x-3">
-                    <div class="bg-navy-900 text-white rounded-2xl rounded-tr-sm p-5 text-sm max-w-xl leading-relaxed shadow-md">
-                        ${escapeHtml(message)}
-                    </div>
-                </div>
-            `;
-            
-            input.value = '';
-            chatWindow.scrollTop = chatWindow.scrollHeight;
+            const href = link.getAttribute('href');
+            if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+                e.preventDefault();
+                document.body.classList.remove('page-loaded');
+                document.body.classList.add('page-fade-out');
 
-            // 2. Render Typing Indicator
-            const typingId = 'typing-' + Date.now();
-            chatWindow.innerHTML += `
-                <div id="${typingId}" class="flex items-start space-x-4">
-                    <div class="w-10 h-10 rounded-2xl bg-turq-500 text-white flex items-center justify-center shrink-0 shadow-md">
-                        <i data-lucide="bot" class="w-6 h-6"></i>
-                    </div>
-                    <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-4 text-xs text-slate-500 flex items-center gap-2 shadow-sm">
-                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce"></span>
-                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce delay-100"></span>
-                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce delay-200"></span>
-                        <span>Ras Beirut AI is analyzing clinical data...</span>
-                    </div>
-                </div>
-            `;
-            chatWindow.scrollTop = chatWindow.scrollHeight;
-            lucide.createIcons();
-
-            // 3. Generate Natural Dynamic Response
-            setTimeout(() => {
-                const typingIndicator = document.getElementById(typingId);
-                if (typingIndicator) typingIndicator.remove();
-
-                const responseText = generateSmartResponse(message);
-
-                chatWindow.innerHTML += `
-                    <div class="flex items-start space-x-4">
-                        <div class="w-10 h-10 rounded-2xl bg-turq-500 text-white flex items-center justify-center shrink-0 shadow-md">
-                            <i data-lucide="bot" class="w-6 h-6"></i>
-                        </div>
-                        <div class="bg-white border border-slate-200 rounded-2xl rounded-tl-sm p-5 text-sm text-slate-700 max-w-2xl leading-relaxed shadow-sm">
-                            <p class="font-bold text-turq-800 mb-1">Ras Beirut AI Assistant</p>
-                            <div>${responseText}</div>
-                        </div>
-                    </div>
-                `;
-
-                chatWindow.scrollTop = chatWindow.scrollHeight;
-                lucide.createIcons();
-            }, 500);
-        }
-
-        // Comprehensive 100+ Phrase Matching Engine
-        function generateSmartResponse(msg) {
-            const lower = msg.toLowerCase().trim();
-
-            // 1. GREETINGS & SMALL TALK
-            if (['hi', 'hello', 'hey', 'marhaba', 'good morning', 'good evening', 'good afternoon', 'sup', 'hiya'].some(w => lower.includes(w)) && !lower.includes('headache') && !lower.includes('fever')) {
-                return "Hello! Welcome to Ras Beirut Pharmacy. How can I help you today? You can ask about our medication catalog, symptoms, delivery, or store location facing LAU lower gate!";
+                setTimeout(() => {
+                    window.location.href = href;
+                }, 250);
             }
-            if (['how are you', 'how r u', 'doing good', 'how are u'].some(w => lower.includes(w))) {
-                return "I'm doing great, thank you for asking! Ready to assist you with any health inquiries or medication orders. How can I help you today? 😊";
-            }
-            if (['who are you', 'what are you', 'your name'].some(w => lower.includes(w))) {
-                return "I am the 24/7 AI Clinical Assistant for Ras Beirut Pharmacy, designed to help you check symptoms, verify drug availability, and manage orders.";
-            }
-            if (['thank', 'shukran', 'thanks', 'thx'].some(w => lower.includes(w))) {
-                return "You're very welcome! Stay healthy, and feel free to reach out anytime you need assistance. 🌿";
-            }
-            if (['bye', 'goodbye', 'see you', 'cya'].some(w => lower.includes(w))) {
-                return "Goodbye! Feel free to drop back in anytime if you need anything else from our Ras Beirut team.";
-            }
-
-            // 2. LOCATION & HOURS
-            if (['location', 'where', 'address', 'map', 'find you', 'direction', 'lau'].some(w => lower.includes(w))) {
-                return "Our flagship physical pharmacy is located in <strong>Ras Beirut, directly facing the LAU lower gate</strong>. We are open daily from 7:30 AM to 11:30 PM, while our online delivery runs 24/7!";
-            }
-            if (['hours', 'open', 'close', 'time', 'timing', 'schedule'].some(w => lower.includes(w))) {
-                return "Our in-store physical branch in Ras Beirut (facing LAU lower gate) is open daily from <strong>7:30 AM to 11:30 PM</strong>. Our digital delivery and AI chatbot operate <strong>24/7</strong>.";
-            }
-
-            // 3. SYMPTOMS & HEALTH ASSESSOR
-            if (['headache', 'migraine', 'head pain', 'head hurts', 'pain in head'].some(w => lower.includes(w))) {
-                return "For a headache or mild migraine, we recommend <strong>Panadol Extra 500mg</strong> ($3.50 for 24 tablets) available in our <a href='search.html' class='text-turq-600 font-bold underline'>Search Medicine</a> catalog. Ensure you stay hydrated in a quiet room. If the headache is severe and sudden, please consult a physician immediately.";
-            }
-            if (['fever', 'temperature', 'hot', 'chills', 'shivering'].some(w => lower.includes(w))) {
-                return "Fever is often a sign your body is fighting an infection. For adults, Paracetamol (Panadol) helps reduce fever. Drink plenty of fluids and rest. If your fever exceeds 39°C (102°F) or lasts more than 3 days, please visit a doctor.";
-            }
-            if (['stomach', 'belly', 'nausea', 'vomit', 'digestion', 'acid', 'reflux', 'heartburn', 'stomachache'].some(w => lower.includes(w))) {
-                return "For stomach discomfort, acid reflux, or indigestion, we carry <strong>Gaviscon Liquid 200ml</strong> ($9.00) in our store catalog. Avoid spicy foods and stay upright after eating.";
-            }
-            if (['cough', 'throat', 'cold', 'flu', 'sore throat', 'runny nose', 'sneezing', 'congestion'].some(w => lower.includes(w))) {
-                return "For cold, sore throat, or flu symptoms, we recommend Vitamin C 1000mg effervescent tablets, soothing lozenges, and plenty of warm fluids. You can check our <a href='search.html' class='text-turq-600 font-bold underline'>Search Medicine</a> tab for stock availability.";
-            }
-            if (['pain', 'ache', 'back pain', 'joint', 'muscle'].some(w => lower.includes(w))) {
-                return "For general muscle or joint aches, mild analgesic pain relievers like Paracetamol or Ibuprofen are typically effective. You can order them directly online or call our pharmacists for specific dosage advice.";
-            }
-            if (['allergy', 'allergies', 'itchy', 'rash', 'sneez'].some(w => lower.includes(w))) {
-                return "For seasonal allergies, antihistamines can provide fast relief. Check our catalog or upload your prescription if you need specialized chronic allergy medications.";
-            }
-            if (['tired', 'fatigue', 'exhausted', 'sleep', 'insomnia'].some(w => lower.includes(w))) {
-                return "Persistent fatigue can stem from lack of sleep, stress, or vitamin deficiencies (like Vitamin D or B12). Consider booking a consultation with our clinical pharmacists on our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page.";
-            }
-
-            // 4. ORDERING & CART
-            if (['order', 'buy', 'purchase', 'cart', 'shop', 'catalog', 'getPrice', 'cost', 'price'].some(w => lower.includes(w))) {
-                return `
-                    <p class="mb-2">You can place an order easily:</p>
-                    <ul class="list-disc pl-4 space-y-1 text-xs sm:text-sm">
-                        <li><strong>Online Catalog:</strong> Visit <a href="search.html" class="text-turq-600 font-bold underline">Search Medicine</a> to pick quantities and add items to your live cart.</li>
-                        <li><strong>Prescription Upload:</strong> Submit your doctor's order for rapid verification.</li>
-                        <li><strong>Direct WhatsApp:</strong> Message us at <strong>+961 70 000 000</strong>.</li>
-                    </ul>
-                `;
-            }
-
-            // 5. DELIVERY
-            if (['delivery', 'ship', 'dispatch', 'rider', 'bring', 'arrive', 'deliver'].some(w => lower.includes(w))) {
-                return "Our motorcycle couriers dispatch rapidly from our Ras Beirut branch (facing LAU lower gate) to Ras Beirut, Hamra, Manara, Raouche, Verdun, and Koraytem.";
-            }
-
-            // 6. WHATSAPP & REFILLS
-            if (['whatsapp', 'refill', 'reminder', 'remind', 'chronic'].some(w => lower.includes(w))) {
-                return "You can link your monthly chronic prescription schedule to automated WhatsApp refill reminders on our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page!";
-            }
-
-            // 7. CONSULTATIONS
-            if (['consult', 'doctor', 'appointment', 'slot', 'booking', 'video', 'pharmacist'].some(w => lower.includes(w))) {
-                return "To book a 15-minute secure video consultation with a Ras Beirut clinical pharmacist, please visit our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page.";
-            }
-
-            // DEFAULT FALLBACK FOR UNRECOGNIZED PHRASES
-            return `I understand you are asking about <em>"${escapeHtml(msg)}"</em>. Our licensed pharmacist at Ras Beirut (facing LAU lower gate) can confirm specific details for you right now!<br/><br/>You can call us directly at <strong>+961 1 370 000</strong> or message on WhatsApp at <strong>+961 70 000 000</strong>.`;
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-        }
+        });
     </script>
-<script>
-    window.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('page-loaded');
-    });
-
-    document.addEventListener('click', e => {
-        const link = e.target.closest('a');
-        if (!link) return;
-
-        const href = link.getAttribute('href');
-        
-        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
-            e.preventDefault();
-            document.body.classList.remove('page-loaded');
-            document.body.classList.add('page-fade-out');
-
-            setTimeout(() => {
-                window.location.href = href;
-            }, 250);
-        }
-    });
-</script>
 </body>
 </html>
