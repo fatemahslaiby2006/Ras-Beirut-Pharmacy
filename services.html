@@ -395,6 +395,8 @@
 
         window.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('page-loaded');
+            // Automatically trigger the consult modal on page load so it appears right where you are looking
+            openConsultModal();
         });
 
         document.addEventListener('click', e => {
