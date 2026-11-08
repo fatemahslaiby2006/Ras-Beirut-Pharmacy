@@ -82,24 +82,32 @@
         </div>
     </header>
 
-    <!-- EXPANDED CHAT CONTAINER -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-between my-auto">
+    <!-- ELONGATED CHAT CONTAINER -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-4 sm:p-6 flex flex-col justify-between my-4">
         
-        <!-- LARGER CHAT WINDOW BOX -->
-        <div class="flex-1 h-[75vh] flex flex-col bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-4">
+        <!-- LONGER CHAT WINDOW BOX (h-[85vh]) -->
+        <div class="flex-1 h-[85vh] min-h-[600px] flex flex-col bg-white rounded-3xl border border-slate-200 shadow-xl overflow-hidden mb-4">
             
-            <!-- CHAT HEADER BANNER -->
+            <!-- CHAT HEADER BANNER WITH LIGHTING / GLOWING PULSE CIRCLE -->
             <div class="bg-navy-900 text-white px-6 py-5 flex items-center justify-between border-b border-navy-800 shrink-0">
-                <div class="flex items-center space-x-3">
-                    <div class="relative">
-                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-md">
+                <div class="flex items-center space-x-4">
+                    <div class="relative flex items-center justify-center">
+                        <!-- Glowing Animated Outer Ring -->
+                        <span class="absolute inline-flex h-12 w-12 rounded-2xl bg-turq-400 opacity-40 animate-ping"></span>
+                        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/30 relative z-10">
                             <i data-lucide="bot" class="w-6 h-6"></i>
                         </div>
-                        <span class="absolute -bottom-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-navy-900 animate-pulse"></span>
+                        <!-- Status Dot -->
+                        <span class="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-emerald-500 border-2 border-navy-900 z-20"></span>
                     </div>
                     <div>
-                        <h2 class="font-bold text-base text-white">Ras Beirut Clinical AI Assistant</h2>
-                        <span class="text-xs text-turq-300 font-mono">Online • 100+ Phrase Engine Active</span>
+                        <h2 class="font-bold text-base text-white flex items-center gap-2">
+                            Ras Beirut Clinical AI Assistant
+                        </h2>
+                        <span class="text-xs text-turq-300 font-mono flex items-center gap-1.5">
+                            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                            Online • 100+ Phrase Engine Active
+                        </span>
                     </div>
                 </div>
                 <div class="hidden sm:flex items-center gap-2 text-xs text-slate-300 bg-navy-800/80 px-4 py-2 rounded-xl border border-navy-700">
