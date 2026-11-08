@@ -74,7 +74,7 @@
         </div>
     </header>
 
-    <!-- FLOATING STICKY CART BUTTON (Always accessible while scrolling) -->
+    <!-- FLOATING STICKY CART BUTTON -->
     <div class="fixed bottom-6 right-6 z-40">
         <button onclick="toggleCartDrawer()" class="bg-turq-600 hover:bg-turq-700 text-white p-4 rounded-full shadow-2xl flex items-center gap-3 transition transform hover:scale-105 cursor-pointer border-2 border-white">
             <div class="relative">
@@ -807,17 +807,22 @@
         </div>
     </section>
 
-    <!-- SLIDE-OVER SHOPPING CART DRAWER -->
+    <!-- SLIDE-OVER SHOPPING CART DRAWER (STATIONARY HEADER & FOOTER, INDEPENDENT MIDDLE SCROLL) -->
     <div id="cart-drawer-overlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity"></div>
-    <div id="cart-drawer" class="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col h-full">
-        <div class="p-5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 flex-shrink-0">
+    <div id="cart-drawer" class="fixed top-0 bottom-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col h-screen max-h-screen">
+        <!-- FIXED DRAWER HEADER -->
+        <div class="p-5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
             <div class="flex items-center space-x-2"><i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i><h3 class="font-bold text-base">Your Online Order Cart</h3></div>
             <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1 cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
         </div>
-        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100 min-h-0">
+
+        <!-- SCROLLABLE MIDDLE ITEM LIST -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100">
             <div class="text-center py-12 text-slate-400 text-xs">Your shopping cart is currently empty. Open this cart whenever you finish shopping.</div>
         </div>
-        <div class="p-5 bg-slate-50 border-t border-slate-200 space-y-3 flex-shrink-0">
+
+        <!-- STICKY ALWAYS-VISIBLE FOOTER WITH CHECKOUT BUTTON -->
+        <div class="p-5 bg-slate-50 border-t border-slate-200 space-y-3 shrink-0 shadow-lg">
             <div class="flex justify-between text-xs text-slate-600"><span>Subtotal</span><span id="cart-subtotal" class="font-bold text-slate-900">$0.00</span></div>
             <div class="flex justify-between text-xs text-slate-600"><span>Ras Beirut Express Delivery</span><span class="font-bold text-slate-900">$1.50</span></div>
             <div class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
