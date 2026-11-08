@@ -337,34 +337,31 @@
                             <button onclick="changeCardQty('qty-12', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
                             <span id="qty-12" class="w-6 text-center font-bold">1</span>
                             <button onclick="changeCardQty('qty-12', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Concor 5mg', 13.50, 'qty-12')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
+                      <!-- SLIDE-OVER SHOPPING CART DRAWER -->
+    <div id="cart-drawer-overlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity"></div>
+    <div id="cart-drawer" class="fixed top-0 bottom-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col h-screen max-h-screen">
+        <!-- FIXED DRAWER HEADER -->
+        <div class="p-5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
+            <div class="flex items-center space-x-2"><i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i><h3 class="font-bold text-base">Your Online Order Cart</h3></div>
+            <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1 cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
+        </div>
 
-            <!-- 13 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="zyrtec 10mg cetirizine allergy antihistamine">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (70 left)</span><span class="text-lg font-extrabold text-turq-700">$7.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Zyrtec 10mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Cetirizine allergy relief (20 Tablets).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-13', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-13" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-13', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Zyrtec 10mg', 7.50, 'qty-13')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
+        <!-- CHECKOUT SUMMARY & BUTTON (NOW AT THE TOP) -->
+        <div class="p-5 bg-slate-50 border-b border-slate-200 space-y-3 shrink-0 shadow-sm">
+            <div class="flex justify-between text-xs text-slate-600"><span>Subtotal</span><span id="cart-subtotal" class="font-bold text-slate-900">$0.00</span></div>
+            <div class="flex justify-between text-xs text-slate-600"><span>Ras Beirut Express Delivery</span><span class="font-bold text-slate-900">$1.50</span></div>
+            <div class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
+                <span>Total Amount</span>
+                <div class="text-right"><span id="cart-total-usd" class="text-turq-700">$0.00</span><div id="cart-total-lbp" class="text-[10px] text-slate-400 font-normal">~ 0 LBP</div></div>
             </div>
+            <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-sm transition shadow-md cursor-pointer">Proceed to Checkout</button>
+        </div>
 
-            <!-- 14 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="aerius 5mg desloratadine allergy">
+        <!-- SCROLLABLE ITEM LIST (NOW AT THE BOTTOM) -->
+        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100">
+            <div class="text-center py-12 text-slate-400 text-xs">Your shopping cart is currently empty.</div>
+        </div>
+    </div>
                 <div>
                     <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (33 left)</span><span class="text-lg font-extrabold text-turq-700">$12.00</span></div>
                     <h3 class="font-bold text-slate-900 text-base">Aerius 5mg</h3>
