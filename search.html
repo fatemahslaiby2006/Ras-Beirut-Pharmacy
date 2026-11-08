@@ -1,1061 +1,164 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search Medicine | Ras Beirut Pharmacy</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        turq: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a', 950: '#042f2e' },
-                        navy: { 800: '#062c38', 900: '#041d26' }
-                    }
-                }
-            }
-        }
-    </script>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Search Medicine | Ras Beirut Pharmacy</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>tailwind.config={theme:{extend:{colors:{turq:{50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',900:'#134e4a'},navy:{900:'#041d26'}}}}}</script>
 <style>
-    /* Page Transition Animations */
-    body {
-        opacity: 0;
-        transform: translateY(8px);
-        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
-    }
-    body.page-loaded {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    body.page-fade-out {
-        opacity: 0;
-        transform: translateY(-8px);
-        transition: opacity 0.25s ease-in, transform 0.25s ease-in;
-    }
+body{opacity:0;transition:opacity .35s}body.ready{opacity:1}body.leaving{opacity:0}
+.product-card{transition:transform .25s,box-shadow .25s}.product-card:hover{transform:translateY(-5px);box-shadow:0 20px 45px #0f766e16}
+.pill.active{background:#0d9488;color:white;border-color:#0d9488}
+#suggestions:empty{display:none}#toast{transition:opacity .25s,transform .25s}
+.drawer{transform:translateX(100%);transition:transform .3s}.drawer.open{transform:translateX(0)}
+.modal{position:fixed;inset:0;z-index:80;display:flex;align-items:center;justify-content:center;padding:16px;background:#041d26b9;backdrop-filter:blur(5px)}
+.modal.hidden{display:none}body.locked{overflow:hidden}
 </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-turq-500 selection:text-white relative">
-
-    <!-- UNIFIED NAVBAR -->
-    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <a href="index.html" class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
-                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
-                    </div>
-                    <div>
-                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
-                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
-                    </div>
-                </a>
-
-                <nav class="hidden lg:flex items-center space-x-8">
-                    <a href="index.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Home</a>
-                    <a href="services.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
-                    <a href="search.html" class="text-turq-600 font-bold text-sm">Search Medicine</a>
-                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1.5">
-                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
-                    </a>
-                    <a href="contact.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Contact Us</a>
-                    <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin</a>
-                </nav>
-
-                <div class="flex items-center space-x-3">
-                    <button onclick="toggleCartDrawer()" class="relative p-3 rounded-xl bg-slate-900 text-white hover:bg-turq-600 transition flex items-center gap-2 shadow-md cursor-pointer">
-                        <i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i>
-                        <span class="text-xs font-bold hidden sm:inline">My Cart</span>
-                        <span id="cart-badge-count" class="w-5 h-5 bg-turq-500 text-white rounded-full text-xs font-extrabold flex items-center justify-center">0</span>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </header>
-
-    <!-- FLOATING STICKY CART BUTTON -->
-    <div class="fixed bottom-6 right-6 z-40">
-        <button onclick="toggleCartDrawer()" class="bg-turq-600 hover:bg-turq-700 text-white p-4 rounded-full shadow-2xl flex items-center gap-3 transition transform hover:scale-105 cursor-pointer border-2 border-white">
-            <div class="relative">
-                <i data-lucide="shopping-bag" class="w-6 h-6 text-white"></i>
-                <span id="floating-cart-count" class="absolute -top-2 -right-2 w-5 h-5 bg-slate-900 text-turq-300 rounded-full text-xs font-black flex items-center justify-center border border-turq-500">0</span>
-            </div>
-            <span class="text-xs font-extrabold pr-1 hidden sm:inline">View Cart</span>
-        </button>
-    </div>
-
-    <!-- SEARCH HEADER SECTION -->
-    <section class="bg-white border-b border-slate-200 py-12">
-        <div class="max-w-4xl mx-auto px-4 text-center">
-            <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-1">Live Store Database</span>
-            <h1 class="text-3xl font-extrabold text-slate-900 mb-3">Search your Medications</h1>
-            <p class="text-slate-500 text-sm mb-6">Select your desired quantities and add items to your cart. Open your cart when you are ready to review and checkout.</p>
-            
-            <div class="relative">
-                <i data-lucide="search" class="w-5 h-5 absolute left-4 top-4 text-slate-400"></i>
-                <input type="text" id="search-input" onkeyup="filterProducts()" placeholder="Search across 50+ medicines (e.g. Panadol, Augmentin, Lipitor, Aspirin, Nexium)..." class="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 shadow-inner">
-            </div>
-        </div>
-    </section>
-
-    <!-- CATALOG GRID (50+ MEDICINES) -->
-    <section class="py-12 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="product-grid">
-            
-            <!-- 1 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="panadol extra paracetamol pain relief">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (142 left)</span><span class="text-lg font-extrabold text-turq-700">$3.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Panadol Extra 500mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Paracetamol & Caffeine - Rapid Pain Relief (24 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-1', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-1" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-1', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Panadol Extra 500mg', 3.50, 'qty-1')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 2 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="augmentin 1g antibiotic amoxicillin">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (4 left)</span><span class="text-lg font-extrabold text-turq-700">$15.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Augmentin 1g Tablets</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Amoxicillin / Clavulanic Acid (14 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-2', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-2" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-2', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Augmentin 1g Tablets', 15.50, 'qty-2')" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="file-text" class="w-4 h-4"></i> Add RX Item</button>
-                </div>
-            </div>
-
-            <!-- 3 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="vitamin c 1000mg effervescent immune">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (88 left)</span><span class="text-lg font-extrabold text-turq-700">$6.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Vitamin C 1000mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Effervescent immune support (20 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-3', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-3" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-3', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Vitamin C 1000mg', 6.50, 'qty-3')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 4 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="lipitor 20mg atorvastatin cholesterol">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (35 left)</span><span class="text-lg font-extrabold text-turq-700">$22.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Lipitor 20mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Atorvastatin cholesterol control (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-4', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-4" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-4', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Lipitor 20mg', 22.00, 'qty-4')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 5 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="ventolin inhaler salbutamol asthma respiratory">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-blue-100 text-blue-800 text-[10px] font-bold uppercase">In Stock (19 left)</span><span class="text-lg font-extrabold text-turq-700">$8.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Ventolin Inhaler</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Salbutamol bronchodilator (200 Doses).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-5', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-5" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-5', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Ventolin Inhaler', 8.00, 'qty-5')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 6 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="thermal water spray skincare la roche posay">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (45 left)</span><span class="text-lg font-extrabold text-turq-700">$14.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Thermal Water Spray</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Dermo-cosmetic soothing spray (150ml).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-6', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-6" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-6', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Thermal Water Spray', 14.00, 'qty-6')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 7 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="aspirin protect 100mg cardiovascular">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (62 left)</span><span class="text-lg font-extrabold text-turq-700">$4.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Aspirin Protect 100mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Cardiovascular protection (30 enteric tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-7', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-7" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-7', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Aspirin Protect 100mg', 4.00, 'qty-7')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 8 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="nexium 20mg esomeprazole acid reflux">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (28 left)</span><span class="text-lg font-extrabold text-turq-700">$18.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Nexium 20mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Esomeprazole acid reflux control (14 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-8', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-8" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-8', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Nexium 20mg', 18.50, 'qty-8')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 9 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="brufen ibuprofen 400mg pain anti-inflammatory">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (95 left)</span><span class="text-lg font-extrabold text-turq-700">$5.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Brufen 400mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Ibuprofen anti-inflammatory (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-9', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-9" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-9', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Brufen 400mg', 5.00, 'qty-9')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 10 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="gaviscon liquid 200ml heartburn relief">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (40 left)</span><span class="text-lg font-extrabold text-turq-700">$9.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Gaviscon Liquid 200ml</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Heartburn & indigestion relief suspension.</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-10', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-10" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-10', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Gaviscon Liquid 200ml', 9.00, 'qty-10')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 11 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="glucophage 850mg metformin diabetes">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (55 left)</span><span class="text-lg font-extrabold text-turq-700">$11.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Glucophage 850mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Metformin diabetes management (40 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-11', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-11" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-11', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Glucophage 850mg', 11.00, 'qty-11')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 12 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="concor 5mg bisoprolol blood pressure hypertension">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (22 left)</span><span class="text-lg font-extrabold text-turq-700">$13.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Concor 5mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Bisoprolol hypertension therapy (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-12', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-12" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-12', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                      <!-- SLIDE-OVER SHOPPING CART DRAWER -->
-    <div id="cart-drawer-overlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity"></div>
-    <div id="cart-drawer" class="fixed top-0 bottom-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col h-screen max-h-screen">
-        <!-- FIXED DRAWER HEADER -->
-        <div class="p-5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
-            <div class="flex items-center space-x-2"><i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i><h3 class="font-bold text-base">Your Online Order Cart</h3></div>
-            <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1 cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
-        </div>
-
-        <!-- CHECKOUT SUMMARY & BUTTON (NOW AT THE TOP) -->
-        <div class="p-5 bg-slate-50 border-b border-slate-200 space-y-3 shrink-0 shadow-sm">
-            <div class="flex justify-between text-xs text-slate-600"><span>Subtotal</span><span id="cart-subtotal" class="font-bold text-slate-900">$0.00</span></div>
-            <div class="flex justify-between text-xs text-slate-600"><span>Ras Beirut Express Delivery</span><span class="font-bold text-slate-900">$1.50</span></div>
-            <div class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
-                <span>Total Amount</span>
-                <div class="text-right"><span id="cart-total-usd" class="text-turq-700">$0.00</span><div id="cart-total-lbp" class="text-[10px] text-slate-400 font-normal">~ 0 LBP</div></div>
-            </div>
-            <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-sm transition shadow-md cursor-pointer">Proceed to Checkout</button>
-        </div>
-
-        <!-- SCROLLABLE ITEM LIST (NOW AT THE BOTTOM) -->
-        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100">
-            <div class="text-center py-12 text-slate-400 text-xs">Your shopping cart is currently empty.</div>
-        </div>
-    </div>
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (33 left)</span><span class="text-lg font-extrabold text-turq-700">$12.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Aerius 5mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Desloratadine non-drowsy allergy relief (20 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-14', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-14" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-14', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Aerius 5mg', 12.00, 'qty-14')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 15 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="voltaren emulgel 1% diclofenac joint pain">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (50 left)</span><span class="text-lg font-extrabold text-turq-700">$9.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Voltaren Emulgel 1%</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Diclofenac sodium topical gel (50g).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-15', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-15" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-15', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Voltaren Emulgel 1%', 9.50, 'qty-15')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 16 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="cataflam 50mg diclofenac potassium">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (80 left)</span><span class="text-lg font-extrabold text-turq-700">$6.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Cataflam 50mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Diclofenac potassium rapid pain relief (20 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-16', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-16" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-16', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Cataflam 50mg', 6.00, 'qty-16')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 17 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="zithromax 500mg azithromycin antibiotic">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (12 left)</span><span class="text-lg font-extrabold text-turq-700">$16.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Zithromax 500mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Azithromycin antibiotic (3 Tablets).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-17', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-17" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-17', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Zithromax 500mg', 16.00, 'qty-17')" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="file-text" class="w-4 h-4"></i> Add RX Item</button>
-                </div>
-            </div>
-
-            <!-- 18 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="klacid 500mg clarithromycin antibiotic">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (8 left)</span><span class="text-lg font-extrabold text-turq-700">$21.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Klacid 500mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Clarithromycin antibiotic (14 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-18', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-18" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-18', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Klacid 500mg', 21.00, 'qty-18')" class="w-full py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="file-text" class="w-4 h-4"></i> Add RX Item</button>
-                </div>
-            </div>
-
-            <!-- 19 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="omeprazole 20mg capsule stomach ulcer">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (110 left)</span><span class="text-lg font-extrabold text-turq-700">$6.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Omeprazole 20mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Gastric acid reducer capsules (28 Caps).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-19', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-19" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-19', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Omeprazole 20mg', 6.50, 'qty-19')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 20 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="daflon 500mg hemorrhoids circulation">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (44 left)</span><span class="text-lg font-extrabold text-turq-700">$24.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Daflon 500mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Micronized purified flavonoid fraction (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-20', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-20" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-20', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Daflon 500mg', 24.00, 'qty-20')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 21 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="panadol cold and flu day night">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (85 left)</span><span class="text-lg font-extrabold text-turq-700">$5.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Panadol Cold & Flu</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Day & Night symptom relief (24 Caplets).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-21', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-21" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-21', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Panadol Cold & Flu', 5.50, 'qty-21')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 22 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="actifed syrup cold decongestant">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (30 left)</span><span class="text-lg font-extrabold text-turq-700">$7.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Actifed Syrup 100ml</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Decongestant and antihistamine syrup.</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-22', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-22" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-22', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Actifed Syrup 100ml', 7.00, 'qty-22')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 23 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="strepsils honey and lemon lozenges sore throat">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (150 left)</span><span class="text-lg font-extrabold text-turq-700">$4.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Strepsils Honey & Lemon</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Sore throat lozenges (36 Lozenges).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-23', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-23" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-23', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Strepsils Honey & Lemon', 4.50, 'qty-23')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 24 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="maalox plus suspension antacid gas">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (42 left)</span><span class="text-lg font-extrabold text-turq-700">$8.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Maalox Plus Suspension</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Antacid and anti-gas oral suspension (250ml).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-24', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-24" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-24', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Maalox Plus Suspension', 8.00, 'qty-24')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 25 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="buscopan 10mg cramps spasms">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (65 left)</span><span class="text-lg font-extrabold text-turq-700">$6.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Buscopan 10mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Abdominal cramp and spasm relief (20 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-25', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-25" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-25', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Buscopan 10mg', 6.00, 'qty-25')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 26 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="centrum multivitamins adults">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (38 left)</span><span class="text-lg font-extrabold text-turq-700">$19.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Centrum Multivitamins</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Complete daily multivitamin formula (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-26', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-26" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-26', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Centrum Multivitamins', 19.00, 'qty-26')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 27 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="omega 3 fish oil 1000mg heart">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (52 left)</span><span class="text-lg font-extrabold text-turq-700">$16.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Omega-3 Fish Oil 1000mg</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Heart and brain support softgels (60 Caps).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-27', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-27" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-27', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Omega-3 Fish Oil 1000mg', 16.50, 'qty-27')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 28 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="vitamin d3 5000 iu bone immunity">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (60 left)</span><span class="text-lg font-extrabold text-turq-700">$12.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Vitamin D3 5000 IU</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Bone and immune support softgels (60 Caps).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-28', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-28" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-28', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Vitamin D3 5000 IU', 12.50, 'qty-28')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 29 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="magnesium b6 fatigue muscle relaxation">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (48 left)</span><span class="text-lg font-extrabold text-turq-700">$14.50</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Magnesium B6</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Muscle relaxation and anti-fatigue (30 Tabs).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-29', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-29" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-29', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Magnesium B6', 14.50, 'qty-29')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 30 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="procto glyvenol hemorrhoid cream">
-                <div>
-                    <div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (25 left)</span><span class="text-lg font-extrabold text-turq-700">$11.00</span></div>
-                    <h3 class="font-bold text-slate-900 text-base">Procto-Glyvenol Cream</h3>
-                    <p class="text-xs text-slate-500 mt-1 mb-4 leading-relaxed">Hemorrhoid treatment cream (30g with applicator).</p>
-                </div>
-                <div class="space-y-3 border-t border-slate-100 pt-3">
-                    <div class="flex items-center justify-between text-xs font-semibold text-slate-600">
-                        <span>Quantity:</span>
-                        <div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1">
-                            <button onclick="changeCardQty('qty-30', -1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">-</button>
-                            <span id="qty-30" class="w-6 text-center font-bold">1</span>
-                            <button onclick="changeCardQty('qty-30', 1)" class="w-6 h-6 rounded bg-white hover:bg-slate-200 font-bold flex items-center justify-center text-slate-700 shadow-sm">+</button>
-                        </div>
-                    </div>
-                    <button onclick="addToCart('Procto-Glyvenol Cream', 11.00, 'qty-30')" class="w-full py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2 shadow-sm cursor-pointer"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Add to Cart</button>
-                </div>
-            </div>
-
-            <!-- 31 to 50 -->
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="betadine antiseptic solution wound">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (75 left)</span><span class="text-lg font-extrabold text-turq-700">$6.00</span></div><h3 class="font-bold text-slate-900 text-base">Betadine Antiseptic Solution</h3><p class="text-xs text-slate-500 mt-1 mb-4">Povidone-iodine 10% (120ml).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-31', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-31" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-31', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Betadine Antiseptic Solution', 6.00, 'qty-31')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="fucidin cream 20g antibacterial skin">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (18 left)</span><span class="text-lg font-extrabold text-turq-700">$10.50</span></div><h3 class="font-bold text-slate-900 text-base">Fucidin Cream 20g</h3><p class="text-xs text-slate-500 mt-1 mb-4">Fusidic acid antibacterial skin cream.</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-32', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-32" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-32', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Fucidin Cream 20g', 10.50, 'qty-32')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="flixonase nasal spray allergy">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (22 left)</span><span class="text-lg font-extrabold text-turq-700">$17.00</span></div><h3 class="font-bold text-slate-900 text-base">Flixonase Nasal Spray</h3><p class="text-xs text-slate-500 mt-1 mb-4">Fluticasone propionate aqueous spray.</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-33', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-33" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-33', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Flixonase Nasal Spray', 17.00, 'qty-33')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="xylocaine 2% spray local anesthetic">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (14 left)</span><span class="text-lg font-extrabold text-turq-700">$13.00</span></div><h3 class="font-bold text-slate-900 text-base">Xylocaine 2% Spray</h3><p class="text-xs text-slate-500 mt-1 mb-4">Lidocaine local anesthetic pump spray (50g).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-34', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-34" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-34', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Xylocaine 2% Spray', 13.00, 'qty-34')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="neosporin ointment wound care">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (40 left)</span><span class="text-lg font-extrabold text-turq-700">$8.50</span></div><h3 class="font-bold text-slate-900 text-base">Neosporin Ointment</h3><p class="text-xs text-slate-500 mt-1 mb-4">Triple antibiotic first aid ointment (15g).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-35', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-35" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-35', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Neosporin Ointment', 8.50, 'qty-35')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="hylo comod eye drops dry eyes">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (35 left)</span><span class="text-lg font-extrabold text-turq-700">$18.00</span></div><h3 class="font-bold text-slate-900 text-base">Hylo-Comod Eye Drops</h3><p class="text-xs text-slate-500 mt-1 mb-4">Hyaluronic acid 0.1% for dry eyes (10ml).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-36', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-36" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-36', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Hylo-Comod Eye Drops', 18.00, 'qty-36')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="systane ultra lubricant eye drops">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (58 left)</span><span class="text-lg font-extrabold text-turq-700">$15.00</span></div><h3 class="font-bold text-slate-900 text-base">Systane Ultra Drops</h3><p class="text-xs text-slate-500 mt-1 mb-4">High-performance lubricant eye drops (10ml).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-37', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-37" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-37', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Systane Ultra Drops', 15.00, 'qty-37')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="refresh tears eye drops">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (64 left)</span><span class="text-lg font-extrabold text-turq-700">$12.50</span></div><h3 class="font-bold text-slate-900 text-base">Refresh Tears Drops</h3><p class="text-xs text-slate-500 mt-1 mb-4">Lubricant eye drops for dry eyes (15ml).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-38', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-38" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-38', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Refresh Tears Drops', 12.50, 'qty-38')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="dermovate cream clobetasol psoriasis eczema">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (10 left)</span><span class="text-lg font-extrabold text-turq-700">$14.00</span></div><h3 class="font-bold text-slate-900 text-base">Dermovate Cream 30g</h3><p class="text-xs text-slate-500 mt-1 mb-4">Clobetasol propionate powerful steroid cream.</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-39', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-39" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-39', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Dermovate Cream 30g', 14.00, 'qty-39')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="daivobet ointment psoriasis">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (7 left)</span><span class="text-lg font-extrabold text-turq-700">$29.00</span></div><h3 class="font-bold text-slate-900 text-base">Daivobet Ointment 30g</h3><p class="text-xs text-slate-500 mt-1 mb-4">Calcipotriol and betamethasone dipropionate.</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-40', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-40" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-40', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Daivobet Ointment 30g', 29.00, 'qty-40')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="proscar 5mg finasteride hair loss prostate">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (20 left)</span><span class="text-lg font-extrabold text-turq-700">$32.00</span></div><h3 class="font-bold text-slate-900 text-base">Proscar 5mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Finasteride prostate and hair therapy (28 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-41', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-41" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-41', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Proscar 5mg', 32.00, 'qty-41')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="Xanax 0.5mg alprazolam anxiety">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">Controlled RX (5 left)</span><span class="text-lg font-extrabold text-turq-700">$16.50</span></div><h3 class="font-bold text-slate-900 text-base">Xanax 0.5mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Alprazolam anxiolytic tablets (30 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-42', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-42" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-42', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Xanax 0.5mg', 16.50, 'qty-42')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="lexotanil 3mg bromazepam anxiety">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">Controlled RX (9 left)</span><span class="text-lg font-extrabold text-turq-700">$11.00</span></div><h3 class="font-bold text-slate-900 text-base">Lexotanil 3mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Bromazepam anxiolytic tablets (30 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-43', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-43" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-43', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Lexotanil 3mg', 11.00, 'qty-43')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="valium 10mg diazepam">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">Controlled RX (4 left)</span><span class="text-lg font-extrabold text-turq-700">$9.50</span></div><h3 class="font-bold text-slate-900 text-base">Valium 10mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Diazepam muscle relaxant & sedative (20 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-44', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-44" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-44', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Valium 10mg', 9.50, 'qty-44')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="nexium 40mg esomeprazole">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-bold uppercase">In Stock (31 left)</span><span class="text-lg font-extrabold text-turq-700">$24.50</span></div><h3 class="font-bold text-slate-900 text-base">Nexium 40mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">High strength acid reducer (14 Caps).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-45', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-45" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-45', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Nexium 40mg', 24.50, 'qty-45')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="crestor 20mg rosuvastatin cholesterol">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (28 left)</span><span class="text-lg font-extrabold text-turq-700">$28.00</span></div><h3 class="font-bold text-slate-900 text-base">Crestor 20mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Rosuvastatin cholesterol therapy (28 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-46', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-46" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-46', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Crestor 20mg', 28.00, 'qty-46')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="micardis 80mg telmisartan blood pressure">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (41 left)</span><span class="text-lg font-extrabold text-turq-700">$19.50</span></div><h3 class="font-bold text-slate-900 text-base">Micardis 80mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Telmisartan hypertension control (28 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-47', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-47" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-47', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Micardis 80mg', 19.50, 'qty-47')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="norvasc 10mg amlodipine blood pressure">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (49 left)</span><span class="text-lg font-extrabold text-turq-700">$14.00</span></div><h3 class="font-bold text-slate-900 text-base">Norvasc 10mg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Amlodipine calcium channel blocker (30 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-48', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-48" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-48', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Norvasc 10mg', 14.00, 'qty-48')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="euthyrox 50mcg levothyroxine thyroid">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-amber-100 text-amber-800 text-[10px] font-bold uppercase">Chronic (80 left)</span><span class="text-lg font-extrabold text-turq-700">$8.50</span></div><h3 class="font-bold text-slate-900 text-base">Euthyrox 50mcg</h3><p class="text-xs text-slate-500 mt-1 mb-4">Levothyroxine sodium thyroid hormone (50 Tabs).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-49', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-49" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-49', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Euthyrox 50mcg', 8.50, 'qty-49')" class="w-full py-2.5 bg-turq-500 text-white font-bold rounded-xl text-xs cursor-pointer">Add to Cart</button></div>
-            </div>
-
-            <div class="product-card bg-white rounded-2xl border border-slate-200 p-5 hover:shadow-xl transition flex flex-col justify-between" data-name="protopic 0.1% ointment tacrolimus eczema">
-                <div><div class="flex justify-between items-start mb-3"><span class="px-2.5 py-0.5 rounded bg-purple-100 text-purple-800 text-[10px] font-bold uppercase">RX (6 left)</span><span class="text-lg font-extrabold text-turq-700">$34.00</span></div><h3 class="font-bold text-slate-900 text-base">Protopic 0.1% Ointment</h3><p class="text-xs text-slate-500 mt-1 mb-4">Tacrolimus eczema & dermatitis treatment (30g).</p></div>
-                <div class="space-y-3 border-t border-slate-100 pt-3"><div class="flex items-center justify-between text-xs font-semibold text-slate-600"><span>Quantity:</span><div class="flex items-center space-x-2 bg-slate-100 rounded-lg p-1"><button onclick="changeCardQty('qty-50', -1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">-</button><span id="qty-50" class="w-6 text-center font-bold">1</span><button onclick="changeCardQty('qty-50', 1)" class="w-6 h-6 rounded bg-white font-bold cursor-pointer">+</button></div></div><button onclick="addToCart('Protopic 0.1% Ointment', 34.00, 'qty-50')" class="w-full py-2.5 bg-purple-600 text-white font-bold rounded-xl text-xs cursor-pointer">Add RX Item</button></div>
-            </div>
-
-        </div>
-    </section>
-
-    <!-- SLIDE-OVER SHOPPING CART DRAWER (STATIONARY HEADER & FOOTER, INDEPENDENT MIDDLE SCROLL) -->
-    <div id="cart-drawer-overlay" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm hidden transition-opacity"></div>
-    <div id="cart-drawer" class="fixed top-0 bottom-0 right-0 z-50 w-full max-w-md bg-white shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col h-screen max-h-screen">
-        <!-- FIXED DRAWER HEADER -->
-        <div class="p-5 bg-navy-900 text-white flex items-center justify-between border-b border-navy-800 shrink-0">
-            <div class="flex items-center space-x-2"><i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i><h3 class="font-bold text-base">Your Online Order Cart</h3></div>
-            <button onclick="toggleCartDrawer()" class="text-slate-400 hover:text-white p-1 cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
-        </div>
-
-        <!-- SCROLLABLE MIDDLE ITEM LIST -->
-        <div id="cart-items-container" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100">
-            <div class="text-center py-12 text-slate-400 text-xs">Your shopping cart is currently empty. Open this cart whenever you finish shopping.</div>
-        </div>
-
-        <!-- STICKY ALWAYS-VISIBLE FOOTER WITH CHECKOUT BUTTON -->
-        <div class="p-5 bg-slate-50 border-t border-slate-200 space-y-3 shrink-0 shadow-lg">
-            <div class="flex justify-between text-xs text-slate-600"><span>Subtotal</span><span id="cart-subtotal" class="font-bold text-slate-900">$0.00</span></div>
-            <div class="flex justify-between text-xs text-slate-600"><span>Ras Beirut Express Delivery</span><span class="font-bold text-slate-900">$1.50</span></div>
-            <div class="flex justify-between text-base font-black text-slate-900 border-t border-slate-200 pt-2">
-                <span>Total Amount</span>
-                <div class="text-right"><span id="cart-total-usd" class="text-turq-700">$0.00</span><div id="cart-total-lbp" class="text-[10px] text-slate-400 font-normal">~ 0 LBP</div></div>
-            </div>
-            <button onclick="openCheckoutModal()" class="w-full py-4 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-sm transition shadow-lg cursor-pointer">Proceed to Checkout</button>
-        </div>
-    </div>
-
-    <!-- PROFESSIONAL CHECKOUT MODAL (CASH OR CARD WITH FULL FORM) -->
-    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-slate-900/70 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl my-8">
-            <button onclick="closeCheckoutModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 cursor-pointer"><i data-lucide="x" class="w-6 h-6"></i></button>
-            <div class="text-center mb-6">
-                <div class="w-12 h-12 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mx-auto mb-3"><i data-lucide="credit-card" class="w-6 h-6"></i></div>
-                <h3 class="text-xl font-bold text-slate-900">Secure Checkout</h3>
-                <p class="text-xs text-slate-500 mt-1">Ras Beirut Pharmacy Delivery (Facing LAU Lower Gate)</p>
-            </div>
-
-            <form onsubmit="finalizeOrder(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Full Name</label>
-                    <input type="text" required placeholder="e.g. Karim El-Khoury" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Delivery Address in Ras Beirut</label>
-                    <input type="text" required placeholder="e.g. Facing LAU Lower Gate, Building 4" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold text-slate-700 mb-1">Phone / WhatsApp Number</label>
-                    <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
-                </div>
-
-                <!-- PAYMENT METHOD SELECTOR -->
-                <div class="pt-2">
-                    <label class="block text-xs font-semibold text-slate-700 mb-2">Select Payment Method</label>
-                    <div class="grid grid-cols-2 gap-4">
-                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-turq-500 transition bg-slate-50">
-                            <input type="radio" name="payment_method" value="cash" checked onclick="togglePaymentFields('cash')" class="text-turq-500 focus:ring-turq-500">
-                            <span class="text-xs font-bold text-slate-800">Cash on Delivery</span>
-                        </label>
-                        <label class="flex items-center space-x-3 p-3 rounded-xl border border-slate-200 cursor-pointer hover:border-turq-500 transition bg-slate-50">
-                            <input type="radio" name="payment_method" value="card" onclick="togglePaymentFields('card')" class="text-turq-500 focus:ring-turq-500">
-                            <span class="text-xs font-bold text-slate-800">Credit / Debit Card</span>
-                        </label>
-                    </div>
-                </div>
-
-                <!-- CARD INFO FIELDS (HIDDEN BY DEFAULT) -->
-                <div id="card-fields" class="space-y-3 hidden p-4 bg-turq-50/50 rounded-2xl border border-turq-100">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Cardholder Name</label>
-                        <input type="text" placeholder="Name on Card" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-700 mb-1">Card Number</label>
-                        <input type="text" placeholder="4000 1234 5678 9010" maxlength="19" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
-                    </div>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mb-1">Expiry Date</label>
-                            <input type="text" placeholder="MM/YY" maxlength="5" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
-                        </div>
-                        <div>
-                            <label class="block text-xs font-semibold text-slate-700 mm-1">CVV Code</label>
-                            <input type="password" placeholder="123" maxlength="4" class="w-full px-3 py-2 rounded-xl border border-slate-200 text-xs bg-white">
-                        </div>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full py-4 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition text-sm shadow-md mt-4 cursor-pointer">Confirm & Place Secure Order</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800 text-center text-xs">
-        &copy; 2026 Ras Beirut Pharmacy | Ras Beirut, Facing LAU Lower Gate, Lebanon.
-    </footer>
-
-    <script>
-        lucide.createIcons();
-        let cart = [];
-        const LBP_RATE = 89500;
-
-        function filterProducts() {
-            const query = document.getElementById('search-input').value.toLowerCase().trim();
-            const cards = document.querySelectorAll('.product-card');
-            cards.forEach(card => {
-                const name = card.getAttribute('data-name');
-                if (name.includes(query)) {
-                    card.style.display = 'flex';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
-
-        function changeCardQty(id, change) {
-            const elem = document.getElementById(id);
-            let val = parseInt(elem.innerText) + change;
-            if (val < 1) val = 1;
-            elem.innerText = val;
-        }
-
-        function addToCart(title, price, qtyId) {
-            const chosenQty = parseInt(document.getElementById(qtyId).innerText);
-            const existing = cart.find(item => item.title === title);
-            if (existing) existing.qty += chosenQty;
-            else cart.push({ title, price, qty: chosenQty });
-            
-            document.getElementById(qtyId).innerText = "1";
-            renderCart();
-            showToast(`Added ${chosenQty}x ${title} to your cart!`);
-        }
-
-        function showToast(message) {
-            const toast = document.createElement('div');
-            toast.className = 'fixed bottom-6 right-6 z-50 bg-slate-900 text-white text-xs px-4 py-3 rounded-xl shadow-2xl border border-turq-500 animate-bounce';
-            toast.innerText = message;
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2500);
-        }
-
-        function toggleCartDrawer() {
-            const drawer = document.getElementById('cart-drawer');
-            const overlay = document.getElementById('cart-drawer-overlay');
-            drawer.classList.toggle('translate-x-full');
-            overlay.classList.toggle('hidden');
-        }
-
-        // Attach overlay click to close drawer
-        document.getElementById('cart-drawer-overlay').addEventListener('click', toggleCartDrawer);
-
-        function updateCartQty(index, change) {
-            cart[index].qty += change;
-            if (cart[index].qty <= 0) cart.splice(index, 1);
-            renderCart();
-        }
-
-        function renderCart() {
-            const container = document.getElementById('cart-items-container');
-            const countBadge = document.getElementById('cart-badge-count');
-            const floatingBadge = document.getElementById('floating-cart-count');
-            const subtotalElem = document.getElementById('cart-subtotal');
-            const totalUsdElem = document.getElementById('cart-total-usd');
-            const totalLbpElem = document.getElementById('cart-total-lbp');
-            
-            const totalCount = cart.reduce((acc, item) => acc + item.qty, 0);
-            countBadge.innerText = totalCount;
-            floatingBadge.innerText = totalCount;
-            
-            if (cart.length === 0) {
-                container.innerHTML = '<div class="text-center py-12 text-slate-400 text-xs">Your shopping cart is currently empty. Open this cart whenever you finish shopping.</div>';
-                subtotalElem.innerText = "$0.00"; totalUsdElem.innerText = "$0.00"; totalLbpElem.innerText = "~ 0 LBP";
-                return;
-            }
-
-            let subtotal = 0, html = '';
-            cart.forEach((item, index) => {
-                const itemTotal = item.price * item.qty;
-                subtotal += itemTotal;
-                html += `
-                    <div class="pt-3 first:pt-0 flex items-center justify-between">
-                        <div><div class="text-xs font-bold text-slate-900">${item.title}</div><div class="text-[10px] text-slate-400">$${item.price.toFixed(2)} each</div></div>
-                        <div class="flex items-center space-x-2">
-                            <button onclick="updateCartQty(${index}, -1)" class="w-6 h-6 rounded bg-slate-100 font-bold text-xs cursor-pointer">-</button>
-                            <span class="text-xs font-bold w-4 text-center">${item.qty}</span>
-                            <button onclick="updateCartQty(${index}, 1)" class="w-6 h-6 rounded bg-turq-50 font-bold text-xs text-turq-700 cursor-pointer">+</button>
-                            <span class="text-xs font-extrabold text-slate-900 w-12 text-right">$${itemTotal.toFixed(2)}</span>
-                        </div>
-                    </div>
-                `;
-            });
-            const grandTotal = subtotal + 1.50;
-            container.innerHTML = html;
-            subtotalElem.innerText = `$${subtotal.toFixed(2)}`;
-            totalUsdElem.innerText = `$${grandTotal.toFixed(2)}`;
-            totalLbpElem.innerText = `~ ${(grandTotal * LBP_RATE).toLocaleString()} LBP`;
-            lucide.createIcons();
-        }
-
-        function openCheckoutModal() {
-            if (cart.length === 0) {
-                alert("Your cart is empty! Add medicines before checking out.");
-                return;
-            }
-            toggleCartDrawer();
-            document.getElementById('checkout-modal').classList.remove('hidden');
-        }
-
-        function closeCheckoutModal() {
-            document.getElementById('checkout-modal').classList.add('hidden');
-        }
-
-        function togglePaymentFields(method) {
-            const cardFields = document.getElementById('card-fields');
-            if (method === 'card') {
-                cardFields.classList.remove('hidden');
-            } else {
-                cardFields.classList.add('hidden');
-            }
-        }
-
-        function finalizeOrder(e) {
-            e.preventDefault();
-            alert("Order placed successfully! Ras Beirut courier dispatched from the LAU lower gate branch.");
-            cart = [];
-            renderCart();
-            closeCheckoutModal();
-        }
-    </script>
+<body class="bg-slate-50 text-slate-800 antialiased">
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-turq-100 shadow-sm">
+ <div class="max-w-7xl mx-auto px-4 sm:px-6 flex h-20 items-center justify-between gap-4">
+  <a href="index.html" class="flex items-center gap-3 shrink-0"><span class="w-11 h-11 rounded-2xl bg-turq-600 text-white grid place-items-center"><i data-lucide="cross"></i></span><span><b class="block text-slate-900 text-lg leading-5">RAS BEIRUT</b><small class="text-turq-600 font-bold tracking-wider">PHARMACY & DIGITAL HEALTH</small></span></a>
+  <nav class="hidden lg:flex gap-6 text-sm font-semibold"><a href="index.html" class="hover:text-turq-600">Home</a><a href="services.html" class="hover:text-turq-600">Digital Services</a><a href="search.html" class="text-turq-600">Search Medicine</a><a href="chatbot.html" class="hover:text-turq-600">AI Pharmacist</a><a href="contact.html" class="hover:text-turq-600">Contact Us</a><a href="admin.html" class="hover:text-turq-600">Admin</a></nav>
+  <button onclick="openCart()" class="flex items-center gap-2 rounded-xl bg-navy-900 text-white px-4 py-3 text-xs font-bold"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Cart <span id="count" class="bg-turq-500 rounded-full px-2 py-0.5">0</span></button>
+ </div>
+ <div class="lg:hidden flex gap-4 overflow-x-auto px-4 pb-3 text-xs font-bold whitespace-nowrap"><a href="index.html">Home</a><a href="services.html">Services</a><a href="search.html" class="text-turq-600">Medicines</a><a href="chatbot.html">AI Pharmacist</a><a href="contact.html">Contact</a><a href="admin.html">Admin</a></div>
+</header>
+<section class="bg-white border-b border-slate-100 px-4 sm:px-6 pt-9 pb-11">
+ <div class="max-w-7xl mx-auto">
+  <!-- Storefront-style heading, distinct from the homepage split hero -->
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5 pb-7 border-b border-slate-100">
+   <div>
+    <div class="flex items-center gap-2 text-[11px] font-extrabold tracking-[.16em] uppercase text-turq-700 mb-3"><i data-lucide="pill" class="w-4 h-4"></i> Ras Beirut Pharmacy / Online Catalog</div>
+    <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-slate-900">Medicine &amp; Wellness <span class="text-turq-600">Store</span></h1>
+    <p class="text-sm text-slate-500 mt-2">Find your everyday essentials in our 50-item demo catalog.</p>
+   </div>
+   <div class="flex items-center gap-3 bg-turq-50 border border-turq-100 rounded-2xl px-4 py-3 shrink-0">
+    <span class="w-10 h-10 bg-white text-turq-600 rounded-xl grid place-items-center"><i data-lucide="shield-check" class="w-5 h-5"></i></span>
+    <span class="text-xs text-slate-600 leading-5"><strong class="block text-slate-900">Shop with confidence</strong>Pharmacist review for Rx items</span>
+   </div>
+  </div>
+  <!-- Search-first layout: the search bar is the main focus -->
+  <div class="max-w-4xl mx-auto pt-9">
+   <label for="search" class="block text-sm font-extrabold text-slate-800 mb-3">What are you looking for today?</label>
+   <div class="relative">
+    <i data-lucide="search" class="absolute left-5 top-1/2 -translate-y-1/2 w-5 h-5 text-turq-600 pointer-events-none"></i>
+    <input id="search" autocomplete="off" oninput="searchChanged()" onkeydown="if(event.key==='Escape')document.getElementById('suggestions').innerHTML=''" placeholder="Search by medicine, vitamin, or skincare product..." aria-label="Search medicine catalog" class="w-full rounded-2xl border-2 border-turq-200 bg-white text-slate-900 py-5 pl-14 pr-12 text-sm shadow-[0_12px_38px_rgba(15,118,110,.09)] outline-none focus:ring-4 focus:ring-turq-400/20 focus:border-turq-500">
+    <button onclick="clearSearch()" class="absolute right-5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-turq-600" aria-label="Clear search">✕</button>
+    <div id="suggestions" class="absolute z-30 top-full mt-2 w-full bg-white rounded-2xl shadow-xl text-slate-800 overflow-hidden border border-slate-100"></div>
+   </div>
+   <div class="mt-4 flex gap-2 items-center flex-wrap text-xs"><span class="font-semibold text-slate-400 mr-1">Trending searches:</span><button onclick="quickSearch('Panadol')" class="rounded-full bg-slate-50 border border-slate-200 px-3 py-1.5 text-slate-600 hover:border-turq-300 hover:text-turq-700">Panadol</button><button onclick="quickSearch('Vitamin')" class="rounded-full bg-slate-50 border border-slate-200 px-3 py-1.5 text-slate-600 hover:border-turq-300 hover:text-turq-700">Vitamins</button><button onclick="quickSearch('Nexium')" class="rounded-full bg-slate-50 border border-slate-200 px-3 py-1.5 text-slate-600 hover:border-turq-300 hover:text-turq-700">Nexium</button></div>
+  </div>
+ </div>
+</section>
+<main class="max-w-7xl mx-auto px-4 sm:px-6 py-12">
+ <div class="flex items-center justify-between gap-4 mb-5"><div><p class="text-xs uppercase tracking-widest font-bold text-turq-600">Explore by category</p><h2 class="text-2xl font-extrabold text-slate-900">Shop Your Way</h2></div><button onclick="openFinder()" class="rounded-xl bg-navy-900 text-white px-4 py-3 text-xs font-bold hover:bg-turq-600">✨ Help Me Find Products</button></div>
+ <div id="categories" class="flex flex-wrap gap-2 mb-10"></div>
+ <div class="flex flex-wrap items-center justify-between gap-4 mb-5"><div><h2 class="text-xl font-extrabold">Medicine & Wellness Catalog</h2><p id="result-count" class="text-xs text-slate-500 mt-1"></p></div><div class="flex gap-3 items-center"><label class="text-xs font-bold text-slate-600">Sort by</label><select id="sort" onchange="renderProducts()" class="rounded-xl border border-slate-200 bg-white p-3 text-xs"><option value="featured">Featured</option><option value="low">Price: Low to High</option><option value="high">Price: High to Low</option><option value="az">Name: A–Z</option></select><button id="favorites-toggle" onclick="toggleFavorites()" class="rounded-xl border border-slate-200 bg-white px-3 py-3 text-xs font-bold">♡ Favorites</button></div></div>
+ <div id="grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"></div>
+ <div id="empty" class="hidden text-center py-16 text-slate-500"><i data-lucide="search-x" class="w-12 h-12 mx-auto mb-3"></i><p>No matching products. Try a different search or category.</p><button onclick="resetFilters()" class="mt-4 text-turq-700 font-bold underline">Show all medicines</button></div>
+ <p class="mt-10 text-xs text-slate-500 text-center">Educational demo catalog. Product prices, stock quantities and availability are illustrative, not live pharmacy data. Medication selection should be confirmed by a licensed pharmacist.</p>
+</main>
+<footer class="bg-slate-900 text-slate-400 py-10 text-center text-xs">© 2026 Ras Beirut Pharmacy · Facing LAU Lower Gate, Beirut, Lebanon.</footer>
+<div id="overlay" onclick="closeCart()" class="hidden fixed inset-0 z-50 bg-slate-950/60"></div>
+<aside id="drawer" class="drawer fixed right-0 top-0 bottom-0 w-full max-w-md bg-white z-[60] flex flex-col shadow-2xl" aria-label="Shopping cart">
+ <div class="bg-navy-900 text-white p-6 flex items-center justify-between"><h2 class="font-extrabold text-lg">Your Shopping Cart</h2><button onclick="closeCart()" aria-label="Close cart">✕</button></div>
+ <div id="cart-items" class="flex-1 overflow-y-auto p-5 space-y-4"></div>
+ <div class="border-t p-5 bg-slate-50 space-y-3"><div class="flex justify-between text-sm"><span>Subtotal</span><b id="subtotal">$0.00</b></div><div class="flex justify-between text-sm"><span>Demo delivery fee</span><b>$1.50</b></div><div class="flex justify-between text-xl font-black"><span>Estimated Total</span><span id="total" class="text-turq-700">$0.00</span></div><button onclick="openCheckout()" class="w-full bg-turq-500 hover:bg-turq-600 text-white rounded-xl py-4 font-bold">Continue to Demo Checkout</button></div>
+</aside>
+<div id="checkout" class="modal hidden"><div class="bg-white rounded-3xl w-full max-w-lg p-7 max-h-[90vh] overflow-y-auto relative"><button onclick="closeModal('checkout')" class="absolute right-5 top-5">✕</button><h2 class="text-2xl font-extrabold mb-1">Checkout Request</h2><p class="text-xs text-slate-500 mb-5">Demo only — no order is transmitted or paid.</p><form id="checkout-form" onsubmit="submitOrder(event)" class="space-y-4"><label class="block text-xs font-bold">Full name<input name="name" required class="w-full border rounded-xl p-3 mt-1" placeholder="Your name"></label><label class="block text-xs font-bold">Phone / WhatsApp<input name="phone" required type="tel" class="w-full border rounded-xl p-3 mt-1" placeholder="+961 ..."></label><label class="block text-xs font-bold">Delivery address<input name="address" required class="w-full border rounded-xl p-3 mt-1" placeholder="Ras Beirut, street and building"></label><label class="block text-xs font-bold">Payment preference<select name="payment" class="w-full border rounded-xl p-3 mt-1"><option>Cash on delivery (demo)</option><option>Card payment — unavailable in demo</option></select></label><div id="rx-checkout" class="hidden rounded-xl bg-purple-50 border border-purple-200 p-4"><p class="text-xs font-bold text-purple-900">Prescription review required</p><p class="text-xs text-purple-800 mt-1">Attach a prescription for pharmacist review. The file remains on this device and is not uploaded.</p><input id="rx-file" type="file" accept="image/*,.pdf" class="text-xs mt-3 w-full"></div><button class="w-full bg-turq-600 text-white font-bold rounded-xl py-3">Save Demo Order Request</button></form></div></div>
+<div id="finder" class="modal hidden"><div class="bg-white rounded-3xl w-full max-w-md p-7 relative"><button onclick="closeModal('finder')" class="absolute top-5 right-5">✕</button><span class="text-xs text-turq-600 font-bold uppercase tracking-widest">Guided browsing</span><h2 class="text-2xl font-black mt-2 mb-3">What are you shopping for?</h2><p class="text-xs text-slate-500 mb-5">Choose a category to explore. This tool does not diagnose conditions or recommend a treatment.</p><div id="finder-choices" class="grid grid-cols-2 gap-3"></div></div></div>
+<div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 translate-y-4 opacity-0 pointer-events-none z-[90] rounded-xl bg-navy-900 text-white px-6 py-3 text-sm font-bold shadow-xl"></div>
 <script>
-    // Trigger fade-in when page loads
-    window.addEventListener('DOMContentLoaded', () => {
-        document.body.classList.add('page-loaded');
-    });
-
-    // Intercept internal navigation clicks for smooth fade-out effect
-    document.addEventListener('click', e => {
-        const link = e.target.closest('a');
-        if (!link) return;
-
-        const href = link.getAttribute('href');
-        
-        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
-            e.preventDefault();
-            document.body.classList.remove('page-loaded');
-            document.body.classList.add('page-fade-out');
-
-            setTimeout(() => {
-                window.location.href = href;
-            }, 250);
-        }
-    });
+// Original 50 catalog items: [name, description, demo price USD, category, prescription flag, demo stock]
+const catalog = [
+["Panadol Extra 500mg", "Paracetamol & Caffeine - Rapid Pain Relief (24 Tabs).", 3.5, "Pain Relief", 0, 142],
+["Augmentin 1g Tablets", "Amoxicillin / Clavulanic Acid (14 Tabs).", 15.5, "Other Care", 1, 4],
+["Vitamin C 1000mg", "Effervescent immune support (20 Tabs).", 6.5, "Vitamins", 0, 88],
+["Lipitor 20mg", "Atorvastatin cholesterol control (30 Tabs).", 22.0, "Chronic Care", 0, 35],
+["Ventolin Inhaler", "Salbutamol bronchodilator (200 Doses).", 8.0, "Other Care", 0, 19],
+["Thermal Water Spray", "Dermo-cosmetic soothing spray (150ml).", 14.0, "Skincare", 0, 45],
+["Aspirin Protect 100mg", "Cardiovascular protection (30 enteric tabs).", 4.0, "Pain Relief", 0, 62],
+["Nexium 20mg", "Esomeprazole acid reflux control (14 Tabs).", 18.5, "Cold & Allergy", 0, 28],
+["Brufen 400mg", "Ibuprofen anti-inflammatory (30 Tabs).", 5.0, "Pain Relief", 0, 95],
+["Gaviscon Liquid 200ml", "Heartburn & indigestion relief suspension.", 9.0, "Other Care", 0, 40],
+["Glucophage 850mg", "Metformin diabetes management (40 Tabs).", 11.0, "Chronic Care", 0, 55],
+["Concor 5mg", "Bisoprolol hypertension therapy (30 Tabs).", 13.5, "Chronic Care", 0, 22],
+["Zyrtec 10mg", "Cetirizine allergy relief (20 Tablets).", 7.5, "Cold & Allergy", 0, 70],
+["Aerius 5mg", "Desloratadine non-drowsy allergy relief (20 Tabs).", 12.0, "Cold & Allergy", 0, 33],
+["Voltaren Emulgel 1%", "Diclofenac sodium topical gel (50g).", 9.5, "Skincare", 0, 50],
+["Cataflam 50mg", "Diclofenac potassium rapid pain relief (20 Tabs).", 6.0, "Pain Relief", 0, 80],
+["Zithromax 500mg", "Azithromycin antibiotic (3 Tablets).", 16.0, "Other Care", 1, 12],
+["Klacid 500mg", "Clarithromycin antibiotic (14 Tabs).", 21.0, "Other Care", 1, 8],
+["Omeprazole 20mg", "Gastric acid reducer capsules (28 Caps).", 6.5, "Other Care", 0, 110],
+["Daflon 500mg", "Micronized purified flavonoid fraction (30 Tabs).", 24.0, "Other Care", 0, 44],
+["Panadol Cold & Flu", "Day & Night symptom relief (24 Caplets).", 5.5, "Cold & Allergy", 0, 85],
+["Actifed Syrup 100ml", "Decongestant and antihistamine syrup.", 7.0, "Cold & Allergy", 0, 30],
+["Strepsils Honey & Lemon", "Sore throat lozenges (36 Lozenges).", 4.5, "Cold & Allergy", 0, 150],
+["Maalox Plus Suspension", "Antacid and anti-gas oral suspension (250ml).", 8.0, "Other Care", 0, 42],
+["Buscopan 10mg", "Abdominal cramp and spasm relief (20 Tabs).", 6.0, "Pain Relief", 0, 65],
+["Centrum Multivitamins", "Complete daily multivitamin formula (30 Tabs).", 19.0, "Vitamins", 0, 38],
+["Omega-3 Fish Oil 1000mg", "Heart and brain support softgels (60 Caps).", 16.5, "Vitamins", 0, 52],
+["Vitamin D3 5000 IU", "Bone and immune support softgels (60 Caps).", 12.5, "Vitamins", 0, 60],
+["Magnesium B6", "Muscle relaxation and anti-fatigue (30 Tabs).", 14.5, "Vitamins", 0, 48],
+["Procto-Glyvenol Cream", "Hemorrhoid treatment cream (30g with applicator).", 11.0, "Skincare", 0, 25],
+["Betadine Antiseptic Solution", "Povidone-iodine 10% (120ml).", 6.0, "Skincare", 0, 75],
+["Fucidin Cream 20g", "Fusidic acid antibacterial skin cream.", 10.5, "Skincare", 1, 18],
+["Flixonase Nasal Spray", "Fluticasone propionate aqueous spray.", 17.0, "Cold & Allergy", 0, 22],
+["Xylocaine 2% Spray", "Lidocaine local anesthetic pump spray (50g).", 13.0, "Other Care", 1, 14],
+["Neosporin Ointment", "Triple antibiotic first aid ointment (15g).", 8.5, "Skincare", 0, 40],
+["Hylo-Comod Eye Drops", "Hyaluronic acid 0.1% for dry eyes (10ml).", 18.0, "Other Care", 0, 35],
+["Systane Ultra Drops", "High-performance lubricant eye drops (10ml).", 15.0, "Other Care", 0, 58],
+["Refresh Tears Drops", "Lubricant eye drops for dry eyes (15ml).", 12.5, "Other Care", 0, 64],
+["Dermovate Cream 30g", "Clobetasol propionate powerful steroid cream.", 14.0, "Skincare", 1, 10],
+["Daivobet Ointment 30g", "Calcipotriol and betamethasone dipropionate.", 29.0, "Skincare", 1, 7],
+["Proscar 5mg", "Finasteride prostate and hair therapy (28 Tabs).", 32.0, "Chronic Care", 0, 20],
+["Xanax 0.5mg", "Alprazolam anxiolytic tablets (30 Tabs).", 16.5, "Other Care", 1, 5],
+["Lexotanil 3mg", "Bromazepam anxiolytic tablets (30 Tabs).", 11.0, "Other Care", 1, 9],
+["Valium 10mg", "Diazepam muscle relaxant & sedative (20 Tabs).", 9.5, "Other Care", 1, 4],
+["Nexium 40mg", "High strength acid reducer (14 Caps).", 24.5, "Other Care", 0, 31],
+["Crestor 20mg", "Rosuvastatin cholesterol therapy (28 Tabs).", 28.0, "Chronic Care", 0, 28],
+["Micardis 80mg", "Telmisartan hypertension control (28 Tabs).", 19.5, "Chronic Care", 0, 41],
+["Norvasc 10mg", "Amlodipine calcium channel blocker (30 Tabs).", 14.0, "Chronic Care", 0, 49],
+["Euthyrox 50mcg", "Levothyroxine sodium thyroid hormone (50 Tabs).", 8.5, "Chronic Care", 0, 80],
+["Protopic 0.1% Ointment", "Tacrolimus eczema & dermatitis treatment (30g).", 34.0, "Skincare", 1, 6]
+].map((p,i)=>({id:i+1,name:p[0],description:p[1],price:p[2],category:p[3],rx:!!p[4],stock:p[5]}));
+const categories=['All','Pain Relief','Vitamins','Skincare','Cold & Allergy','Chronic Care','Other Care'];
+const icons={'All':'layout-grid','Pain Relief':'heart-pulse','Vitamins':'pill','Skincare':'sparkles','Cold & Allergy':'wind','Chronic Care':'activity','Other Care':'shield-plus'};
+let category='All',favoritesOnly=false,cart=[],favorites=[];
+try{cart=JSON.parse(localStorage.getItem('rb-cart-v2')||'[]');favorites=JSON.parse(localStorage.getItem('rb-favorites-v2')||'[]')}catch(e){}
+const $=id=>document.getElementById(id);
+const money=n=>'$'+Number(n).toFixed(2);
+const save=()=>{localStorage.setItem('rb-cart-v2',JSON.stringify(cart));localStorage.setItem('rb-favorites-v2',JSON.stringify(favorites))};
+const icon=()=>{if(window.lucide)lucide.createIcons()};
+function renderCategories(){ $('categories').innerHTML=categories.map(c=>`<button class="pill ${category===c?'active':'bg-white text-slate-700'} border border-slate-200 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-2 hover:border-turq-500 transition" onclick="setCategory('${c}')"><i data-lucide="${icons[c]}" class="w-4 h-4"></i>${c}</button>`).join('');icon() }
+function setCategory(c){category=c;renderCategories();renderProducts()}
+function searchChanged(){const q=$('search').value.trim().toLowerCase();const hits=q?catalog.filter(p=>(p.name+' '+p.description).toLowerCase().includes(q)).slice(0,5):[];$('suggestions').innerHTML=hits.map(p=>`<button onclick="quickSearch(${JSON.stringify(p.name).replaceAll('"','&quot;')})" class="w-full px-5 py-3 text-left hover:bg-turq-50 border-b border-slate-100 text-sm flex justify-between gap-3"><span>${p.name}</span><b class="text-turq-700">${money(p.price)}</b></button>`).join('');renderProducts()}
+function quickSearch(q){$('search').value=q;$('suggestions').innerHTML='';category='All';renderCategories();renderProducts();$('grid').scrollIntoView({behavior:'smooth',block:'start'})}
+function clearSearch(){$('search').value='';$('suggestions').innerHTML='';renderProducts()}
+function resetFilters(){clearSearch();category='All';favoritesOnly=false;$('favorites-toggle').textContent='♡ Favorites';renderCategories();renderProducts()}
+function toggleFavorites(){favoritesOnly=!favoritesOnly;$('favorites-toggle').textContent=favoritesOnly?'♥ Show All':'♡ Favorites';renderProducts()}
+function renderProducts(){const q=$('search').value.toLowerCase().trim();let list=catalog.filter(p=>(category==='All'||p.category===category)&&(!q||(p.name+' '+p.description+' '+p.category).toLowerCase().includes(q))&&(!favoritesOnly||favorites.includes(p.id)));const sort=$('sort').value;if(sort==='low')list.sort((a,b)=>a.price-b.price);if(sort==='high')list.sort((a,b)=>b.price-a.price);if(sort==='az')list.sort((a,b)=>a.name.localeCompare(b.name));$('result-count').textContent=`Showing ${list.length} of ${catalog.length} demo products`;$('empty').classList.toggle('hidden',list.length>0);$('grid').innerHTML=list.map(p=>`<article class="product-card bg-white border border-slate-200 rounded-3xl overflow-hidden flex flex-col"><div class="h-36 bg-gradient-to-br from-turq-50 to-slate-100 relative grid place-items-center"><div class="w-20 h-20 rounded-3xl bg-white shadow-sm grid place-items-center text-turq-600"><i data-lucide="${icons[p.category]}" class="w-10 h-10"></i></div><button onclick="favorite(${p.id})" class="absolute top-4 right-4 bg-white rounded-full w-9 h-9 shadow text-xl ${favorites.includes(p.id)?'text-rose-500':'text-slate-400'}" aria-label="Toggle favorite">${favorites.includes(p.id)?'♥':'♡'}</button><span class="absolute bottom-3 left-4 bg-white/90 rounded-full px-3 py-1 text-[10px] font-bold text-slate-600">${p.category}</span></div><div class="p-5 flex flex-col flex-1"><div class="flex justify-between items-center gap-2"><span class="text-[10px] font-bold rounded-full px-2.5 py-1 ${p.rx?'bg-purple-100 text-purple-800':'bg-emerald-100 text-emerald-800'}">${p.rx?'Rx review required':'Catalog item'}</span><span class="text-[10px] text-slate-500">Demo stock: ${p.stock}</span></div><h3 class="font-extrabold text-slate-900 mt-3">${p.name}</h3><p class="text-xs text-slate-500 mt-2 leading-relaxed flex-1">${p.description}</p><div class="flex items-center justify-between mt-5 mb-3"><b class="text-xl text-turq-700">${money(p.price)}</b><div class="flex items-center rounded-xl bg-slate-100"><button onclick="qty(${p.id},-1)" class="px-3 py-2 font-bold">−</button><span id="qty-${p.id}" class="text-xs font-bold">1</span><button onclick="qty(${p.id},1)" class="px-3 py-2 font-bold">+</button></div></div><button onclick="add(${p.id},this)" class="w-full rounded-xl py-3 text-white text-xs font-bold ${p.rx?'bg-purple-600 hover:bg-purple-700':'bg-turq-500 hover:bg-turq-600'}">${p.rx?'Add for Rx Review':'Add to Cart'}</button></div></article>`).join('');icon()}
+function qty(id,delta){const el=$('qty-'+id);el.textContent=Math.max(1,Math.min(20,Number(el.textContent)+delta))}
+function favorite(id){favorites=favorites.includes(id)?favorites.filter(x=>x!==id):[...favorites,id];save();renderProducts()}
+function add(id,button){const p=catalog.find(x=>x.id===id);const n=Number($('qty-'+id).textContent);const existing=cart.find(x=>x.id===id);if(existing)existing.qty+=n;else cart.push({id,qty:n});save();renderCart();button.textContent='✓ Added!';setTimeout(()=>{if(button.isConnected)button.textContent=p.rx?'Add for Rx Review':'Add to Cart'},900);toast(`${n} × ${p.name} added`)}
+function renderCart(){cart=cart.filter(x=>catalog.some(p=>p.id===x.id));$('count').textContent=cart.reduce((a,b)=>a+b.qty,0);$('cart-items').innerHTML=cart.length?cart.map(x=>{const p=catalog.find(p=>p.id===x.id);return `<div class="flex gap-3 items-center border-b pb-4"><div class="w-12 h-12 rounded-xl bg-turq-50 text-turq-700 grid place-items-center"><i data-lucide="pill"></i></div><div class="flex-1"><b class="text-sm">${p.name}</b><p class="text-xs text-slate-500">${money(p.price)} each ${p.rx?'· Rx review':''}</p><div class="flex gap-3 mt-2 items-center text-xs"><button onclick="changeCart(${p.id},-1)" class="font-bold bg-slate-100 rounded px-2 py-1">−</button>${x.qty}<button onclick="changeCart(${p.id},1)" class="font-bold bg-slate-100 rounded px-2 py-1">+</button><button onclick="removeItem(${p.id})" class="text-rose-600 ml-2">Remove</button></div></div><b class="text-sm">${money(p.price*x.qty)}</b></div>`}).join(''):'<p class="text-center text-slate-500 text-sm py-16">Your cart is empty. Explore the catalog to get started.</p>';const subtotal=cart.reduce((a,x)=>a+catalog.find(p=>p.id===x.id).price*x.qty,0);$('subtotal').textContent=money(subtotal);$('total').textContent=money(subtotal+(cart.length?1.5:0));icon()}
+function changeCart(id,d){const x=cart.find(x=>x.id===id);if(!x)return;x.qty+=d;if(x.qty<=0)cart=cart.filter(x=>x.id!==id);save();renderCart()}
+function removeItem(id){cart=cart.filter(x=>x.id!==id);save();renderCart()}
+function openCart(){$('overlay').classList.remove('hidden');$('drawer').classList.add('open');document.body.classList.add('locked');renderCart()}
+function closeCart(){$('overlay').classList.add('hidden');$('drawer').classList.remove('open');document.body.classList.remove('locked')}
+function openModal(id){$(id).classList.remove('hidden');document.body.classList.add('locked')}
+function closeModal(id){$(id).classList.add('hidden');document.body.classList.remove('locked')}
+function openCheckout(){if(!cart.length)return toast('Add an item first');closeCart();$('rx-checkout').classList.toggle('hidden',!cart.some(x=>catalog.find(p=>p.id===x.id).rx));openModal('checkout')}
+function submitOrder(e){e.preventDefault();if(cart.some(x=>catalog.find(p=>p.id===x.id).rx)&&!$('rx-file').files.length)return toast('Please select a prescription for review');const form=new FormData(e.target);const request={date:new Date().toISOString(),name:form.get('name'),phone:form.get('phone'),address:form.get('address'),payment:form.get('payment'),items:cart.map(x=>({...x,name:catalog.find(p=>p.id===x.id).name})),status:'Demo request — not submitted'};let orders=[];try{orders=JSON.parse(localStorage.getItem('rb-demo-orders')||'[]')}catch(e){}orders.push(request);localStorage.setItem('rb-demo-orders',JSON.stringify(orders));cart=[];save();renderCart();closeModal('checkout');e.target.reset();alert('Demo request saved in this browser only. No real order, payment, prescription upload, or pharmacy notification was made.')}
+function openFinder(){$('finder-choices').innerHTML=categories.filter(c=>c!=='All').map(c=>`<button onclick="chooseFinder('${c}')" class="p-4 rounded-xl border border-slate-200 hover:border-turq-500 hover:bg-turq-50 text-sm font-bold text-left">${c} →</button>`).join('');openModal('finder')}
+function chooseFinder(c){closeModal('finder');$('search').value='';setCategory(c);$('grid').scrollIntoView({behavior:'smooth'})}
+let toastTimer;function toast(msg){const el=$('toast');el.textContent=msg;el.style.opacity='1';el.style.transform='translate(-50%,0)';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.style.opacity='0';el.style.transform='translate(-50%,16px)'},2200)}
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCart();['checkout','finder'].forEach(closeModal);$('suggestions').innerHTML=''}});
+document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)closeModal(m.id)}));
+document.addEventListener('click',e=>{if(!e.target.closest('#search')&&!e.target.closest('#suggestions'))$('suggestions').innerHTML='';const a=e.target.closest('a');if(a&&a.getAttribute('href')?.endsWith('.html')&&!e.ctrlKey&&!e.metaKey){e.preventDefault();document.body.classList.add('leaving');setTimeout(()=>location.href=a.href,250)}});
+renderCategories();renderProducts();renderCart();document.body.classList.add('ready');
 </script>
 </body>
 </html>
