@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ras Beirut Pharmacy | Digital Healthcare & Heritage</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: { 
+                            50: '#f0fdfa', 
+                            100: '#ccfbf1', 
+                            200: '#99f6e4', 
+                            300: '#5eead4', 
+                            400: '#2dd4bf', 
+                            500: '#14b8a6', 
+                            600: '#0d9488', 
+                            700: '#0f766e', 
+                            800: '#115e59', 
+                            900: '#134e4a',
+                            950: '#042f2e'
+                        },
+                        navy: { 
+                            800: '#062c38', 
+                            900: '#041d26' 
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    /* Page Transition Animations */
+    body {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
+    body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    body.page-fade-out {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+    }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-turq-500 selection:text-white">
+
+    <!-- UNIFIED NAVBAR (UNTOUCHED / KEPT EXACTLY THE SAME) -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- BRAND LOGO -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
+                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
+                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
+                    </div>
+                </a>
+
+                <!-- SHARED NAVIGATION LINKS -->
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-turq-600 font-bold text-sm">Home</a>
+                    <a href="services.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
+                    <a href="search.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Search Medicine</a>
+                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
+                    </a>
+                    <a href="contact.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Contact Us</a>
+                    <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <a href="search.html" class="px-4 py-2.5 rounded-xl bg-turq-500 text-white font-bold text-xs hover:bg-turq-600 transition shadow-sm flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Shop Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HERO SECTION WITH LOCAL HERITAGE TOUCH -->
+    <section class="relative bg-gradient-to-b from-turq-900 via-navy-900 to-slate-900 text-white pt-20 pb-28 overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#2dd4bf_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-7 space-y-6">
+                    <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-turq-500/20 border border-turq-400/30 text-turq-300 text-xs font-bold uppercase tracking-widest">
+                        <i data-lucide="map-pin" class="w-3.5 h-3.5 text-turq-400"></i> Serving Ras Beirut Facing LAU Lower Gate
+                    </div>
+                    <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
+                        A Legacy of Trust in <span class="text-transparent bg-clip-text bg-gradient-to-r from-turq-300 to-turq-500">Ras Beirut</span>
+                    </h1>
+                    <p class="text-slate-300 text-base sm:text-lg max-w-2xl leading-relaxed">
+                        Combining half a century of neighborhood care with next-generation digital healthcare. Order medication, verify prescriptions, or consult our AI clinical assistant anytime.
+                    </p>
+
+                    <div class="flex flex-wrap items-center gap-4 pt-2">
+                        <a href="search.html" class="px-6 py-3.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-turq-500/25 flex items-center gap-2">
+                            <i data-lucide="search" class="w-4 h-4"></i> Search Medicine (50+ Items)
+                        </a>
+                        <a href="chatbot.html" class="px-6 py-3.5 bg-white/10 hover:bg-white/20 border border-white/20 text-white font-bold rounded-xl text-sm transition flex items-center gap-2">
+                            <i data-lucide="bot" class="w-4 h-4 text-turq-400"></i> Talk to AI Clinical Assistant
+                        </a>
+                    </div>
+
+                    <!-- METRICS BAR -->
+                    <div class="grid grid-cols-3 gap-4 pt-8 border-t border-slate-800">
+                        <div>
+                            <div class="text-2xl font-black text-turq-400">50+ Years</div>
+                            <div class="text-xs text-slate-400 mt-0.5">Community Heritage</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-white">24/7</div>
+                            <div class="text-xs text-slate-400 mt-0.5">Digital Dispatch</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl font-black text-turq-400">15 Min</div>
+                            <div class="text-xs text-slate-400 mt-0.5">Express Local Delivery</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT QUICK ACTION CARD -->
+                <div class="lg:col-span-5">
+                    <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-white">Instant Prescription Refill</h3>
+                                <p class="text-xs text-slate-400">Upload RX for rapid pharmacist verification</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-xl bg-turq-500/20 text-turq-400 flex items-center justify-center">
+                                <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+                            </div>
+                        </div>
+
+                        <form onsubmit="event.preventDefault(); alert('Prescription received! A Ras Beirut pharmacist will reach out via WhatsApp shortly.');" class="space-y-4">
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Your Full Name</label>
+                                <input type="text" required placeholder="e.g. Nadim El-Hage" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-xs focus:outline-none focus:ring-2 focus:ring-turq-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">WhatsApp Phone Number</label>
+                                <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-3 rounded-xl bg-slate-900/80 border border-slate-700 text-white text-xs focus:outline-none focus:ring-2 focus:ring-turq-500">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-300 mb-1">Select RX Document</label>
+                                <input type="file" required class="w-full px-3 py-2 text-xs text-slate-400 bg-slate-900/80 rounded-xl border border-slate-700 file:mr-4 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-turq-500 file:text-white hover:file:bg-turq-600">
+                            </div>
+                            <button type="submit" class="w-full py-3.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow-lg shadow-turq-500/20">
+                                Send RX to On-Duty Pharmacist
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- RAS BEIRUT HERITAGE & HISTORY SECTION -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                
+                <div class="lg:col-span-6 space-y-6">
+                    <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block">Rooted in Beirut</span>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 leading-tight">
+                        A Cornerstone of Medical Care Facing LAU Lower Gate Since 1976
+                    </h2>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Established in the heart of Ras Beirut, our pharmacy began as a modest neighborhood apothecary dedicated to students, faculty, and families residing along Hamra, Manara, and Koraytem.
+                    </p>
+                    <p class="text-slate-600 text-sm leading-relaxed">
+                        Through decades of urban evolution, Ras Beirut Pharmacy remained an unwavering beacon of health support. Today, we bridge this rich heritage with modern digital telehealth, offering automated refills, interactive health tools, and instant delivery.
+                    </p>
+
+                    <div class="grid grid-cols-2 gap-4 pt-4">
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                            <i data-lucide="heart-pulse" class="w-6 h-6 text-turq-600 mb-2"></i>
+                            <h4 class="font-bold text-slate-900 text-sm">Personalized Guidance</h4>
+                            <p class="text-xs text-slate-500 mt-1">Direct access to licensed clinical pharmacists.</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200">
+                            <i data-lucide="truck" class="w-6 h-6 text-turq-600 mb-2"></i>
+                            <h4 class="font-bold text-slate-900 text-sm">Express Riders</h4>
+                            <p class="text-xs text-slate-500 mt-1">Direct dispatch to all surrounding districts.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- HISTORICAL TIMELINE -->
+                <div class="lg:col-span-6">
+                    <div class="bg-slate-900 text-white p-8 rounded-3xl border border-slate-800 relative shadow-xl">
+                        <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                            <i data-lucide="history" class="w-5 h-5 text-turq-400"></i> Milestones in Ras Beirut
+                        </h3>
+
+                        <div class="space-y-6 relative before:absolute before:inset-0 before:left-3 before:w-0.5 before:bg-slate-800">
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-turq-500 text-white flex items-center justify-center text-[10px] font-bold">1</div>
+                                <span class="text-xs font-bold text-turq-400">1976</span>
+                                <h4 class="font-bold text-sm text-white">Apothecary Foundation</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Opened facing the lower gate of LAU (formerly BUC), serving local students and families.</p>
+                            </div>
+
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-turq-500 text-white flex items-center justify-center text-[10px] font-bold">2</div>
+                                <span class="text-xs font-bold text-turq-400">1998</span>
+                                <h4 class="font-bold text-sm text-white">Expansion & Cold Chain Vaults</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Upgraded facility with clinical storage vaults for complex chronic and pediatric biologicals.</p>
+                            </div>
+
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-turq-500 text-white flex items-center justify-center text-[10px] font-bold">3</div>
+                                <span class="text-xs font-bold text-turq-400">2018</span>
+                                <h4 class="font-bold text-sm text-white">Neighborhood Courier Dispatch</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Launched rapid motorcycle courier coverage across Hamra, Raouche, Verdun, and Koraytem.</p>
+                            </div>
+
+                            <div class="relative pl-8">
+                                <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-turq-500 text-white flex items-center justify-center text-[10px] font-bold">4</div>
+                                <span class="text-xs font-bold text-turq-400">2026</span>
+                                <h4 class="font-bold text-sm text-white">Digital Health & AI Platform</h4>
+                                <p class="text-xs text-slate-400 mt-0.5">Integrated 24/7 AI Clinical Assistant, live digital inventory search, and WhatsApp refills.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- INTERACTIVE HEALTH TOOLS SECTION -->
+    <section class="py-16 bg-slate-100 border-y border-slate-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+                <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-1">Interactive Tools</span>
+                <h2 class="text-3xl font-extrabold text-slate-900">Check Your Daily Health Metrics</h2>
+                <p class="text-xs text-slate-500 mt-2">Use our built-in clinical calculators to check your Body Mass Index (BMI) or daily recommended water intake.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- BMI CALCULATOR -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-turq-50 rounded-xl text-turq-600"><i data-lucide="scale" class="w-6 h-6"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">BMI Assessment Tool</h3>
+                            <p class="text-xs text-slate-500">Calculate body mass index category</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Weight (kg)</label>
+                            <input type="number" id="bmi-weight" placeholder="e.g. 70" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Height (cm)</label>
+                            <input type="number" id="bmi-height" placeholder="e.g. 175" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                        </div>
+                        <button onclick="calculateBMI()" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition">Calculate BMI</button>
+                        <div id="bmi-result" class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-center font-bold text-slate-700 hidden"></div>
+                    </div>
+                </div>
+
+                <!-- WATER HYDRATION CALCULATOR -->
+                <div class="bg-white p-6 sm:p-8 rounded-3xl border border-slate-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="p-3 bg-turq-50 rounded-xl text-turq-600"><i data-lucide="droplet" class="w-6 h-6"></i></div>
+                        <div>
+                            <h3 class="font-bold text-slate-900 text-base">Hydration Intake Calculator</h3>
+                            <p class="text-xs text-slate-500">Determine daily water requirement</p>
+                        </div>
+                    </div>
+
+                    <div class="space-y-4 text-xs">
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Body Weight (kg)</label>
+                            <input type="number" id="water-weight" placeholder="e.g. 68" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                        </div>
+                        <div>
+                            <label class="block font-semibold text-slate-700 mb-1">Daily Activity Level</label>
+                            <select id="water-activity" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                                <option value="35">Normal Daily Activity</option>
+                                <option value="40">Moderate Exercise (30+ mins)</option>
+                                <option value="45">Heavy Workouts / High Heat</option>
+                            </select>
+                        </div>
+                        <button onclick="calculateWater()" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition">Calculate Water Intake</button>
+                        <div id="water-result" class="p-4 bg-slate-50 rounded-xl border border-slate-200 text-center font-bold text-slate-700 hidden"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- CORE DIGITAL SERVICES SECTION -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto mb-16">
+                <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-1">Digital Healthcare</span>
+                <h2 class="text-3xl font-extrabold text-slate-900">Comprehensive Pharmacy Services</h2>
+                <p class="text-slate-500 text-xs mt-2">Explore our full suite of online health solutions designed for the Ras Beirut community.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-12 h-12 rounded-2xl bg-turq-500 text-white flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform">
+                        <i data-lucide="search" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">Medicine Search & Live Cart</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">Search over 50 stocked medications, check real-time availability, and build your cart seamlessly.</p>
+                    <a href="search.html" class="text-turq-600 font-bold text-xs hover:underline flex items-center gap-1">Open Search Catalog →</a>
+                </div>
+
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-12 h-12 rounded-2xl bg-turq-500 text-white flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform">
+                        <i data-lucide="bot" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">24/7 AI Clinical Assistant</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">Get immediate answers for over 100 health phrases, dosages, location details, and symptom checks.</p>
+                    <a href="chatbot.html" class="text-turq-600 font-bold text-xs hover:underline flex items-center gap-1">Launch AI Assistant →</a>
+                </div>
+
+                <div class="p-8 rounded-3xl bg-slate-50 border border-slate-200 hover:border-turq-300 transition hover:shadow-xl group">
+                    <div class="w-12 h-12 rounded-2xl bg-turq-500 text-white flex items-center justify-center mb-6 shadow-md group-hover:scale-110 transition-transform">
+                        <i data-lucide="calendar" class="w-6 h-6"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-slate-900 mb-2">WhatsApp Refills & Consults</h3>
+                    <p class="text-xs text-slate-500 leading-relaxed mb-6">Schedule chronic medication reminders and book virtual consultations with on-duty clinical staff.</p>
+                    <a href="services.html" class="text-turq-600 font-bold text-xs hover:underline flex items-center gap-1">View Digital Services →</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div>
+                <p class="text-sm font-semibold text-white">&copy; 2026 Ras Beirut Pharmacy. Digital Healthcare Platform.</p>
+                <p class="text-xs text-slate-500 mt-1">Ras Beirut, Facing LAU Lower Gate, Beirut, Lebanon.</p>
+            </div>
+            <div class="flex items-center space-x-6 text-xs">
+                <a href="index.html" class="text-turq-400 font-bold">Home</a>
+                <a href="services.html" class="hover:text-turq-400">Services</a>
+                <a href="search.html" class="hover:text-turq-400">Medicines</a>
+                <a href="chatbot.html" class="hover:text-turq-400">AI Assistant</a>
+                <a href="admin.html" class="text-turq-400 font-bold hover:underline">Admin Portal</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE CALCULATOR SCRIPTS -->
+    <script>
+        lucide.createIcons();
+
+        function calculateBMI() {
+            const w = parseFloat(document.getElementById('bmi-weight').value);
+            const h = parseFloat(document.getElementById('bmi-height').value) / 100;
+            const res = document.getElementById('bmi-result');
+
+            if (!w || !h) {
+                alert('Please enter valid weight and height values.');
+                return;
+            }
+
+            const bmi = (w / (h * h)).toFixed(1);
+            let category = '';
+            if (bmi < 18.5) category = 'Underweight';
+            else if (bmi < 25) category = 'Normal weight';
+            else if (bmi < 30) category = 'Overweight';
+            else category = 'Obese';
+
+            res.innerHTML = `Your BMI: <span class="text-turq-700 font-black">${bmi}</span> (${category})`;
+            res.classList.remove('hidden');
+        }
+
+        function calculateWater() {
+            const w = parseFloat(document.getElementById('water-weight').value);
+            const factor = parseFloat(document.getElementById('water-activity').value);
+            const res = document.getElementById('water-result');
+
+            if (!w) {
+                alert('Please enter a valid weight.');
+                return;
+            }
+
+            const liters = ((w * factor) / 1000).toFixed(2);
+            res.innerHTML = `Recommended Intake: <span class="text-turq-700 font-black">${liters} Liters</span> / day`;
+            res.classList.remove('hidden');
+        }
+    </script>
+<script>
+    // Trigger fade-in when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('page-loaded');
+    });
+
+    // Intercept internal navigation clicks for smooth fade-out effect
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        
+        // Check if it's an internal HTML link (ignoring anchors, external links, or JS triggers)
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+            e.preventDefault();
+            document.body.classList.remove('page-loaded');
+            document.body.classList.add('page-fade-out');
+
+            setTimeout(() => {
+                window.location.href = href;
+            }, 250); // Matches the 0.25s fade-out CSS duration
+        }
+    });
+</script>
+</body>
+</html>

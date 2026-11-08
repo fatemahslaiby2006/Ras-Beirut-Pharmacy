@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Services | Ras Beirut Pharmacy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: { 50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' },
+                        navy: { 800: '#062c38', 900: '#041d26' }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    /* Page Transition Animations */
+    body {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
+    body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    body.page-fade-out {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+    }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+    <!-- UNIFIED NAVBAR -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
+                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
+                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
+                    </div>
+                </a>
+
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Home</a>
+                    <a href="services.html" class="text-turq-600 font-bold text-sm">Digital Services</a>
+                    <a href="search.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Search Medicine</a>
+                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
+                    </a>
+                    <a href="contact.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Contact Us</a>
+                    <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin</a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <a href="search.html" class="px-4 py-2.5 rounded-xl bg-turq-500 text-white font-bold text-xs hover:bg-turq-600 transition shadow-sm flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Shop Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HEADER BANNER -->
+    <section class="bg-turq-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-turq-400 font-bold text-xs uppercase tracking-widest block mb-2">Advanced Healthcare Suite</span>
+            <h1 class="text-4xl font-extrabold">Our Comprehensive Digital Services</h1>
+            <p class="text-turq-100 mt-2 max-w-2xl mx-auto text-sm">Explore virtual consultations, AI clinical assessments, WhatsApp reminders, and our mobile app ecosystem.</p>
+        </div>
+    </section>
+
+    <!-- SERVICES CONTENT (EXTENDED & LONG) -->
+    <section class="py-16 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+        
+        <!-- SERVICE 1: VIRTUAL CONSULTATION BOOKING -->
+        <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-5 bg-turq-50 p-8 rounded-2xl space-y-4">
+                <div class="w-12 h-12 bg-turq-500 text-white rounded-xl flex items-center justify-center"><i data-lucide="video" class="w-6 h-6"></i></div>
+                <h3 class="text-xl font-bold text-slate-900">Book Pharmacist Consult</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">Schedule a secure 15-minute video call with our on-duty Ras Beirut clinical pharmacists to review your drug regimen or symptoms.</p>
+                <button onclick="toggleModal('consult-modal')" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow">Book Consultation Slot</button>
+            </div>
+            <div class="md:col-span-7 space-y-4">
+                <span class="px-3 py-1 bg-turq-100 text-turq-800 text-xs font-bold rounded-full uppercase">Professional Guidance</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Expert Clinical Advice From Home</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Unsure about side effects, drug-to-drug interactions, or correct pediatric dosing? Our licensed team is available for scheduled virtual meetings. Choose an open time slot, fill out your inquiry, and receive a secure video conference link straight to your email and WhatsApp.
+                </p>
+                <div class="grid grid-cols-2 gap-4 pt-2 text-xs font-semibold text-slate-700">
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-turq-500"><span>15-min dedicated session</span></i></div>
+                    <div class="flex items-center gap-2"><i data-lucide="check-circle" class="w-4 h-4 text-turq-500"><span>Certified Ras Beirut pharmacists</span></i></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SERVICE 2: WHATSAPP REFILL REMINDER & AI CHATBOT -->
+        <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200 shadow-sm grid grid-cols-1 md:grid-cols-12 gap-8 items-center">
+            <div class="md:col-span-7 space-y-4 order-2 md:order-1">
+                <span class="px-3 py-1 bg-turq-100 text-turq-800 text-xs font-bold uppercase">Chronic Care Automation</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Remind Me of My Medicine (WhatsApp Integration)</h2>
+                <p class="text-slate-600 text-sm leading-relaxed">
+                    Never skip a dose or run out of monthly chronic medications. Link your prescription schedule to our automated WhatsApp bot, which sends timely refill alerts and allows one-click reordering directly through chat. Combined with our 24/7 AI chatbot assessor, you get instant answers and safety checks around the clock.
+                </p>
+                <div class="pt-2">
+                    <a href="chatbot.html" class="inline-flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-xs hover:bg-turq-600 transition shadow">
+                        <i data-lucide="bot" class="w-4 h-4"></i> Try AI Chatbot & Assessor Now →
+                    </a>
+                </div>
+            </div>
+            <div class="md:col-span-5 bg-turq-50 p-8 rounded-2xl space-y-4 order-1 md:order-2">
+                <div class="w-12 h-12 bg-turq-500 text-white rounded-xl flex items-center justify-center"><i data-lucide="message-square-heart" class="w-6 h-6"></i></div>
+                <h3 class="text-xl font-bold text-slate-900">WhatsApp Refill Link</h3>
+                <p class="text-xs text-slate-600 leading-relaxed">Connect your phone number for automated dosage reminders and instant courier dispatch.</p>
+                <button onclick="alert('WhatsApp Refill Notification successfully linked to your phone!')" class="w-full py-3 bg-slate-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow">Link WhatsApp Refills</button>
+            </div>
+        </div>
+
+        <!-- SERVICE 3: MOBILE APP SPOTLIGHT -->
+        <div class="bg-gradient-to-r from-navy-900 to-navy-800 rounded-3xl p-8 sm:p-12 text-white grid grid-cols-1 lg:grid-cols-12 gap-8 items-center shadow-2xl">
+            <div class="lg:col-span-7 space-y-6">
+                <span class="px-3 py-1 bg-turq-500 text-white text-xs font-bold rounded-full uppercase tracking-wider">Mobile App Ecosystem</span>
+                <h2 class="text-3xl font-extrabold">The Ras Beirut Pharmacy Mobile App is Live</h2>
+                <p class="text-slate-300 text-sm leading-relaxed">
+                    Take your pharmacy with you. Track live deliveries, store family health profiles, scan prescriptions instantly, and manage refill subscriptions with our official iOS and Android application.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <button onclick="alert('Redirecting to iOS App Store...')" class="px-6 py-3 bg-white text-slate-900 font-bold rounded-xl text-xs flex items-center gap-2 hover:bg-turq-50 transition shadow"><i data-lucide="apple" class="w-5 h-5"></i> iOS App Store</button>
+                    <button onclick="alert('Redirecting to Google Play Store...')" class="px-6 py-3 bg-turq-500 text-white font-bold rounded-xl text-xs flex items-center gap-2 hover:bg-turq-600 transition shadow"><i data-lucide="play" class="w-5 h-5"></i> Google Play Store</button>
+                </div>
+            </div>
+            <div class="lg:col-span-5 flex justify-center">
+                <div class="w-64 h-96 bg-slate-900 rounded-[40px] border-4 border-slate-700 p-4 shadow-2xl relative flex flex-col justify-between">
+                    <div class="w-24 h-4 bg-slate-700 rounded-full mx-auto"></div>
+                    <div class="text-center space-y-2">
+                        <div class="w-12 h-12 bg-turq-500 rounded-2xl mx-auto flex items-center justify-center text-white"><i data-lucide="cross" class="w-7 h-7"></i></div>
+                        <h4 class="font-bold text-white text-sm">Ras Beirut App</h4>
+                        <p class="text-[10px] text-slate-400">Version 2.4 Live</p>
+                    </div>
+                    <div class="bg-slate-800 p-3 rounded-2xl text-[10px] text-slate-300 space-y-1">
+                        <div class="flex justify-between font-bold text-turq-400"><span>Consult Booked</span><span>Tomorrow 3 PM</span></div>
+                        <div>Dr. Jad K. (Ras Beirut)</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- CONSULTATION BOOKING MODAL -->
+    <div id="consult-modal" class="fixed inset-0 z-50 hidden bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 relative shadow-2xl">
+            <button onclick="toggleModal('consult-modal')" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600"><i data-lucide="x" class="w-6 h-6"></i></button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 rounded-2xl bg-turq-100 text-turq-600 flex items-center justify-center mx-auto mb-3"><i data-lucide="video" class="w-6 h-6"></i></div>
+                <h3 class="text-xl font-bold text-slate-900">Schedule Virtual Consultation</h3>
+                <p class="text-xs text-slate-500 mt-1">Select your preferred time slot with a Ras Beirut pharmacist.</p>
+            </div>
+            <form onsubmit="event.preventDefault(); alert('Consultation slot booked successfully! We sent a calendar invite & confirmation link to your WhatsApp.'); toggleModal('consult-modal');" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">Your Full Name</label>
+                    <input type="text" required placeholder="e.g. Karim El-Khoury" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">WhatsApp Phone Number</label>
+                    <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Preferred Date</label>
+                        <input type="date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">Time Slot</label>
+                        <select class="w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500">
+                            <option>10:00 AM - 10:15 AM</option>
+                            <option>02:00 PM - 02:15 PM</option>
+                            <option>06:00 PM - 06:15 PM</option>
+                        </select>
+                    </div>
+                </div>
+                <button type="submit" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl transition text-sm shadow-md">Confirm Video Consultation Slot</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div>
+                <p class="text-sm font-semibold text-white">&copy; 2026 Ras Beirut Pharmacy. Digital Healthcare Platform.</p>
+                <p class="text-xs text-slate-500 mt-1">Ras Beirut, Facing LAU Lower Gate, Beirut, Lebanon.</p>
+            </div>
+            <div class="flex items-center space-x-6 text-xs">
+                <a href="index.html" class="hover:text-turq-400">Home</a>
+                <a href="search.html" class="hover:text-turq-400">Medicines</a>
+                <a href="chatbot.html" class="hover:text-turq-400">AI Assistant</a>
+                <a href="admin.html" class="text-turq-400 font-bold hover:underline">Admin Portal</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        function toggleModal(id) { document.getElementById(id).classList.toggle('hidden'); }
+    </script>
+<script>
+    // Trigger fade-in when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('page-loaded');
+    });
+
+    // Intercept internal navigation clicks for smooth fade-out effect
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        
+        // Check if it's an internal HTML link (ignoring anchors, external links, or JS triggers)
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+            e.preventDefault();
+            document.body.classList.remove('page-loaded');
+            document.body.classList.add('page-fade-out');
+
+            setTimeout(() => {
+                window.location.href = href;
+            }, 250); // Matches the 0.25s fade-out CSS duration
+        }
+    });
+</script>
+</body>
+</html>

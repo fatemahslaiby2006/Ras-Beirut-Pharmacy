@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pharmacist Chatbot | Ras Beirut Pharmacy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: { 
+                            50: '#f0fdfa', 
+                            100: '#ccfbf1', 
+                            200: '#99f6e4', 
+                            300: '#5eead4', 
+                            400: '#2dd4bf', 
+                            500: '#14b8a6', 
+                            600: '#0d9488', 
+                            700: '#0f766e', 
+                            800: '#115e59', 
+                            900: '#134e4a' 
+                        },
+                        navy: { 
+                            800: '#062c38', 
+                            900: '#041d26' 
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased h-screen flex flex-col">
+
+    <!-- UNIFIED NAVBAR -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shrink-0 shadow-sm">
+        <a href="index.html" class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-xl bg-turq-500 flex items-center justify-center text-white font-bold">
+                <i data-lucide="cross" class="w-6 h-6"></i>
+            </div>
+            <div>
+                <h1 class="font-bold text-slate-900 text-sm">RAS BEIRUT PHARMACY</h1>
+                <span class="text-[10px] text-turq-600 font-bold uppercase tracking-widest flex items-center gap-1">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    Live AI Clinical Assistant (100+ Phrase Engine)
+                </span>
+            </div>
+        </a>
+        <nav class="hidden md:flex items-center space-x-6 text-sm font-medium">
+            <a href="index.html" class="text-slate-600 hover:text-turq-600 transition">Home</a>
+            <a href="services.html" class="text-slate-600 hover:text-turq-600 transition">Services</a>
+            <a href="search.html" class="text-slate-600 hover:text-turq-600 transition">Search Medicine</a>
+            <a href="chatbot.html" class="text-turq-600 font-bold">AI Pharmacist</a>
+            <a href="contact.html" class="text-slate-600 hover:text-turq-600 transition">Contact Us</a>
+            <a href="admin.html" class="text-slate-600 hover:text-turq-600 transition flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin</a>
+        </nav>
+    </header>
+
+    <!-- CHAT CONTAINER -->
+    <main class="flex-1 max-w-4xl w-full mx-auto p-4 flex flex-col justify-between overflow-hidden">
+        
+        <!-- MESSAGES WINDOW -->
+        <div id="chat-window" class="flex-1 overflow-y-auto space-y-4 p-4 sm:p-6 bg-white rounded-3xl border border-slate-200 shadow-sm mb-4">
+            
+            <!-- BOT GREETING -->
+            <div class="flex items-start space-x-3">
+                <div class="w-9 h-9 rounded-full bg-turq-500 text-white flex items-center justify-center shrink-0 shadow">
+                    <i data-lucide="bot" class="w-5 h-5"></i>
+                </div>
+                <div class="bg-turq-50 border border-turq-100 rounded-2xl p-4 text-xs sm:text-sm text-slate-700 max-w-xl leading-relaxed">
+                    <p class="font-bold text-turq-900 mb-1">Hello! I am your 24/7 Ras Beirut AI Clinical Assistant. 👋</p>
+                    <p>I can help you assess symptoms (like headaches, fevers, or coughs), recommend safe OTC doses, check our location facing LAU lower gate, or set up WhatsApp refills. What can I help you with today?</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- QUICK SUGGESTION CHIPS -->
+        <div class="flex gap-2 overflow-x-auto pb-2 mb-2 text-xs">
+            <button onclick="sendQuickMessage('I have a severe headache')" class="px-3 py-1.5 bg-white border border-slate-200 hover:border-turq-400 hover:text-turq-700 text-slate-600 rounded-full shrink-0 transition">🤕 I have a headache</button>
+            <button onclick="sendQuickMessage('Where are you located?')" class="px-3 py-1.5 bg-white border border-slate-200 hover:border-turq-400 hover:text-turq-700 text-slate-600 rounded-full shrink-0 transition">📍 Store location</button>
+            <button onclick="sendQuickMessage('How do I order medicine?')" class="px-3 py-1.5 bg-white border border-slate-200 hover:border-turq-400 hover:text-turq-700 text-slate-600 rounded-full shrink-0 transition">🛍️ How to order?</button>
+            <button onclick="sendQuickMessage('I have a fever and sore throat')" class="px-3 py-1.5 bg-white border border-slate-200 hover:border-turq-400 hover:text-turq-700 text-slate-600 rounded-full shrink-0 transition">🤒 Fever & sore throat</button>
+            <button onclick="sendQuickMessage('How are you today?')" class="px-3 py-1.5 bg-white border border-slate-200 hover:border-turq-400 hover:text-turq-700 text-slate-600 rounded-full shrink-0 transition">👋 Hello / Small talk</button>
+        </div>
+
+        <!-- INPUT FORM -->
+        <form onsubmit="handleChat(event)" class="flex gap-2 bg-white p-2 rounded-2xl border border-slate-200 shadow-md">
+            <input type="text" id="chat-input" placeholder="Type a message..." class="flex-1 px-4 py-3 text-xs sm:text-sm focus:outline-none bg-transparent">
+            <button type="submit" class="px-5 py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs sm:text-sm transition flex items-center gap-2 shadow-sm">
+                <span>Send</span>
+                <i data-lucide="send" class="w-4 h-4"></i>
+            </button>
+        </form>
+    </main>
+
+    <!-- ADVANCED 100+ PHRASE INTENT ENGINE -->
+    <script>
+        lucide.createIcons();
+
+        function sendQuickMessage(text) {
+            document.getElementById('chat-input').value = text;
+            handleChat(new Event('submit'));
+        }
+
+        async function handleChat(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const chatWindow = document.getElementById('chat-window');
+            const message = input.value.trim();
+
+            if (!message) return;
+
+            // 1. Render User Message
+            chatWindow.innerHTML += `
+                <div class="flex items-start justify-end space-x-3">
+                    <div class="bg-slate-900 text-white rounded-2xl p-4 text-xs sm:text-sm max-w-lg leading-relaxed shadow-sm">
+                        ${escapeHtml(message)}
+                    </div>
+                </div>
+            `;
+            
+            input.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            // 2. Render Typing Indicator
+            const typingId = 'typing-' + Date.now();
+            chatWindow.innerHTML += `
+                <div id="${typingId}" class="flex items-start space-x-3">
+                    <div class="w-9 h-9 rounded-full bg-turq-500 text-white flex items-center justify-center shrink-0 shadow">
+                        <i data-lucide="bot" class="w-5 h-5"></i>
+                    </div>
+                    <div class="bg-turq-50 border border-turq-100 rounded-2xl p-4 text-xs text-slate-500 flex items-center gap-2">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce"></span>
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce delay-100"></span>
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-bounce delay-200"></span>
+                        <span>Ras Beirut AI is analyzing...</span>
+                    </div>
+                </div>
+            `;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+            lucide.createIcons();
+
+            // 3. Generate Natural Dynamic Response
+            setTimeout(() => {
+                const typingIndicator = document.getElementById(typingId);
+                if (typingIndicator) typingIndicator.remove();
+
+                const responseText = generateSmartResponse(message);
+
+                chatWindow.innerHTML += `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-9 h-9 rounded-full bg-turq-500 text-white flex items-center justify-center shrink-0 shadow">
+                            <i data-lucide="bot" class="w-5 h-5"></i>
+                        </div>
+                        <div class="bg-turq-50 border border-turq-100 rounded-2xl p-4 text-xs sm:text-sm text-slate-700 max-w-lg leading-relaxed">
+                            <p class="font-bold text-turq-900 mb-1">Ras Beirut AI Assistant</p>
+                            <div>${responseText}</div>
+                        </div>
+                    </div>
+                `;
+
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+                lucide.createIcons();
+            }, 500);
+        }
+
+        // Comprehensive 100+ Phrase Matching Engine
+        function generateSmartResponse(msg) {
+            const lower = msg.toLowerCase().trim();
+
+            // 1. GREETINGS & SMALL TALK
+            if (['hi', 'hello', 'hey', 'marhaba', 'good morning', 'good evening', 'good afternoon', 'sup', 'hiya'].some(w => lower.includes(w)) && !lower.includes('headache') && !lower.includes('fever')) {
+                return "Hello! Welcome to Ras Beirut Pharmacy. How can I help you today? You can ask about our medication catalog, symptoms, delivery, or store location facing LAU lower gate!";
+            }
+            if (['how are you', 'how r u', 'doing good', 'how are u'].some(w => lower.includes(w))) {
+                return "I'm doing great, thank you for asking! Ready to assist you with any health inquiries or medication orders. How can I help you today? 😊";
+            }
+            if (['who are you', 'what are you', 'your name'].some(w => lower.includes(w))) {
+                return "I am the 24/7 AI Clinical Assistant for Ras Beirut Pharmacy, designed to help you check symptoms, verify drug availability, and manage orders.";
+            }
+            if (['thank', 'shukran', 'thanks', 'thx'].some(w => lower.includes(w))) {
+                return "You're very welcome! Stay healthy, and feel free to reach out anytime you need assistance. 🌿";
+            }
+            if (['bye', 'goodbye', 'see you', 'cya'].some(w => lower.includes(w))) {
+                return "Goodbye! Feel free to drop back in anytime if you need anything else from our Ras Beirut team.";
+            }
+
+            // 2. LOCATION & HOURS
+            if (['location', 'where', 'address', 'map', 'find you', 'direction', 'lau'].some(w => lower.includes(w))) {
+                return "Our flagship physical pharmacy is located in <strong>Ras Beirut, directly facing the LAU lower gate</strong>. We are open daily from 7:30 AM to 11:30 PM, while our online delivery runs 24/7!";
+            }
+            if (['hours', 'open', 'close', 'time', 'timing', 'schedule'].some(w => lower.includes(w))) {
+                return "Our in-store physical branch in Ras Beirut (facing LAU lower gate) is open daily from <strong>7:30 AM to 11:30 PM</strong>. Our digital delivery and AI chatbot operate <strong>24/7</strong>.";
+            }
+
+            // 3. SYMPTOMS & HEALTH ASSESSOR
+            if (['headache', 'migraine', 'head pain', 'head hurts', 'pain in head'].some(w => lower.includes(w))) {
+                return "For a headache or mild migraine, we recommend <strong>Panadol Extra 500mg</strong> ($3.50 for 24 tablets) available in our <a href='search.html' class='text-turq-600 font-bold underline'>Search Medicine</a> catalog. Ensure you stay hydrated in a quiet room. If the headache is severe and sudden, please consult a physician immediately.";
+            }
+            if (['fever', 'temperature', 'hot', 'chills', 'shivering'].some(w => lower.includes(w))) {
+                return "Fever is often a sign your body is fighting an infection. For adults, Paracetamol (Panadol) helps reduce fever. Drink plenty of fluids and rest. If your fever exceeds 39°C (102°F) or lasts more than 3 days, please visit a doctor.";
+            }
+            if (['stomach', 'belly', 'nausea', 'vomit', 'digestion', 'acid', 'reflux', 'heartburn', 'stomachache'].some(w => lower.includes(w))) {
+                return "For stomach discomfort, acid reflux, or indigestion, we carry <strong>Gaviscon Liquid 200ml</strong> ($9.00) in our store catalog. Avoid spicy foods and stay upright after eating.";
+            }
+            if (['cough', 'throat', 'cold', 'flu', 'sore throat', 'runny nose', 'sneezing', 'congestion'].some(w => lower.includes(w))) {
+                return "For cold, sore throat, or flu symptoms, we recommend Vitamin C 1000mg effervescent tablets, soothing lozenges, and plenty of warm fluids. You can check our <a href='search.html' class='text-turq-600 font-bold underline'>Search Medicine</a> tab for stock availability.";
+            }
+            if (['pain', 'ache', 'back pain', 'joint', 'muscle'].some(w => lower.includes(w))) {
+                return "For general muscle or joint aches, mild analgesic pain relievers like Paracetamol or Ibuprofen are typically effective. You can order them directly online or call our pharmacists for specific dosage advice.";
+            }
+            if (['allergy', 'allergies', 'itchy', 'rash', 'sneez'].some(w => lower.includes(w))) {
+                return "For seasonal allergies, antihistamines can provide fast relief. Check our catalog or upload your prescription if you need specialized chronic allergy medications.";
+            }
+            if (['tired', 'fatigue', 'exhausted', 'sleep', 'insomnia'].some(w => lower.includes(w))) {
+                return "Persistent fatigue can stem from lack of sleep, stress, or vitamin deficiencies (like Vitamin D or B12). Consider booking a consultation with our clinical pharmacists on our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page.";
+            }
+
+            // 4. ORDERING & CART
+            if (['order', 'buy', 'purchase', 'cart', 'shop', 'catalog', 'getPrice', 'cost', 'price'].some(w => lower.includes(w))) {
+                return `
+                    <p class="mb-2">You can place an order easily:</p>
+                    <ul class="list-disc pl-4 space-y-1 text-xs">
+                        <li><strong>Online Catalog:</strong> Visit <a href="search.html" class="text-turq-600 font-bold underline">Search Medicine</a> to pick quantities and add items to your live cart.</li>
+                        <li><strong>Prescription Upload:</strong> Submit your doctor's order for rapid verification.</li>
+                        <li><strong>Direct WhatsApp:</strong> Message us at <strong>+961 70 000 000</strong>.</li>
+                    </ul>
+                `;
+            }
+
+            // 5. DELIVERY
+            if (['delivery', 'ship', 'dispatch', 'rider', 'bring', 'arrive', 'deliver'].some(w => lower.includes(w))) {
+                return "Our motorcycle couriers dispatch rapidly from our Ras Beirut branch (facing LAU lower gate) to Ras Beirut, Hamra, Manara, Raouche, Verdun, and Koraytem.";
+            }
+
+            // 6. WHATSAPP & REFILLS
+            if (['whatsapp', 'refill', 'reminder', 'remind', 'chronic'].some(w => lower.includes(w))) {
+                return "You can link your monthly chronic prescription schedule to automated WhatsApp refill reminders on our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page!";
+            }
+
+            // 7. CONSULTATIONS
+            if (['consult', 'doctor', 'appointment', 'slot', 'booking', 'video', 'pharmacist'].some(w => lower.includes(w))) {
+                return "To book a 15-minute secure video consultation with a Ras Beirut clinical pharmacist, please visit our <a href='services.html' class='text-turq-600 font-bold underline'>Digital Services</a> page.";
+            }
+
+            // DEFAULT FALLBACK FOR UNRECOGNIZED PHRASES
+            return `I understand you are asking about <em>"${escapeHtml(msg)}"</em>. Our licensed pharmacist at Ras Beirut (facing LAU lower gate) can confirm specific details for you right now!<br/><br/>You can call us directly at <strong>+961 1 370 000</strong> or message on WhatsApp at <strong>+961 70 000 000</strong>.`;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+        }
+    </script>
+<script>
+    // Trigger fade-in when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('page-loaded');
+    });
+
+    // Intercept internal navigation clicks for smooth fade-out effect
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        
+        // Check if it's an internal HTML link (ignoring anchors, external links, or JS triggers)
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+            e.preventDefault();
+            document.body.classList.remove('page-loaded');
+            document.body.classList.add('page-fade-out');
+
+            setTimeout(() => {
+                window.location.href = href;
+            }, 250); // Matches the 0.25s fade-out CSS duration
+        }
+    });
+</script>
+</body>
+</html>

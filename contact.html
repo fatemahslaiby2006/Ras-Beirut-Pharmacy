@@ -1,0 +1,265 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Ras Beirut Pharmacy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: { 
+                            50: '#f0fdfa', 
+                            100: '#ccfbf1', 
+                            200: '#99f6e4', 
+                            300: '#5eead4', 
+                            400: '#2dd4bf', 
+                            500: '#14b8a6', 
+                            600: '#0d9488', 
+                            700: '#0f766e', 
+                            800: '#115e59', 
+                            900: '#134e4a',
+                            950: '#042f2e'
+                        },
+                        navy: { 
+                            800: '#062c38', 
+                            900: '#041d26' 
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    /* Page Transition Animations */
+    body {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
+    body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    body.page-fade-out {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+    }
+</style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-turq-500 selection:text-white">
+
+    <!-- UNIFIED NAVBAR -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- BRAND LOGO -->
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
+                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
+                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
+                    </div>
+                </a>
+
+                <!-- SHARED NAVIGATION LINKS -->
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Home</a>
+                    <a href="services.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
+                    <a href="search.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Search Medicine</a>
+                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
+                    </a>
+                    <a href="contact.html" class="text-turq-600 font-bold text-sm">Contact Us</a>
+                    <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1">
+                        <i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin
+                    </a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <a href="search.html" class="px-4 py-2.5 rounded-xl bg-turq-500 text-white font-bold text-xs hover:bg-turq-600 transition shadow-sm flex items-center gap-2">
+                        <i data-lucide="shopping-bag" class="w-4 h-4"></i> Shop Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- HEADER BANNER -->
+    <section class="bg-turq-900 text-white py-16">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <span class="text-turq-400 font-bold text-xs uppercase tracking-widest block mb-2">Neighborhood Care</span>
+            <h1 class="text-4xl font-extrabold">Contact Ras Beirut Pharmacy</h1>
+            <p class="text-turq-100 mt-2 max-w-xl mx-auto text-sm">Have a question about stock, prescription verification, or delivery? Speak directly with our licensed pharmacists in Ras Beirut.</p>
+        </div>
+    </section>
+
+    <!-- CONTACT CONTENT SECTION -->
+    <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+            
+            <!-- LEFT COLUMN: STORE DETAILS & INFO -->
+            <div class="space-y-6">
+                <div>
+                    <span class="text-turq-600 font-bold text-xs uppercase tracking-widest block mb-1">Store Information</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900">Visit Our Flagship Store</h2>
+                    <p class="text-slate-600 text-sm leading-relaxed mt-2">
+                        Located conveniently in Ras Beirut, directly facing the LAU lower gate. Stop by for personalized consultations, prescription drop-offs, and over-the-counter essentials.
+                    </p>
+                </div>
+
+                <div class="space-y-4 pt-2">
+                    <!-- ADDRESS -->
+                    <div class="flex items-start gap-4 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-turq-300 transition">
+                        <div class="p-3 bg-turq-50 rounded-xl text-turq-600 shrink-0">
+                            <i data-lucide="map-pin" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Physical Address</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">Ras Beirut, Facing LAU Lower Gate, Beirut, Lebanon</p>
+                        </div>
+                    </div>
+
+                    <!-- PHONE & WHATSAPP -->
+                    <div class="flex items-start gap-4 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-turq-300 transition">
+                        <div class="p-3 bg-turq-50 rounded-xl text-turq-600 shrink-0">
+                            <i data-lucide="phone-call" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Hotline & WhatsApp</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">Landline: +961 1 370 000</p>
+                            <p class="text-xs text-slate-500">WhatsApp: +961 70 000 000</p>
+                        </div>
+                    </div>
+
+                    <!-- HOURS -->
+                    <div class="flex items-start gap-4 p-5 bg-white rounded-2xl border border-slate-200 shadow-sm hover:border-turq-300 transition">
+                        <div class="p-3 bg-turq-50 rounded-xl text-turq-600 shrink-0">
+                            <i data-lucide="clock" class="w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Working Hours</h4>
+                            <p class="text-xs text-slate-500 mt-0.5">In-Store: Daily 7:30 AM – 11:30 PM</p>
+                            <p class="text-xs text-turq-600 font-semibold">Online Delivery: 24 / 7 Express</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COVERAGE AREA -->
+                <div class="bg-navy-900 text-slate-300 rounded-2xl p-6 border border-navy-800 space-y-3 shadow-lg">
+                    <div class="flex items-center gap-2 text-turq-400 font-bold text-xs uppercase">
+                        <i data-lucide="navigation" class="w-4 h-4"></i> Coverage Area
+                    </div>
+                    <p class="text-xs leading-relaxed">
+                        Our motorcycle riders dispatch rapidly from our LAU lower gate branch to: 
+                        <strong class="text-white">Ras Beirut, Hamra, Al Manara, Raouche, Verdun, and Koraytem.</strong>
+                    </p>
+                </div>
+            </div>
+
+            <!-- RIGHT COLUMN: DIRECT CONTACT / INQUIRY FORM -->
+            <div class="bg-white p-8 sm:p-10 rounded-3xl border border-slate-200 shadow-xl relative">
+                <div class="absolute -top-3 right-6 bg-turq-500 text-white text-[10px] font-bold uppercase tracking-wider px-3 py-1 rounded-full shadow-md">
+                    Fast Response
+                </div>
+                
+                <h3 class="text-xl font-bold text-slate-900 mb-2">Send a Message to Our Pharmacist</h3>
+                <p class="text-xs text-slate-500 mb-6">Fill in your details below and our on-duty team will reply via WhatsApp or phone call.</p>
+
+                <form onsubmit="event.preventDefault(); alert('Inquiry submitted! A pharmacist from Ras Beirut will reach out shortly via WhatsApp.');" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Your Full Name</label>
+                        <input type="text" required placeholder="e.g. Maya El-Hage" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">WhatsApp Phone Number</label>
+                        <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">Neighborhood / Address</label>
+                        <select class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50">
+                            <option>Ras Beirut / LAU Lower Gate</option>
+                            <option>Hamra</option>
+                            <option>Al Manara</option>
+                            <option>Raouche</option>
+                            <option>Verdun</option>
+                            <option>Other Beirut Location</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1.5 uppercase tracking-wider">How can we help?</label>
+                        <textarea rows="4" required placeholder="Inquire about medicine availability, price, dosage instructions, or custom order..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-turq-500 bg-slate-50"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-sm transition shadow-lg shadow-turq-500/20 flex items-center justify-center gap-2">
+                        <i data-lucide="send" class="w-4 h-4"></i> Submit Inquiry
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 py-12 border-t border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-6">
+            <div>
+                <p class="text-sm font-semibold text-white">&copy; 2026 Ras Beirut Pharmacy. Digital Healthcare Platform.</p>
+                <p class="text-xs text-slate-500 mt-1">Ras Beirut, Facing LAU Lower Gate, Beirut, Lebanon.</p>
+            </div>
+            <div class="flex items-center space-x-6 text-xs">
+                <a href="index.html" class="hover:text-turq-400">Home</a>
+                <a href="services.html" class="hover:text-turq-400">Services</a>
+                <a href="search.html" class="hover:text-turq-400">Medicines</a>
+                <a href="chatbot.html" class="hover:text-turq-400">AI Assistant</a>
+                <a href="admin.html" class="text-turq-400 font-bold hover:underline">Admin Portal</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+    </script>
+<script>
+    // Trigger fade-in when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('page-loaded');
+    });
+
+    // Intercept internal navigation clicks for smooth fade-out effect
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        
+        // Check if it's an internal HTML link (ignoring anchors, external links, or JS triggers)
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+            e.preventDefault();
+            document.body.classList.remove('page-loaded');
+            document.body.classList.add('page-fade-out');
+
+            setTimeout(() => {
+                window.location.href = href;
+            }, 250); // Matches the 0.25s fade-out CSS duration
+        }
+    });
+</script>
+</body>
+</html>
+
+```
+
