@@ -104,7 +104,7 @@
                     <h3 class="text-base font-bold text-slate-900">Book Pharmacist Consult</h3>
                     <p class="text-xs text-slate-500 mt-1 leading-relaxed">Schedule a secure 15-minute video call with our on-duty Ras Beirut clinical pharmacists to review your drug regimen or symptoms.</p>
                 </div>
-                <button onclick="alert('Booking calendar opened! Select your preferred time slot.');" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
+                <button onclick="openConsultModal()" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
                     Book Consultation Slot
                 </button>
             </div>
@@ -139,7 +139,7 @@
                     <h3 class="text-base font-bold text-slate-900">WhatsApp Refill Link</h3>
                     <p class="text-xs text-slate-500 mt-1 leading-relaxed">Connect your phone number for automated dosage reminders and instant courier dispatch.</p>
                 </div>
-                <button onclick="alert('WhatsApp pairing link generated! Check your phone.');" class="w-full py-3 bg-navy-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
+                <button onclick="openWhatsAppModal()" class="w-full py-3 bg-navy-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow cursor-pointer">
                     Link WhatsApp Refills
                 </button>
             </div>
@@ -259,8 +259,139 @@
         &copy; 2026 Ras Beirut Pharmacy | Ras Beirut, Facing LAU Lower Gate, Lebanon.
     </footer>
 
+    <!-- MODAL 1: BOOK CONSULTATION MODAL -->
+    <div id="consult-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative max-h-[90vh] overflow-y-auto">
+            <button onclick="closeConsultModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-xl font-bold p-2">✕</button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-2xl bg-turq-50 text-turq-600 flex items-center justify-center">
+                    <i data-lucide="video" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Book Pharmacist Consult</h3>
+                    <p class="text-xs text-slate-500">Ras Beirut On-Duty Clinical Team</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleConsultSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Full Name *</label>
+                    <input type="text" required placeholder="e.g. Maya El-Hage" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Phone Number *</label>
+                        <input type="tel" required placeholder="+961 70 123 456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Healthcare / Insurance ID</label>
+                        <input type="text" placeholder="e.g. NSSF-882190" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Select Clinical Pharmacist *</label>
+                    <select required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                        <option value="Dr. Hani Kassir">Dr. Hani Kassir, PharmD (Chronic Care Specialist)</option>
+                        <option value="Dr. Nour El-Beirut">Dr. Nour El-Beirut, PharmD (Pediatric & OTC Advisor)</option>
+                        <option value="First Available Pharmacist">First Available Licensed Pharmacist</option>
+                    </select>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Preferred Date</label>
+                        <input type="date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-slate-700 mb-1">Time Slot</label>
+                        <select required class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                            <option>10:00 AM - 10:15 AM</option>
+                            <option>02:30 PM - 02:45 PM</option>
+                            <option>06:00 PM - 06:15 PM</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow mt-2">
+                    Confirm & Reserve Video Slot
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: WHATSAPP REFILL MODAL -->
+    <div id="whatsapp-modal" class="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+            <button onclick="closeWhatsAppModal()" class="absolute top-5 right-5 text-slate-400 hover:text-slate-600 text-xl font-bold p-2">✕</button>
+            
+            <div class="flex items-center gap-3 mb-4">
+                <div class="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center">
+                    <i data-lucide="message-square" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Link WhatsApp Refills</h3>
+                    <p class="text-xs text-slate-500">Automated Chronic Medication Alerts</p>
+                </div>
+            </div>
+
+            <form onsubmit="handleWhatsAppSubmit(event)" class="space-y-4 text-xs">
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">WhatsApp Number *</label>
+                    <input type="tel" id="wa-num" required placeholder="+961 70 123 456" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Medication Name / Prescription Code</label>
+                    <input type="text" placeholder="e.g. Lipitor 20mg / Rx-994" class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                </div>
+
+                <div>
+                    <label class="block font-bold text-slate-700 mb-1">Refill Cycle</label>
+                    <select class="w-full px-4 py-2.5 rounded-xl border border-slate-200 focus:outline-none focus:border-turq-500 bg-slate-50 text-xs">
+                        <option>Every 30 Days (Monthly Chronic)</option>
+                        <option>Every 60 Days</option>
+                        <option>Every 90 Days (Quarterly Supply)</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="w-full py-3 bg-navy-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition shadow">
+                    Activate WhatsApp Reminders
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script>
         lucide.createIcons();
+
+        // Modal Functions
+        function openConsultModal() {
+            document.getElementById('consult-modal').classList.remove('hidden');
+        }
+        function closeConsultModal() {
+            document.getElementById('consult-modal').classList.add('hidden');
+        }
+        function handleConsultSubmit(e) {
+            e.preventDefault();
+            closeConsultModal();
+            alert('Consultation Slot Reserved! A confirmation SMS and video meeting link have been sent to your phone number.');
+        }
+
+        function openWhatsAppModal() {
+            document.getElementById('whatsapp-modal').classList.remove('hidden');
+        }
+        function closeWhatsAppModal() {
+            document.getElementById('whatsapp-modal').classList.add('hidden');
+        }
+        function handleWhatsAppSubmit(e) {
+            e.preventDefault();
+            const num = document.getElementById('wa-num').value;
+            closeWhatsAppModal();
+            alert('WhatsApp Refill Activated! Verification code sent to ' + (num || 'your phone number') + '.');
+        }
 
         window.addEventListener('DOMContentLoaded', () => {
             document.body.classList.add('page-loaded');
