@@ -7,7 +7,7 @@
 <script src="https://unpkg.com/lucide@latest"></script>
 <script>tailwind.config={theme:{extend:{colors:{turq:{50:'#f0fdfa',100:'#ccfbf1',200:'#99f6e4',400:'#2dd4bf',500:'#14b8a6',600:'#0d9488',700:'#0f766e',900:'#134e4a'},navy:{900:'#041d26'}}}}}</script>
 <style>
-body{opacity:0;transition:opacity .35s}body.ready{opacity:1}body.leaving{opacity:0}
+body{opacity:1;transition:opacity .35s}body.ready{opacity:1}body.leaving{opacity:0}
 .product-card{transition:transform .25s,box-shadow .25s}.product-card:hover{transform:translateY(-5px);box-shadow:0 20px 45px #0f766e16}
 .pill.active{background:#0d9488;color:white;border-color:#0d9488}
 #suggestions:empty{display:none}#toast{transition:opacity .25s,transform .25s}
@@ -17,14 +17,40 @@ body{opacity:0;transition:opacity .35s}body.ready{opacity:1}body.leaving{opacity
 </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
-<header class="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-turq-100 shadow-sm">
- <div class="max-w-7xl mx-auto px-4 sm:px-6 flex h-20 items-center justify-between gap-4">
-  <a href="index.html" class="flex items-center gap-3 shrink-0"><span class="w-11 h-11 rounded-2xl bg-turq-600 text-white grid place-items-center"><i data-lucide="cross"></i></span><span><b class="block text-slate-900 text-lg leading-5">RAS BEIRUT</b><small class="text-turq-600 font-bold tracking-wider">PHARMACY & DIGITAL HEALTH</small></span></a>
-  <nav class="hidden lg:flex gap-6 text-sm font-semibold"><a href="index.html" class="hover:text-turq-600">Home</a><a href="services.html" class="hover:text-turq-600">Digital Services</a><a href="search.html" class="text-turq-600">Search Medicine</a><a href="chatbot.html" class="hover:text-turq-600">AI Pharmacist</a><a href="contact.html" class="hover:text-turq-600">Contact Us</a><a href="admin.html" class="hover:text-turq-600">Admin</a></nav>
-  <button onclick="openCart()" class="flex items-center gap-2 rounded-xl bg-navy-900 text-white px-4 py-3 text-xs font-bold"><i data-lucide="shopping-bag" class="w-4 h-4"></i> Cart <span id="count" class="bg-turq-500 rounded-full px-2 py-0.5">0</span></button>
- </div>
- <div class="lg:hidden flex gap-4 overflow-x-auto px-4 pb-3 text-xs font-bold whitespace-nowrap"><a href="index.html">Home</a><a href="services.html">Services</a><a href="search.html" class="text-turq-600">Medicines</a><a href="chatbot.html">AI Pharmacist</a><a href="contact.html">Contact</a><a href="admin.html">Admin</a></div>
-</header>
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-turq-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center space-x-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-turq-600 to-turq-400 flex items-center justify-center text-white shadow-lg shadow-turq-500/20">
+                        <i data-lucide="cross" class="w-7 h-7 stroke-[2.5]"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">RAS BEIRUT</span>
+                        <span class="text-xs font-semibold text-turq-600 uppercase tracking-widest block">Pharmacy & Digital Health</span>
+                    </div>
+                </a>
+
+                <nav class="hidden lg:flex items-center space-x-8">
+                    <a href="index.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Home</a>
+                    <a href="services.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Digital Services</a>
+                    <a href="search.html" class="text-turq-600 font-bold text-sm">Search Medicine</a>
+                    <a href="chatbot.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1.5">
+                        <span class="w-2 h-2 rounded-full bg-turq-500 animate-ping"></span> AI Pharmacist
+                    </a>
+                    <a href="contact.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition">Contact Us</a>
+                    <a href="admin.html" class="text-slate-600 hover:text-turq-600 font-medium text-sm transition flex items-center gap-1"><i data-lucide="lock" class="w-3.5 h-3.5"></i> Admin</a>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleCartDrawer()" class="relative p-3 rounded-xl bg-slate-900 text-white hover:bg-turq-600 transition flex items-center gap-2 shadow-md cursor-pointer">
+                        <i data-lucide="shopping-bag" class="w-5 h-5 text-turq-400"></i>
+                        <span class="text-xs font-bold hidden sm:inline">My Cart</span>
+                        <span id="cart-badge-count" class="w-5 h-5 bg-turq-500 text-white rounded-full text-xs font-extrabold flex items-center justify-center">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
 <section class="bg-white border-b border-slate-100 px-4 sm:px-6 pt-9 pb-11">
  <div class="max-w-7xl mx-auto">
   <!-- Storefront-style heading, distinct from the homepage split hero -->
@@ -130,7 +156,7 @@ let category='All',favoritesOnly=false,cart=[],favorites=[];
 try{cart=JSON.parse(localStorage.getItem('rb-cart-v2')||'[]');favorites=JSON.parse(localStorage.getItem('rb-favorites-v2')||'[]')}catch(e){}
 const $=id=>document.getElementById(id);
 const money=n=>'$'+Number(n).toFixed(2);
-const save=()=>{localStorage.setItem('rb-cart-v2',JSON.stringify(cart));localStorage.setItem('rb-favorites-v2',JSON.stringify(favorites))};
+const save=()=>{try{localStorage.setItem('rb-cart-v2',JSON.stringify(cart));localStorage.setItem('rb-favorites-v2',JSON.stringify(favorites))}catch(e){console.warn('Browser storage unavailable',e)}};
 const icon=()=>{if(window.lucide)lucide.createIcons()};
 function renderCategories(){ $('categories').innerHTML=categories.map(c=>`<button class="pill ${category===c?'active':'bg-white text-slate-700'} border border-slate-200 px-4 py-3 rounded-xl text-xs font-bold flex items-center gap-2 hover:border-turq-500 transition" onclick="setCategory('${c}')"><i data-lucide="${icons[c]}" class="w-4 h-4"></i>${c}</button>`).join('');icon() }
 function setCategory(c){category=c;renderCategories();renderProducts()}
@@ -151,7 +177,7 @@ function closeCart(){$('overlay').classList.add('hidden');$('drawer').classList.
 function openModal(id){$(id).classList.remove('hidden');document.body.classList.add('locked')}
 function closeModal(id){$(id).classList.add('hidden');document.body.classList.remove('locked')}
 function openCheckout(){if(!cart.length)return toast('Add an item first');closeCart();$('rx-checkout').classList.toggle('hidden',!cart.some(x=>catalog.find(p=>p.id===x.id).rx));openModal('checkout')}
-function submitOrder(e){e.preventDefault();if(cart.some(x=>catalog.find(p=>p.id===x.id).rx)&&!$('rx-file').files.length)return toast('Please select a prescription for review');const form=new FormData(e.target);const request={date:new Date().toISOString(),name:form.get('name'),phone:form.get('phone'),address:form.get('address'),payment:form.get('payment'),items:cart.map(x=>({...x,name:catalog.find(p=>p.id===x.id).name})),status:'Demo request — not submitted'};let orders=[];try{orders=JSON.parse(localStorage.getItem('rb-demo-orders')||'[]')}catch(e){}orders.push(request);localStorage.setItem('rb-demo-orders',JSON.stringify(orders));cart=[];save();renderCart();closeModal('checkout');e.target.reset();alert('Demo request saved in this browser only. No real order, payment, prescription upload, or pharmacy notification was made.')}
+function submitOrder(e){e.preventDefault();if(cart.some(x=>catalog.find(p=>p.id===x.id).rx)&&!$('rx-file').files.length)return toast('Please select a prescription for review');const form=new FormData(e.target);const request={date:new Date().toISOString(),name:form.get('name'),phone:form.get('phone'),address:form.get('address'),payment:form.get('payment'),items:cart.map(x=>({...x,name:catalog.find(p=>p.id===x.id).name})),status:'Demo request — not submitted'};let orders=[];try{orders=JSON.parse(localStorage.getItem('rb-demo-orders')||'[]')}catch(e){}orders.push(request);try{localStorage.setItem('rb-demo-orders',JSON.stringify(orders))}catch(err){console.warn('Demo order could not be saved',err)}cart=[];save();renderCart();closeModal('checkout');e.target.reset();alert('Demo request saved in this browser only. No real order, payment, prescription upload, or pharmacy notification was made.')}
 function openFinder(){$('finder-choices').innerHTML=categories.filter(c=>c!=='All').map(c=>`<button onclick="chooseFinder('${c}')" class="p-4 rounded-xl border border-slate-200 hover:border-turq-500 hover:bg-turq-50 text-sm font-bold text-left">${c} →</button>`).join('');openModal('finder')}
 function chooseFinder(c){closeModal('finder');$('search').value='';setCategory(c);$('grid').scrollIntoView({behavior:'smooth'})}
 let toastTimer;function toast(msg){const el=$('toast');el.textContent=msg;el.style.opacity='1';el.style.transform='translate(-50%,0)';clearTimeout(toastTimer);toastTimer=setTimeout(()=>{el.style.opacity='0';el.style.transform='translate(-50%,16px)'},2200)}
