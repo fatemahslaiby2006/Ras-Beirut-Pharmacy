@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Staff Portal | Ras Beirut Pharmacy</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        turq: { 
+                            50: '#f0fdfa', 100: '#ccfbf1', 200: '#99f6e4', 300: '#5eead4', 
+                            400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 
+                            800: '#115e59', 900: '#134e4a' 
+                        },
+                        navy: { 800: '#062c38', 900: '#041d26' }
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    /* Page Transition Animations */
+    body {
+        opacity: 0;
+        transform: translateY(8px);
+        transition: opacity 0.35s ease-out, transform 0.35s ease-out;
+    }
+    body.page-loaded {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    body.page-fade-out {
+        opacity: 0;
+        transform: translateY(-8px);
+        transition: opacity 0.25s ease-in, transform 0.25s ease-in;
+    }
+</style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased flex h-screen overflow-hidden">
+
+    <!-- SIDEBAR NAVIGATION -->
+    <aside class="w-64 bg-navy-900 text-slate-300 flex flex-col justify-between shrink-0 hidden lg:flex border-r border-navy-800">
+        <div>
+            <!-- LOGO HEADER -->
+            <div class="p-6 border-b border-navy-800 flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-turq-500 flex items-center justify-center text-white font-bold shadow-lg shadow-turq-500/20">
+                    <i data-lucide="cross" class="w-6 h-6"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-white text-sm tracking-tight">RAS BEIRUT</h1>
+                    <span class="text-[10px] text-turq-400 uppercase tracking-widest font-semibold block">Management Portal</span>
+                </div>
+            </div>
+
+            <!-- MENU LINKS -->
+            <nav class="p-4 space-y-1 text-xs">
+                <a href="#kpi-section" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-turq-500/10 text-turq-400 font-bold border border-turq-500/20">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Overview Dashboard
+                </a>
+                <a href="#inventory-section" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-navy-800 text-slate-300 font-medium transition">
+                    <i data-lucide="boxes" class="w-4 h-4 text-turq-400"></i> Stock & Inventory
+                </a>
+                <a href="#orders-section" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-navy-800 text-slate-300 font-medium transition">
+                    <i data-lucide="shopping-bag" class="w-4 h-4 text-turq-400"></i> Customer Orders
+                </a>
+                <a href="#staff-section" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-navy-800 text-slate-300 font-medium transition">
+                    <i data-lucide="users" class="w-4 h-4 text-turq-400"></i> Staff & Shift Roster
+                </a>
+                <a href="index.html" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-navy-800 text-slate-300 font-medium transition pt-4 border-t border-navy-800">
+                    <i data-lucide="globe" class="w-4 h-4 text-slate-400"></i> Exit to Public Site
+                </a>
+            </nav>
+        </div>
+
+        <!-- LOGGED IN USER FOOTER -->
+        <div class="p-4 border-t border-navy-800 bg-navy-950/50 flex items-center space-x-3">
+            <div class="w-8 h-8 rounded-full bg-turq-600 text-white font-bold flex items-center justify-center text-xs">JK</div>
+            <div>
+                <div class="text-xs font-bold text-white">Pharm. Jad Khoury</div>
+                <div class="text-[10px] text-slate-400">On Duty • LAU Gate Branch</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN DASHBOARD CONTENT AREA -->
+    <main class="flex-1 flex flex-col overflow-y-auto">
+
+        <!-- TOP BAR -->
+        <header class="bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between sticky top-0 z-20 shadow-sm">
+            <div class="flex items-center space-x-3">
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                <h2 class="text-lg font-extrabold text-slate-900">Branch Operations & Management Dashboard</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button onclick="alert('System database synced successfully with central servers.')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Sync DB
+                </button>
+                <a href="index.html" class="px-4 py-2 bg-turq-50 text-turq-700 font-bold rounded-xl text-xs border border-turq-200 hover:bg-turq-100 transition">
+                    ← Public Website
+                </a>
+            </div>
+        </header>
+
+        <div class="p-6 space-y-8 max-w-7xl mx-auto w-full">
+
+            <!-- 1. KPI SUMMARY CARDS -->
+            <section id="kpi-section" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Today's Sales Revenue</span>
+                        <span class="text-2xl font-black text-slate-900">$1,485.50</span>
+                        <span class="text-[10px] font-bold text-emerald-600 block mt-0.5">↑ +14.2% from yesterday</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center"><i data-lucide="dollar-sign" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Orders Processed Today</span>
+                        <span class="text-2xl font-black text-slate-900">42 Orders</span>
+                        <span class="text-[10px] font-bold text-turq-600 block mt-0.5">38 Express Motorbikes</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-turq-50 text-turq-600 flex items-center justify-center"><i data-lucide="shopping-bag" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Low Stock Warnings</span>
+                        <span class="text-2xl font-black text-amber-600">3 SKUs Low</span>
+                        <span class="text-[10px] font-bold text-amber-700 block mt-0.5">Requires Supplier Reorder</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center"><i data-lucide="alert-triangle" class="w-6 h-6"></i></div>
+                </div>
+
+                <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+                    <div>
+                        <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Active Shift Personnel</span>
+                        <span class="text-2xl font-black text-slate-900">5 On Duty</span>
+                        <span class="text-[10px] font-bold text-slate-500 block mt-0.5">2 Pharmacists • 3 Riders</span>
+                    </div>
+                    <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center"><i data-lucide="users" class="w-6 h-6"></i></div>
+                </div>
+            </section>
+
+            <!-- 2. DETAILED MEDICINE INVENTORY DATABASE -->
+            <section id="inventory-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Master Medicine Stock Database</h3>
+                        <p class="text-xs text-slate-500">Live inventory levels, expiration tracking, shelf locations, and batch records.</p>
+                    </div>
+                    <button onclick="alert('Opening New Product Registration Form')" class="px-4 py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center gap-2 shadow-md">
+                        <i data-lucide="plus" class="w-4 h-4"></i> Add New Medicine Item
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[10px] border-y border-slate-200">
+                            <tr>
+                                <th class="py-3.5 px-4">Medication Name</th>
+                                <th class="py-3.5 px-4">SKU / Batch No.</th>
+                                <th class="py-3.5 px-4">Category</th>
+                                <th class="py-3.5 px-4">Supplier</th>
+                                <th class="py-3.5 px-4">Expiry Date</th>
+                                <th class="py-3.5 px-4">Location</th>
+                                <th class="py-3.5 px-4">Unit Price</th>
+                                <th class="py-3.5 px-4">Stock Level</th>
+                                <th class="py-3.5 px-4">Status</th>
+                                <th class="py-3.5 px-4 text-right">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Panadol Extra 500mg</td>
+                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-PAN-8092</td>
+                                <td class="py-3.5 px-4">OTC / Pain Relief</td>
+                                <td class="py-3.5 px-4">GSK Pharma Lebanon</td>
+                                <td class="py-3.5 px-4">12/2027</td>
+                                <td class="py-3.5 px-4 text-slate-500">Shelf A-04</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">$3.50</td>
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900">142 Units</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
+                                <td class="py-3.5 px-4 text-right space-x-1">
+                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
+                                    <button onclick="alert('Editing Item details')" class="px-2 py-1 bg-turq-50 text-turq-700 font-bold rounded text-[10px]">Edit</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Augmentin 1g Tablets</td>
+                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-AUG-4120</td>
+                                <td class="py-3.5 px-4">Prescription RX</td>
+                                <td class="py-3.5 px-4">Medco SAL</td>
+                                <td class="py-3.5 px-4 text-amber-700 font-bold">04/2026</td>
+                                <td class="py-3.5 px-4 text-slate-500">Vault RX-02</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">$15.50</td>
+                                <td class="py-3.5 px-4 font-extrabold text-amber-600">4 Units</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase">Low Stock</span></td>
+                                <td class="py-3.5 px-4 text-right space-x-1">
+                                    <button onclick="alert('Reorder request dispatched to Medco SAL')" class="px-2.5 py-1 bg-amber-50 text-amber-700 font-bold rounded text-[10px]">Reorder</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Vitamin C 1000mg</td>
+                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-VTC-9912</td>
+                                <td class="py-3.5 px-4">Vitamins</td>
+                                <td class="py-3.5 px-4">Marseille Health Imports</td>
+                                <td class="py-3.5 px-4">08/2028</td>
+                                <td class="py-3.5 px-4 text-slate-500">Shelf B-12</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">$6.50</td>
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900">88 Units</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
+                                <td class="py-3.5 px-4 text-right space-x-1">
+                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Lipitor 20mg (Atorvastatin)</td>
+                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-LIP-1029</td>
+                                <td class="py-3.5 px-4">Chronic Care</td>
+                                <td class="py-3.5 px-4">Pfizer Distributor Levant</td>
+                                <td class="py-3.5 px-4">11/2027</td>
+                                <td class="py-3.5 px-4 text-slate-500">Vault RX-05</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">$22.00</td>
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900">35 Units</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
+                                <td class="py-3.5 px-4 text-right space-x-1">
+                                    <button onclick="alert('Editing Item details')" class="px-2 py-1 bg-turq-50 text-turq-700 font-bold rounded text-[10px]">Edit</button>
+                                </td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Ventolin Inhaler 100mcg</td>
+                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-VNT-3044</td>
+                                <td class="py-3.5 px-4">Respiratory</td>
+                                <td class="py-3.5 px-4">GSK Pharma Lebanon</td>
+                                <td class="py-3.5 px-4">01/2027</td>
+                                <td class="py-3.5 px-4 text-slate-500">Shelf C-01</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">$8.00</td>
+                                <td class="py-3.5 px-4 font-extrabold text-slate-900">19 Units</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
+                                <td class="py-3.5 px-4 text-right space-x-1">
+                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 3. RECENT PURCHASES & CUSTOMER ORDERS -->
+            <section id="orders-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Live Customer Purchases & Express Orders</h3>
+                        <p class="text-xs text-slate-500">Real-time incoming orders, courier dispatches, and prescription verifications.</p>
+                    </div>
+                    <span class="px-3 py-1 bg-turq-100 text-turq-800 text-xs font-bold rounded-full">Realtime Feed</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-xs text-slate-600">
+                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[10px] border-y border-slate-200">
+                            <tr>
+                                <th class="py-3.5 px-4">Order ID</th>
+                                <th class="py-3.5 px-4">Customer Name</th>
+                                <th class="py-3.5 px-4">Items Purchased</th>
+                                <th class="py-3.5 px-4">Delivery Neighborhood</th>
+                                <th class="py-3.5 px-4">Total Amount</th>
+                                <th class="py-3.5 px-4">Assigned Courier</th>
+                                <th class="py-3.5 px-4">Order Status</th>
+                                <th class="py-3.5 px-4 text-right">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 font-medium">
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-mono font-bold text-slate-900">#ORD-9801</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Sami El-Hassan</td>
+                                <td class="py-3.5 px-4">Panadol Extra (x2), Vitamin C (x1)</td>
+                                <td class="py-3.5 px-4">Facing LAU Lower Gate</td>
+                                <td class="py-3.5 px-4 font-extrabold text-turq-700">$15.00</td>
+                                <td class="py-3.5 px-4 text-slate-500">Rider Ziad K.</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">Out for Delivery</span></td>
+                                <td class="py-3.5 px-4 text-right"><button onclick="alert('Marked as Completed')" class="px-2.5 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">Complete</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-mono font-bold text-slate-900">#ORD-9802</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Nour Makarem</td>
+                                <td class="py-3.5 px-4">Augmentin 1g (x1 RX attached)</td>
+                                <td class="py-3.5 px-4">Hamra Street</td>
+                                <td class="py-3.5 px-4 font-extrabold text-turq-700">$17.00</td>
+                                <td class="py-3.5 px-4 text-slate-500">Pending Assign</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-purple-100 text-purple-800 font-bold text-[10px]">RX Pending Approval</span></td>
+                                <td class="py-3.5 px-4 text-right"><button onclick="alert('Prescription approved! Rider assigned.')" class="px-2.5 py-1 bg-purple-600 text-white font-bold rounded text-[10px]">Approve RX</button></td>
+                            </tr>
+                            <tr class="hover:bg-slate-50 transition">
+                                <td class="py-3.5 px-4 font-mono font-bold text-slate-900">#ORD-9799</td>
+                                <td class="py-3.5 px-4 font-bold text-slate-900">Layla Chahine</td>
+                                <td class="py-3.5 px-4">Thermal Water Spray (x1)</td>
+                                <td class="py-3.5 px-4">Ras Beirut / LAU Area</td>
+                                <td class="py-3.5 px-4 font-extrabold text-turq-700">$15.50</td>
+                                <td class="py-3.5 px-4 text-slate-500">Rider Tarek M.</td>
+                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Delivered</span></td>
+                                <td class="py-3.5 px-4 text-right"><button onclick="alert('Archived order')" class="px-2 py-1 text-slate-400 hover:text-slate-600 font-bold text-[10px]">Archive</button></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 4. EMPLOYEE INFO & SHIFT ROSTER -->
+            <section id="staff-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Pharmacy Staff & Delivery Rider Duty Roster</h3>
+                        <p class="text-xs text-slate-500">Active personnel info, role assignments, shift hours, and contact details.</p>
+                    </div>
+                    <button onclick="alert('Staff Shift Scheduler opened')" class="px-4 py-2 bg-slate-900 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition">Manage Roster</button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-xl bg-turq-500 text-white font-bold flex items-center justify-center text-xs">JK</div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active Shift</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Pharm. Jad Khoury</h4>
+                            <span class="text-xs text-turq-700 font-semibold">Chief Pharmacist</span>
+                        </div>
+                        <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-slate-200">
+                            <div><strong>Shift:</strong> Morning (07:30 AM - 03:30 PM)</div>
+                            <div><strong>Phone:</strong> +961 70 111 222</div>
+                            <div><strong>License ID:</strong> LOP-88219</div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-xl bg-navy-800 text-white font-bold flex items-center justify-center text-xs">RS</div>
+                            <span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px]">Active Shift</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Rania Saad</h4>
+                            <span class="text-xs text-turq-700 font-semibold">Assistant Pharmacist</span>
+                        </div>
+                        <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-slate-200">
+                            <div><strong>Shift:</strong> Full Day (09:00 AM - 05:00 PM)</div>
+                            <div><strong>Phone:</strong> +961 03 444 555</div>
+                            <div><strong>License ID:</strong> LOP-91024</div>
+                        </div>
+                    </div>
+
+                    <div class="p-5 bg-slate-50 rounded-2xl border border-slate-200 space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div class="w-10 h-10 rounded-xl bg-turq-700 text-white font-bold flex items-center justify-center text-xs">ZK</div>
+                            <span class="px-2 py-0.5 rounded bg-blue-100 text-blue-800 font-bold text-[10px]">On Dispatch</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-900 text-sm">Ziad Karam</h4>
+                            <span class="text-xs text-turq-700 font-semibold">Lead Motorbike Courier</span>
+                        </div>
+                        <div class="text-xs text-slate-500 space-y-1 pt-2 border-t border-slate-200">
+                            <div><strong>Shift:</strong> Express Afternoon (01:00 PM - 09:00 PM)</div>
+                            <div><strong>Phone:</strong> +961 71 888 999</div>
+                            <div><strong>Vehicle:</strong> Bike #04 (Ras Beirut Zone)</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+    </script>
+<script>
+    // Trigger fade-in when page loads
+    window.addEventListener('DOMContentLoaded', () => {
+        document.body.classList.add('page-loaded');
+    });
+
+    // Intercept internal navigation clicks for smooth fade-out effect
+    document.addEventListener('click', e => {
+        const link = e.target.closest('a');
+        if (!link) return;
+
+        const href = link.getAttribute('href');
+        
+        // Check if it's an internal HTML link (ignoring anchors, external links, or JS triggers)
+        if (href && href.endsWith('.html') && !href.startsWith('http') && !link.hasAttribute('target')) {
+            e.preventDefault();
+            document.body.classList.remove('page-loaded');
+            document.body.classList.add('page-fade-out');
+
+            setTimeout(() => {
+                window.location.href = href;
+            }, 250); // Matches the 0.25s fade-out CSS duration
+        }
+    });
+</script>
+</body>
+</html>
