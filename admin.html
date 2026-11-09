@@ -149,7 +149,12 @@
             </section>
 
             <!-- 2. DETAILED MEDICINE INVENTORY DATABASE -->
-            <section id="inventory-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
+            
+<section class="rounded-3xl bg-gradient-to-br from-white to-turq-50 border border-turq-100 shadow-sm p-6 sm:p-8" id="demo-control-center">
+<div class="flex flex-wrap items-start justify-between gap-4 mb-6"><div><span class="text-xs font-extrabold uppercase tracking-widest text-turq-700">Interactive operations · local demo</span><h2 class="text-2xl font-black text-slate-900 mt-2">Inventory & Pickup Control Center</h2><p class="text-sm text-slate-500 mt-2">Edit quantities and advance reservations. Updates appear in Search Medicine in the same browser.</p></div><span class="rounded-full px-3 py-2 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold">Browser-only prototype</span></div>
+<div class="grid lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm"><div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-slate-900">Medicine Stock Editor</h3><span id="stock-low" class="text-xs font-bold text-amber-700"></span></div><input id="admin-stock-search" oninput="renderDemoStock()" placeholder="Search the 50 medicines..." class="w-full border border-slate-200 rounded-xl p-3 text-sm mb-3 focus:ring-2 focus:ring-turq-500 outline-none"><div id="admin-stock-list" class="max-h-[390px] overflow-y-auto divide-y divide-slate-100"></div><button onclick="saveDemoStock()" class="mt-4 w-full rounded-xl bg-turq-600 hover:bg-turq-700 text-white font-extrabold text-sm py-3">Save Inventory Changes</button><p id="stock-feedback" class="text-xs text-slate-500 mt-2" role="status">Stock edits remain local to this browser.</p></div>
+<div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm"><div class="flex items-center justify-between mb-4"><h3 class="font-extrabold text-slate-900">Customer Reservations</h3><button onclick="renderDemoOrders()" class="text-xs font-bold text-turq-700">Refresh</button></div><div id="admin-demo-orders" class="max-h-[510px] overflow-y-auto space-y-3"></div></div></div></section>
+<section id="inventory-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
                     <div>
                         <h3 class="text-lg font-bold text-slate-900">Master Medicine Stock Database</h3>
@@ -404,6 +409,72 @@
             }, 250); // Matches the 0.25s fade-out CSS duration
         }
     });
+</script>
+<script>
+const demoCatalog=[
+["Panadol Extra 500mg", "Paracetamol & Caffeine - Rapid Pain Relief (24 Tabs).", 3.5, "Pain Relief", 0, 142],
+["Augmentin 1g Tablets", "Amoxicillin / Clavulanic Acid (14 Tabs).", 15.5, "Other Care", 1, 4],
+["Vitamin C 1000mg", "Effervescent immune support (20 Tabs).", 6.5, "Vitamins", 0, 88],
+["Lipitor 20mg", "Atorvastatin cholesterol control (30 Tabs).", 22.0, "Chronic Care", 0, 35],
+["Ventolin Inhaler", "Salbutamol bronchodilator (200 Doses).", 8.0, "Other Care", 0, 19],
+["Thermal Water Spray", "Dermo-cosmetic soothing spray (150ml).", 14.0, "Skincare", 0, 45],
+["Aspirin Protect 100mg", "Cardiovascular protection (30 enteric tabs).", 4.0, "Pain Relief", 0, 62],
+["Nexium 20mg", "Esomeprazole acid reflux control (14 Tabs).", 18.5, "Cold & Allergy", 0, 28],
+["Brufen 400mg", "Ibuprofen anti-inflammatory (30 Tabs).", 5.0, "Pain Relief", 0, 95],
+["Gaviscon Liquid 200ml", "Heartburn & indigestion relief suspension.", 9.0, "Other Care", 0, 40],
+["Glucophage 850mg", "Metformin diabetes management (40 Tabs).", 11.0, "Chronic Care", 0, 55],
+["Concor 5mg", "Bisoprolol hypertension therapy (30 Tabs).", 13.5, "Chronic Care", 0, 22],
+["Zyrtec 10mg", "Cetirizine allergy relief (20 Tablets).", 7.5, "Cold & Allergy", 0, 70],
+["Aerius 5mg", "Desloratadine non-drowsy allergy relief (20 Tabs).", 12.0, "Cold & Allergy", 0, 33],
+["Voltaren Emulgel 1%", "Diclofenac sodium topical gel (50g).", 9.5, "Skincare", 0, 50],
+["Cataflam 50mg", "Diclofenac potassium rapid pain relief (20 Tabs).", 6.0, "Pain Relief", 0, 80],
+["Zithromax 500mg", "Azithromycin antibiotic (3 Tablets).", 16.0, "Other Care", 1, 12],
+["Klacid 500mg", "Clarithromycin antibiotic (14 Tabs).", 21.0, "Other Care", 1, 8],
+["Omeprazole 20mg", "Gastric acid reducer capsules (28 Caps).", 6.5, "Other Care", 0, 110],
+["Daflon 500mg", "Micronized purified flavonoid fraction (30 Tabs).", 24.0, "Other Care", 0, 44],
+["Panadol Cold & Flu", "Day & Night symptom relief (24 Caplets).", 5.5, "Cold & Allergy", 0, 85],
+["Actifed Syrup 100ml", "Decongestant and antihistamine syrup.", 7.0, "Cold & Allergy", 0, 30],
+["Strepsils Honey & Lemon", "Sore throat lozenges (36 Lozenges).", 4.5, "Cold & Allergy", 0, 150],
+["Maalox Plus Suspension", "Antacid and anti-gas oral suspension (250ml).", 8.0, "Other Care", 0, 42],
+["Buscopan 10mg", "Abdominal cramp and spasm relief (20 Tabs).", 6.0, "Pain Relief", 0, 65],
+["Centrum Multivitamins", "Complete daily multivitamin formula (30 Tabs).", 19.0, "Vitamins", 0, 38],
+["Omega-3 Fish Oil 1000mg", "Heart and brain support softgels (60 Caps).", 16.5, "Vitamins", 0, 52],
+["Vitamin D3 5000 IU", "Bone and immune support softgels (60 Caps).", 12.5, "Vitamins", 0, 60],
+["Magnesium B6", "Muscle relaxation and anti-fatigue (30 Tabs).", 14.5, "Vitamins", 0, 48],
+["Procto-Glyvenol Cream", "Hemorrhoid treatment cream (30g with applicator).", 11.0, "Skincare", 0, 25],
+["Betadine Antiseptic Solution", "Povidone-iodine 10% (120ml).", 6.0, "Skincare", 0, 75],
+["Fucidin Cream 20g", "Fusidic acid antibacterial skin cream.", 10.5, "Skincare", 1, 18],
+["Flixonase Nasal Spray", "Fluticasone propionate aqueous spray.", 17.0, "Cold & Allergy", 0, 22],
+["Xylocaine 2% Spray", "Lidocaine local anesthetic pump spray (50g).", 13.0, "Other Care", 1, 14],
+["Neosporin Ointment", "Triple antibiotic first aid ointment (15g).", 8.5, "Skincare", 0, 40],
+["Hylo-Comod Eye Drops", "Hyaluronic acid 0.1% for dry eyes (10ml).", 18.0, "Other Care", 0, 35],
+["Systane Ultra Drops", "High-performance lubricant eye drops (10ml).", 15.0, "Other Care", 0, 58],
+["Refresh Tears Drops", "Lubricant eye drops for dry eyes (15ml).", 12.5, "Other Care", 0, 64],
+["Dermovate Cream 30g", "Clobetasol propionate powerful steroid cream.", 14.0, "Skincare", 1, 10],
+["Daivobet Ointment 30g", "Calcipotriol and betamethasone dipropionate.", 29.0, "Skincare", 1, 7],
+["Proscar 5mg", "Finasteride prostate and hair therapy (28 Tabs).", 32.0, "Chronic Care", 0, 20],
+["Xanax 0.5mg", "Alprazolam anxiolytic tablets (30 Tabs).", 16.5, "Other Care", 1, 5],
+["Lexotanil 3mg", "Bromazepam anxiolytic tablets (30 Tabs).", 11.0, "Other Care", 1, 9],
+["Valium 10mg", "Diazepam muscle relaxant & sedative (20 Tabs).", 9.5, "Other Care", 1, 4],
+["Nexium 40mg", "High strength acid reducer (14 Caps).", 24.5, "Other Care", 0, 31],
+["Crestor 20mg", "Rosuvastatin cholesterol therapy (28 Tabs).", 28.0, "Chronic Care", 0, 28],
+["Micardis 80mg", "Telmisartan hypertension control (28 Tabs).", 19.5, "Chronic Care", 0, 41],
+["Norvasc 10mg", "Amlodipine calcium channel blocker (30 Tabs).", 14.0, "Chronic Care", 0, 49],
+["Euthyrox 50mcg", "Levothyroxine sodium thyroid hormone (50 Tabs).", 8.5, "Chronic Care", 0, 80],
+["Protopic 0.1% Ointment", "Tacrolimus eczema & dermatitis treatment (30g).", 34.0, "Skincare", 1, 6]
+].map((p,i)=>({id:i+1,name:p[0],description:p[1],price:p[2],category:p[3],rx:!!p[4],stock:p[5]}));
+const categories=['All','Pain Relief','Vitamins','Skincare','Cold & Allergy','Chronic Care','Other Care'].map((x,i)=>({id:i+1,name:x[0],stock:x[5]}));
+const demoStockKey='rb-stock-v1',demoOrdersKey='rb-demo-orders';
+const escapeDemo=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function readDemo(key,fallback){try{return JSON.parse(localStorage.getItem(key)||JSON.stringify(fallback))}catch(e){return fallback}}
+let pendingStock={...readDemo(demoStockKey,{})};
+function renderDemoStock(){const query=document.getElementById('admin-stock-search').value.toLowerCase();const rows=demoCatalog.filter(p=>p.name.toLowerCase().includes(query));document.getElementById('stock-low').textContent=demoCatalog.filter(p=>Number(pendingStock[p.id]??p.stock)<10).length+' low-stock items';document.getElementById('admin-stock-list').innerHTML=rows.map(p=>{const n=Number(pendingStock[p.id]??p.stock);return `<div class="flex items-center gap-3 py-3"><div class="min-w-0 flex-1"><p class="text-sm font-bold text-slate-800">${escapeDemo(p.name)}</p><span class="text-[11px] font-bold ${n===0?'text-rose-600':n<10?'text-amber-600':'text-turq-700'}">${n===0?'Out of stock':n<10?'Low stock':'Available'}</span></div><input type="number" min="0" max="99999" step="1" value="${n}" data-stock-id="${p.id}" onchange="editDemoStock(${p.id},this.value)" class="w-24 rounded-xl border border-slate-200 p-2 text-center text-sm font-bold"></div>`}).join('')||'<p class="text-sm text-slate-500 py-6">No medicines found.</p>'}
+function editDemoStock(id,value){const n=Number(value);if(!Number.isInteger(n)||n<0||n>99999){alert('Enter a whole number between 0 and 99999');renderDemoStock();return}pendingStock[id]=n;renderDemoStock()}
+function saveDemoStock(){try{localStorage.setItem(demoStockKey,JSON.stringify(pendingStock));document.getElementById('stock-feedback').textContent='✓ Inventory saved in this browser. Refresh Search Medicine to see changes.'}catch(e){document.getElementById('stock-feedback').textContent='Unable to save inventory in this browser.'}renderDemoStock()}
+const pickupStages=['Requested','Confirmed','Preparing','Ready for Pickup','Completed'];
+function renderDemoOrders(){const orders=readDemo(demoOrdersKey,[]).slice().reverse();document.getElementById('admin-demo-orders').innerHTML=orders.length?orders.map(o=>`<div class="border border-slate-200 rounded-2xl p-4"><div class="flex justify-between gap-2"><div><p class="text-sm font-extrabold text-slate-900">${escapeDemo(o.id||'Legacy demo order')}</p><p class="text-xs text-slate-500 mt-1">${escapeDemo(o.name)} · ${escapeDemo(o.fulfillment||'Delivery')}</p></div><span class="text-[10px] bg-turq-50 text-turq-700 font-bold rounded-full px-2 py-1 self-start">${escapeDemo(o.status)}</span></div><p class="text-xs text-slate-500 mt-2">${escapeDemo(o.pickupSlot||o.address||'')} · ${o.items?.length||0} line items</p>${o.rxReview?'<p class="text-xs text-purple-700 mt-2 font-semibold">Rx review needed (file not stored)</p>':''}<label class="block text-xs font-bold text-slate-700 mt-3">Update status<select onchange="changeDemoStatus('${escapeDemo(o.id)}',this.value)" class="w-full mt-1 border border-slate-200 rounded-xl p-2 text-sm">${pickupStages.map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select></label></div>`).join(''):'<div class="text-center py-12"><p class="font-bold text-slate-700">No demo reservations yet</p><p class="text-xs text-slate-500 mt-2">Create a pickup request from Search Medicine in this browser.</p></div>'}
+function changeDemoStatus(id,status){const orders=readDemo(demoOrdersKey,[]);const order=orders.find(o=>o.id===id);if(!order)return;if(!pickupStages.includes(status))return;order.status=status;try{localStorage.setItem(demoOrdersKey,JSON.stringify(orders))}catch(e){alert('Could not save status')}renderDemoOrders()}
+renderDemoStock();renderDemoOrders();window.addEventListener('storage',e=>{if(e.key===demoOrdersKey)renderDemoOrders();if(e.key===demoStockKey){pendingStock=readDemo(demoStockKey,{});renderDemoStock()}});
 </script>
 </body>
 </html>
