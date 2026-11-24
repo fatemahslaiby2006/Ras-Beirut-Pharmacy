@@ -41,7 +41,7 @@
         transition: opacity 0.25s ease-in, transform 0.25s ease-in;
     }
 </style>
-</head>
+<style>#inv-tabs{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px}#inv-tabs button{text-align:left;padding:12px}#inv-content{min-height:450px}.inv-table th{position:sticky;top:0}.inv-table td{vertical-align:top}#inv-dialog{max-height:90vh;overflow:auto}</style></head>
 <body class="bg-slate-100 text-slate-800 font-sans antialiased flex h-screen overflow-hidden">
 
     <!-- SIDEBAR NAVIGATION -->
@@ -98,7 +98,7 @@
                 <h2 class="text-lg font-extrabold text-slate-900">Branch Operations & Management Dashboard</h2>
             </div>
             <div class="flex items-center space-x-3">
-                <button onclick="alert('System database synced successfully with central servers.')" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
+                <button onclick="renderInventory();renderDemoOrders()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs flex items-center gap-1.5 transition">
                     <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Sync DB
                 </button>
                 <a href="index.html" class="px-4 py-2 bg-turq-50 text-turq-700 font-bold rounded-xl text-xs border border-turq-200 hover:bg-turq-100 transition">
@@ -152,113 +152,18 @@
             
 <section class="rounded-3xl bg-gradient-to-br from-white to-turq-50 border border-turq-100 shadow-sm p-6 sm:p-8" id="demo-control-center">
 <div class="flex flex-wrap items-start justify-between gap-4 mb-6"><div><span class="text-xs font-extrabold uppercase tracking-widest text-turq-700">Interactive operations · local demo</span><h2 class="text-2xl font-black text-slate-900 mt-2">Inventory & Pickup Control Center</h2><p class="text-sm text-slate-500 mt-2">Edit quantities and advance reservations. Updates appear in Search Medicine in the same browser.</p></div><span class="rounded-full px-3 py-2 bg-amber-50 text-amber-800 border border-amber-200 text-xs font-bold">Browser-only prototype</span></div>
-<div class="grid lg:grid-cols-2 gap-6"><div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm"><div class="flex justify-between items-center mb-4"><h3 class="font-extrabold text-slate-900">Medicine Stock Editor</h3><span id="stock-low" class="text-xs font-bold text-amber-700"></span></div><input id="admin-stock-search" oninput="renderDemoStock()" placeholder="Search the 50 medicines..." class="w-full border border-slate-200 rounded-xl p-3 text-sm mb-3 focus:ring-2 focus:ring-turq-500 outline-none"><div id="admin-stock-list" class="max-h-[390px] overflow-y-auto divide-y divide-slate-100"></div><button onclick="saveDemoStock()" class="mt-4 w-full rounded-xl bg-turq-600 hover:bg-turq-700 text-white font-extrabold text-sm py-3">Save Inventory Changes</button><p id="stock-feedback" class="text-xs text-slate-500 mt-2" role="status">Stock edits remain local to this browser.</p></div>
-<div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm"><div class="flex items-center justify-between mb-4"><h3 class="font-extrabold text-slate-900">Customer Reservations</h3><button onclick="renderDemoOrders()" class="text-xs font-bold text-turq-700">Refresh</button></div><div id="admin-demo-orders" class="max-h-[510px] overflow-y-auto space-y-3"></div></div></div></section>
-<section id="inventory-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
-                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
-                    <div>
-                        <h3 class="text-lg font-bold text-slate-900">Master Medicine Stock Database</h3>
-                        <p class="text-xs text-slate-500">Live inventory levels, expiration tracking, shelf locations, and batch records.</p>
-                    </div>
-                    <button onclick="alert('Opening New Product Registration Form')" class="px-4 py-2.5 bg-turq-500 hover:bg-turq-600 text-white font-bold rounded-xl text-xs transition flex items-center gap-2 shadow-md">
-                        <i data-lucide="plus" class="w-4 h-4"></i> Add New Medicine Item
-                    </button>
-                </div>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left text-xs text-slate-600">
-                        <thead class="bg-slate-50 text-slate-700 font-bold uppercase tracking-wider text-[10px] border-y border-slate-200">
-                            <tr>
-                                <th class="py-3.5 px-4">Medication Name</th>
-                                <th class="py-3.5 px-4">SKU / Batch No.</th>
-                                <th class="py-3.5 px-4">Category</th>
-                                <th class="py-3.5 px-4">Supplier</th>
-                                <th class="py-3.5 px-4">Expiry Date</th>
-                                <th class="py-3.5 px-4">Location</th>
-                                <th class="py-3.5 px-4">Unit Price</th>
-                                <th class="py-3.5 px-4">Stock Level</th>
-                                <th class="py-3.5 px-4">Status</th>
-                                <th class="py-3.5 px-4 text-right">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-slate-100 font-medium">
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="py-3.5 px-4 font-bold text-slate-900">Panadol Extra 500mg</td>
-                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-PAN-8092</td>
-                                <td class="py-3.5 px-4">OTC / Pain Relief</td>
-                                <td class="py-3.5 px-4">GSK Pharma Lebanon</td>
-                                <td class="py-3.5 px-4">12/2027</td>
-                                <td class="py-3.5 px-4 text-slate-500">Shelf A-04</td>
-                                <td class="py-3.5 px-4 font-bold text-slate-900">$3.50</td>
-                                <td class="py-3.5 px-4 font-extrabold text-slate-900">142 Units</td>
-                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
-                                <td class="py-3.5 px-4 text-right space-x-1">
-                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
-                                    <button onclick="alert('Editing Item details')" class="px-2 py-1 bg-turq-50 text-turq-700 font-bold rounded text-[10px]">Edit</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="py-3.5 px-4 font-bold text-slate-900">Augmentin 1g Tablets</td>
-                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-AUG-4120</td>
-                                <td class="py-3.5 px-4">Prescription RX</td>
-                                <td class="py-3.5 px-4">Medco SAL</td>
-                                <td class="py-3.5 px-4 text-amber-700 font-bold">04/2026</td>
-                                <td class="py-3.5 px-4 text-slate-500">Vault RX-02</td>
-                                <td class="py-3.5 px-4 font-bold text-slate-900">$15.50</td>
-                                <td class="py-3.5 px-4 font-extrabold text-amber-600">4 Units</td>
-                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-amber-100 text-amber-800 font-bold text-[10px] uppercase">Low Stock</span></td>
-                                <td class="py-3.5 px-4 text-right space-x-1">
-                                    <button onclick="alert('Reorder request dispatched to Medco SAL')" class="px-2.5 py-1 bg-amber-50 text-amber-700 font-bold rounded text-[10px]">Reorder</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="py-3.5 px-4 font-bold text-slate-900">Vitamin C 1000mg</td>
-                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-VTC-9912</td>
-                                <td class="py-3.5 px-4">Vitamins</td>
-                                <td class="py-3.5 px-4">Marseille Health Imports</td>
-                                <td class="py-3.5 px-4">08/2028</td>
-                                <td class="py-3.5 px-4 text-slate-500">Shelf B-12</td>
-                                <td class="py-3.5 px-4 font-bold text-slate-900">$6.50</td>
-                                <td class="py-3.5 px-4 font-extrabold text-slate-900">88 Units</td>
-                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
-                                <td class="py-3.5 px-4 text-right space-x-1">
-                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="py-3.5 px-4 font-bold text-slate-900">Lipitor 20mg (Atorvastatin)</td>
-                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-LIP-1029</td>
-                                <td class="py-3.5 px-4">Chronic Care</td>
-                                <td class="py-3.5 px-4">Pfizer Distributor Levant</td>
-                                <td class="py-3.5 px-4">11/2027</td>
-                                <td class="py-3.5 px-4 text-slate-500">Vault RX-05</td>
-                                <td class="py-3.5 px-4 font-bold text-slate-900">$22.00</td>
-                                <td class="py-3.5 px-4 font-extrabold text-slate-900">35 Units</td>
-                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
-                                <td class="py-3.5 px-4 text-right space-x-1">
-                                    <button onclick="alert('Editing Item details')" class="px-2 py-1 bg-turq-50 text-turq-700 font-bold rounded text-[10px]">Edit</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-slate-50 transition">
-                                <td class="py-3.5 px-4 font-bold text-slate-900">Ventolin Inhaler 100mcg</td>
-                                <td class="py-3.5 px-4 text-slate-400 font-mono">SKU-VNT-3044</td>
-                                <td class="py-3.5 px-4">Respiratory</td>
-                                <td class="py-3.5 px-4">GSK Pharma Lebanon</td>
-                                <td class="py-3.5 px-4">01/2027</td>
-                                <td class="py-3.5 px-4 text-slate-500">Shelf C-01</td>
-                                <td class="py-3.5 px-4 font-bold text-slate-900">$8.00</td>
-                                <td class="py-3.5 px-4 font-extrabold text-slate-900">19 Units</td>
-                                <td class="py-3.5 px-4"><span class="px-2.5 py-1 rounded bg-emerald-100 text-emerald-800 font-bold text-[10px] uppercase">In Stock</span></td>
-                                <td class="py-3.5 px-4 text-right space-x-1">
-                                    <button onclick="alert('Stock increased by +10')" class="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold rounded text-[10px]">+10</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-            <!-- 3. RECENT PURCHASES & CUSTOMER ORDERS -->
+<div class="grid gap-6"><div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm"><div class="flex items-center justify-between mb-4"><h3 class="font-extrabold text-slate-900">Customer Reservations</h3><button onclick="renderDemoOrders()" class="text-xs font-bold text-turq-700">Refresh</button></div><div id="admin-demo-orders" class="max-h-[510px] overflow-y-auto space-y-3"></div></div></div></section>
+<section id="inventory-section" class="bg-white rounded-xl border border-slate-200 shadow-sm p-6 space-y-6">
+<div class="flex flex-wrap justify-between items-center gap-3"><div><p class="text-xs font-bold text-turq-700 uppercase tracking-widest">Inventory management MVP</p><h2 class="text-2xl font-extrabold text-slate-900">Medicine Inventory System</h2><p class="text-sm text-slate-500">Manage batch-level stock, expiry alerts, suppliers, purchasing and inventory reporting.</p></div><button class="inv-primary" onclick="openProduct()">+ Add medicine</button></div>
+<p class="text-xs text-slate-500">Demonstration data only: supplier names, costs, batch numbers and initial expiry dates are simulated. Stock is shared with the existing customer catalog in this browser. New products and metadata are staff-only until the public catalog is updated.</p>
+<div id="inv-kpis" class="grid grid-cols-2 lg:grid-cols-4 gap-3"></div>
+<div class="flex flex-wrap gap-2 border-b pb-3" id="inv-tabs"></div>
+<div id="inv-content"></div>
+<p id="inv-message" role="status" class="text-sm font-semibold text-turq-700"></p>
+</section>
+<dialog id="inv-dialog" class="rounded-2xl p-6 w-full max-w-xl shadow-xl"><form id="inv-form" class="space-y-4"><div class="flex justify-between"><h3 id="inv-dialog-title" class="text-xl font-bold"></h3><button type="button" onclick="document.getElementById('inv-dialog').close()">✕</button></div><div id="inv-fields" class="grid grid-cols-2 gap-3"></div><button class="inv-primary" type="submit">Save</button></form></dialog>
+<style>.inv-primary,.inv-btn{padding:9px 14px;border-radius:9px;font-size:13px;font-weight:700;background:#0f766e;color:white}.inv-btn{background:#f1f5f9;color:#334155}.inv-input{border:1px solid #cbd5e1;border-radius:8px;padding:9px;width:100%;font-size:13px}.inv-table{width:100%;font-size:12px;text-align:left;white-space:nowrap}.inv-table th,.inv-table td{padding:12px;border-bottom:1px solid #e2e8f0}.inv-table th{background:#f8fafc;color:#475569}.inv-card{border:1px solid #e2e8f0;border-radius:12px;padding:16px}.inv-label{font-size:12px;font-weight:600;color:#475569}dialog::backdrop{background:#041d2677}</style>
+<!-- 3. RECENT PURCHASES & CUSTOMER ORDERS -->
             <section id="orders-section" class="bg-white rounded-3xl border border-slate-200 shadow-sm p-6">
                 <div class="flex items-center justify-between mb-6">
                     <div>
@@ -474,7 +379,74 @@ function saveDemoStock(){try{localStorage.setItem(demoStockKey,JSON.stringify(pe
 const pickupStages=['Requested','Confirmed','Preparing','Ready for Pickup','Completed'];
 function renderDemoOrders(){const orders=readDemo(demoOrdersKey,[]).slice().reverse();document.getElementById('admin-demo-orders').innerHTML=orders.length?orders.map(o=>`<div class="border border-slate-200 rounded-2xl p-4"><div class="flex justify-between gap-2"><div><p class="text-sm font-extrabold text-slate-900">${escapeDemo(o.id||'Legacy demo order')}</p><p class="text-xs text-slate-500 mt-1">${escapeDemo(o.name)} · ${escapeDemo(o.fulfillment||'Delivery')}</p></div><span class="text-[10px] bg-turq-50 text-turq-700 font-bold rounded-full px-2 py-1 self-start">${escapeDemo(o.status)}</span></div><p class="text-xs text-slate-500 mt-2">${escapeDemo(o.pickupSlot||o.address||'')} · ${o.items?.length||0} line items</p>${o.rxReview?'<p class="text-xs text-purple-700 mt-2 font-semibold">Rx review needed (file not stored)</p>':''}<label class="block text-xs font-bold text-slate-700 mt-3">Update status<select onchange="changeDemoStatus('${escapeDemo(o.id)}',this.value)" class="w-full mt-1 border border-slate-200 rounded-xl p-2 text-sm">${pickupStages.map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select></label></div>`).join(''):'<div class="text-center py-12"><p class="font-bold text-slate-700">No demo reservations yet</p><p class="text-xs text-slate-500 mt-2">Create a pickup request from Search Medicine in this browser.</p></div>'}
 function changeDemoStatus(id,status){const orders=readDemo(demoOrdersKey,[]);const order=orders.find(o=>o.id===id);if(!order)return;if(!pickupStages.includes(status))return;order.status=status;try{localStorage.setItem(demoOrdersKey,JSON.stringify(orders))}catch(e){alert('Could not save status')}renderDemoOrders()}
-renderDemoStock();renderDemoOrders();window.addEventListener('storage',e=>{if(e.key===demoOrdersKey)renderDemoOrders();if(e.key===demoStockKey){pendingStock=readDemo(demoStockKey,{});renderDemoStock()}});
+renderDemoOrders();window.addEventListener('storage',e=>{if(e.key===demoOrdersKey)renderDemoOrders();if(e.key===demoStockKey){pendingStock=readDemo(demoStockKey,{});renderInventory()}});
+</script>
+
+<script>
+const $i=id=>document.getElementById(id), E=escapeDemo;
+const key='rb-advanced-inventory-v1';
+const datePlus=n=>{let d=new Date();d.setDate(d.getDate()+n);return d.toISOString().slice(0,10)}, today=()=>datePlus(0), money=n=>'$'+Number(n).toFixed(2), uid=()=>Date.now()+Math.floor(Math.random()*1000);
+let state=readDemo(key,null), tab='Products', query='', filter='All';
+if(!state){let old=readDemo('rb-inventory-meta-v2',{}), stock=readDemo(demoStockKey,{});state={suppliers:[{id:1,name:'Demo Medical Distributor',email:'',phone:'',lead:3},{id:2,name:'Demo Pharma Wholesale',email:'',phone:'',lead:5},{id:3,name:'Demo Healthcare Supply',email:'',phone:'',lead:7}],products:demoCatalog.map(p=>({...p,sku:'RB-'+String(p.id).padStart(4,'0'),min:10,cost:Math.round(p.price*65)/100,location:'Shelf '+(1+p.id%8),supplier:1+p.id%3})),batches:demoCatalog.map(p=>({id:p.id,pid:p.id,lot:'DEMO-'+p.id,qty:Number(stock[p.id]??p.stock),expiry:old[p.id]?.expiry||datePlus(p.id%9===0?-10:p.id%5===0?25:p.id%7===0?65:180+p.id*7),received:datePlus(-30),cost:Math.round(p.price*65)/100,hold:false})),orders:[],logs:[]};}
+state.batches.forEach((b,i)=>{if(!b.expiry || !Number.isFinite(Date.parse(b.expiry))) b.expiry=datePlus(i%9===0?-10:i%5===0?25:180+i*7)});
+const prod=id=>state.products.find(p=>p.id===Number(id)), sup=id=>state.suppliers.find(p=>p.id===Number(id)), lots=id=>state.batches.filter(b=>b.pid===id), days=b=>Math.round((Date.parse(b.expiry)-Date.parse(today()))/86400000), usable=b=>!b.hold&&days(b)>0, qty=id=>lots(id).filter(usable).reduce((a,b)=>a+b.qty,0), physical=id=>lots(id).reduce((a,b)=>a+b.qty,0), low=p=>qty(p.id)<=p.min;
+function save(){localStorage.setItem(key,JSON.stringify(state));let stock=readDemo(demoStockKey,{});state.products.forEach(p=>stock[p.id]=qty(p.id));localStorage.setItem(demoStockKey,JSON.stringify(stock));}
+function notify(s){save();$i('inv-message').textContent=s;renderInventory()}
+const btn=(label,action)=>`<button class="inv-btn" onclick="${action}">${label}</button>`;
+function table(headers,rows){return `<div class="overflow-x-auto"><table class="inv-table"><thead><tr>${headers.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')||`<tr><td colspan="${headers.length}">No records found.</td></tr>`}</tbody></table></div>`}
+const badge=(s,c='slate')=>`<span class="rounded-full px-2 py-1 text-xs font-bold bg-${c}-100 text-${c}-800">${E(s)}</span>`;
+const heading=s=>`<h3 class="font-bold text-lg mt-5 mb-3">${s}</h3>`;
+function field(name,label,value='',type='text',extra=''){return `<label class="inv-label">${label}<input class="inv-input mt-1" name="${name}" type="${type}" value="${E(value)}" ${extra}></label>`}
+function select(name,label,options,value){return `<label class="inv-label">${label}<select class="inv-input mt-1" name="${name}" required>${options.map(([v,t])=>`<option value="${E(v)}" ${String(v)===String(value)?'selected':''}>${E(t)}</option>`).join('')}</select></label>`}
+const suppliers=()=>state.suppliers.map(s=>[s.id,s.name]), medicines=()=>state.products.map(p=>[p.id,p.name]);
+function modal(title,fields,handler){$i('inv-dialog-title').textContent=title;$i('inv-fields').innerHTML=fields;$i('inv-form').onsubmit=e=>{e.preventDefault();try{handler(Object.fromEntries(new FormData(e.target)));$i('inv-dialog').close()}catch(err){alert(err.message)}};$i('inv-dialog').showModal()}
+const number=(n,min=0)=>{n=Number(n);if(!Number.isInteger(n)||n<min)throw Error('Enter a valid whole quantity');return n};
+function log(p,b,change,reason){state.logs.unshift({date:new Date().toLocaleString(),medicine:p.name,batch:b.lot,change,reason,balance:b.qty})}
+function openProduct(id){let p=prod(id);modal(p?'Edit medicine':'Add medicine',field('name','Medicine name',p?.name,'text','required')+field('sku','SKU',p?.sku||'RB-'+uid(),'text','required')+field('category','Category',p?.category,'text','required')+field('location','Shelf location',p?.location)+select('supplier','Preferred supplier',suppliers(),p?.supplier)+field('cost','Purchase cost ($)',p?.cost??0,'number','min="0" step="0.01" required')+field('price','Retail price ($)',p?.price??0,'number','min="0" step="0.01" required')+field('min','Reorder threshold',p?.min??10,'number','min="0" step="1" required'),v=>{if(state.products.some(x=>x.sku===v.sku&&x.id!==p?.id))throw Error('Duplicate SKU');let data={...v,id:p?.id||uid(),supplier:Number(v.supplier),cost:Number(v.cost),price:Number(v.price),min:number(v.min)};if(p)Object.assign(p,data);else state.products.push(data);notify('Medicine saved. Add a batch to record stock.')})}
+function addBatch(id){modal('Receive / add batch',select('pid','Medicine',medicines(),id)+field('lot','Batch / lot number','','text','required')+field('qty','Quantity',1,'number','min="1" step="1" required')+field('expiry','Expiry date',datePlus(365),'date','required')+field('received','Receipt date',today(),'date','required')+field('cost','Unit purchase cost ($)',prod(id)?.cost??0,'number','min="0" step="0.01" required'),v=>{let p=prod(v.pid);let b={...v,id:uid(),pid:p.id,qty:number(v.qty,1),cost:Number(v.cost),hold:false};state.batches.push(b);log(p,b,b.qty,'Goods receipt');notify('Batch received. Expired stock is excluded from available inventory.')})}
+function editBatch(id){let b=state.batches.find(x=>x.id===id);modal('Edit batch details',field('lot','Batch number',b.lot,'text','required')+field('expiry','Expiry date',b.expiry,'date','required')+field('received','Receipt date',b.received,'date','required'),v=>{Object.assign(b,v);log(prod(b.pid),b,0,'Batch details updated');notify('Batch updated')})}
+function adjust(id){let b=state.batches.find(x=>x.id===id);modal('Stock adjustment — '+b.lot,field('change','Quantity change (+ / −)',0,'number','step="1" required')+select('reason','Reason',['Sale','Damage','Expired disposal','Stock count correction','Supplier return','Other'].map(x=>[x,x]))+field('note','Reference / notes'),v=>{let n=Number(v.change);if(!Number.isInteger(n)||b.qty+n<0)throw Error('Invalid quantity');if(v.reason==='Sale'&&(!usable(b)||n>=0))throw Error('Sale must deduct usable stock');b.qty+=n;log(prod(b.pid),b,n,v.reason+' '+v.note);notify('Stock movement recorded')})}
+function hold(id){let b=state.batches.find(x=>x.id===id);b.hold=!b.hold;log(prod(b.pid),b,0,b.hold?'Quarantined':'Released from quarantine');notify('Batch status updated')}
+function openSupplier(id){let p=sup(id);modal(p?'Edit supplier':'Add supplier',field('name','Supplier name',p?.name,'text','required')+field('email','Email',p?.email,'email')+field('phone','Phone',p?.phone)+field('lead','Lead time (days)',p?.lead??3,'number','min="0" step="1" required'),v=>{let data={...v,id:p?.id||uid(),lead:number(v.lead)};if(p)Object.assign(p,data);else state.suppliers.push(data);notify('Supplier saved')})}
+function openReorder(id){let p=prod(id);modal('New supplier purchase request',select('pid','Medicine',medicines(),id)+select('supplier','Supplier',suppliers(),p?.supplier)+field('qty','Requested quantity',p?Math.max(1,p.min*2-qty(p.id)):20,'number','min="1" step="1" required')+field('cost','Estimated unit cost ($)',p?.cost??0,'number','min="0" step="0.01" required')+field('expected','Expected delivery',datePlus(sup(p?.supplier)?.lead??3),'date','required')+field('note','Notes / special requirements'),v=>{state.orders.unshift({...v,id:uid(),pid:Number(v.pid),supplier:Number(v.supplier),qty:number(v.qty,1),cost:Number(v.cost),received:0,date:today(),status:'Draft'});tab='Purchase orders';notify('Purchase request created. Review and mark requested when sent.')})}
+function orderStatus(id,status){let o=state.orders.find(x=>x.id===id);if(!o||['Received','Cancelled'].includes(o.status))return;o.status=status;notify('Order status updated locally. No supplier message was sent.')}
+function requestText(id){let o=state.orders.find(x=>x.id===id);return `Purchase request PO-${o.id}\nSupplier: ${sup(o.supplier).name}\nMedicine: ${prod(o.pid).name}\nQuantity: ${o.qty}\nExpected delivery: ${o.expected}\nNotes: ${o.note}`}
+function copyRequest(id){let t=requestText(id);if(navigator.clipboard)navigator.clipboard.writeText(t).then(()=>{$i('inv-message').textContent='Request copied. Send it to the supplier manually.'}).catch(()=>prompt('Copy purchase request',t));else prompt('Copy purchase request',t)}
+function receivePO(id){let o=state.orders.find(x=>x.id===id);if(!['Requested','Partially received'].includes(o.status))return;modal('Receive purchase order',field('qty','Delivered quantity',o.qty-o.received,'number',`min="1" max="${o.qty-o.received}" step="1" required`)+field('lot','Supplier batch number','','text','required')+field('expiry','Verified expiry date','','date','required')+field('cost','Actual unit cost ($)',o.cost,'number','min="0" step="0.01" required')+field('received','Delivery date',today(),'date','required'),v=>{let n=number(v.qty,1);if(n>o.qty-o.received)throw Error('Quantity exceeds outstanding order');let b={id:uid(),pid:o.pid,lot:v.lot,qty:n,expiry:v.expiry,cost:Number(v.cost),received:v.received,hold:false};state.batches.push(b);o.received+=n;o.status=o.received===o.qty?'Received':'Partially received';log(prod(o.pid),b,n,'PO-'+o.id);notify('Delivery recorded and inventory updated')})}
+function exportCSV(kind){let rows=kind==='products'?state.products.map(p=>({...p,available:qty(p.id),physical:physical(p.id)})):state[kind];if(!rows.length)return alert('No records');let keys=Object.keys(rows[0]),cell=v=>'"'+String(v??'').replace(/^[=+@-]/,"'$&").replace(/"/g,'""')+'"';let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([[keys.join(','),...rows.map(r=>keys.map(k=>cell(r[k])).join(','))].join('\n')],{type:'text/csv'}));a.download='inventory-'+kind+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function switchTab(t){tab=t;query='';filter='All';renderInventory()}
+function renderInventory(){let ps=state.products,bs=state.batches,os=state.orders;let metrics=[['Medicines',ps.length],['Available units',ps.reduce((a,p)=>a+qty(p.id),0)],['Low / out of stock',ps.filter(low).length],['Expiring within 90 days',bs.filter(b=>b.qty&&days(b)>0&&days(b)<=90).length],['Expired batches',bs.filter(b=>b.qty&&days(b)<=0).length],['Open purchase orders',os.filter(o=>!['Received','Cancelled'].includes(o.status)).length],['Physical stock cost',money(bs.reduce((a,b)=>a+b.qty*b.cost,0))],['Available retail value',money(ps.reduce((a,p)=>a+qty(p.id)*p.price,0))]];$i('inv-kpis').innerHTML=metrics.map(([a,b])=>`<div class="inv-card"><p class="text-xs text-slate-500">${a}</p><p class="text-2xl font-extrabold mt-2">${b}</p></div>`).join('');$i('inv-tabs').innerHTML=['Overview','Products','Batches & expiry','Stock movements','Suppliers','Purchase orders','Reports'].map(t=>`<button class="${tab===t?'inv-primary':'inv-btn'}" onclick="switchTab('${t}')">${t}</button>`).join('');let h='';
+if(tab==='Overview')h=heading('Replenishment alerts')+table(['Medicine','Available','Minimum','Suggested quantity','Action'],ps.filter(low).map(p=>[E(p.name),qty(p.id),p.min,Math.max(1,p.min*2-qty(p.id)),btn('Request medicine',`openReorder(${p.id})`)]))+heading('Expiry watchlist')+table(['Medicine','Batch','Expiry date','Days remaining','Units','Action'],bs.filter(b=>b.qty&&days(b)<=90).sort((a,b)=>days(a)-days(b)).map(b=>[E(prod(b.pid).name),E(b.lot),E(b.expiry),days(b),b.qty,btn('Review batch',`editBatch(${b.id})`)]));
+if(tab==='Products')h=`<div class="flex flex-wrap gap-3 mb-4"><input class="inv-input" style="max-width:320px" placeholder="Search medicine or SKU" value="${E(query)}" oninput="query=this.value;renderRows()"><select class="inv-input" style="max-width:180px" onchange="filter=this.value;renderRows()"><option>All</option><option>Low stock</option><option>Out of stock</option>${[...new Set(ps.map(p=>p.category))].map(c=>`<option>${E(c)}</option>`).join('')}</select></div><div id="inv-rows"></div>`;
+if(tab==='Batches & expiry')h=btn('+ Receive batch','addBatch()')+' <select class="inv-input" style="max-width:200px" onchange="filter=this.value;renderRows()"><option>All</option><option>Expired</option><option>Next 30 days</option><option>Next 90 days</option><option>Quarantined</option></select>'+heading('Batch register — earliest expiry first')+'<div id="inv-rows"></div>';
+if(tab==='Stock movements')h=heading('Stock transaction history')+table(['Date','Medicine','Batch','Change','Balance','Reason'],state.logs.map(l=>[E(l.date),E(l.medicine),E(l.batch),l.change,l.balance,E(l.reason)]));
+if(tab==='Suppliers')h=btn('+ Add supplier','openSupplier()')+heading('Supplier directory')+table(['Supplier','Email','Phone','Lead time','Action'],state.suppliers.map(s=>[E(s.name),E(s.email||'Not recorded'),E(s.phone||'Not recorded'),s.lead+' days',btn('Edit',`openSupplier(${s.id})`)]));
+if(tab==='Purchase orders')h=btn('+ New purchase request','openReorder()')+heading('Purchase order register')+table(['Reference / created','Medicine / supplier','Requested / received','Expected delivery','Estimated total','Status','Actions'],os.map(o=>['PO-'+o.id+'<br>'+E(o.date),E(prod(o.pid).name)+'<br>'+E(sup(o.supplier).name),o.qty+' / '+o.received,E(o.expected),money(o.qty*o.cost),E(o.status),btn('Copy request',`copyRequest(${o.id})`)+(o.status==='Draft'?' '+btn('Mark requested',`orderStatus(${o.id},'Requested')`):'')+(['Requested','Partially received'].includes(o.status)?' '+btn('Receive delivery',`receivePO(${o.id})`):'')+(['Draft','Requested','Partially received'].includes(o.status)?' '+btn('Cancel remainder',`orderStatus(${o.id},'Cancelled')`):'')]));
+if(tab==='Reports')h=heading('Inventory valuation by category')+table(['Category','Products','Available units','Physical cost','Retail value'],[...new Set(ps.map(p=>p.category))].map(c=>{let a=ps.filter(p=>p.category===c);return [E(c),a.length,a.reduce((s,p)=>s+qty(p.id),0),money(a.reduce((s,p)=>s+lots(p.id).reduce((v,b)=>v+b.qty*b.cost,0),0)),money(a.reduce((s,p)=>s+qty(p.id)*p.price,0))]}))+heading('Export records')+['products','batches','orders','logs','suppliers'].map(k=>btn('Export '+k,`exportCSV('${k}')`)).join(' ');
+$i('inv-content').innerHTML=h;if(['Products','Batches & expiry'].includes(tab))renderRows()}
+function renderRows(){if(tab==='Products')$i('inv-rows').innerHTML=table(['Medicine / SKU','Category','Shelf','Supplier','Cost / retail','Available / physical','Expiry date(s) — demo','Minimum','Actions'],state.products.filter(p=>(p.name+' '+p.sku).toLowerCase().includes(query.toLowerCase())&&(filter==='All'||filter===p.category||filter==='Low stock'&&low(p)||filter==='Out of stock'&&qty(p.id)===0)).map(p=>['<b>'+E(p.name)+'</b><br>'+E(p.sku),E(p.category),E(p.location),E(sup(p.supplier)?.name),money(p.cost)+' / '+money(p.price),qty(p.id)+' / '+physical(p.id),lots(p.id).length?lots(p.id).sort((a,b)=>days(a)-days(b)).map(b=>E(b.expiry)+' · '+(days(b)<=0?badge('Expired','rose'):days(b)<=90?badge('Expiring soon','amber'):badge('Valid','teal'))+'<br><small>'+E(b.lot)+' · '+b.qty+' units</small>').join('<br>'):'No batch — receive stock',p.min,btn('Edit',`openProduct(${p.id})`)+' '+btn('Receive',`addBatch(${p.id})`)+' '+btn('Request',`openReorder(${p.id})`)]));else $i('inv-rows').innerHTML=table(['Medicine','Batch','Received','Expiry','Days left','Quantity','Status','Actions'],state.batches.filter(b=>filter==='All'||filter==='Expired'&&days(b)<=0||filter==='Next 30 days'&&days(b)>0&&days(b)<=30||filter==='Next 90 days'&&days(b)>0&&days(b)<=90||filter==='Quarantined'&&b.hold).sort((a,b)=>days(a)-days(b)).map(b=>[E(prod(b.pid).name),E(b.lot),E(b.received),E(b.expiry),days(b),b.qty,b.hold?badge('Quarantined','amber'):days(b)<=0?badge('Expired','rose'):days(b)<=90?badge('Expiring soon','amber'):badge('Available','teal'),btn('Edit',`editBatch(${b.id})`)+' '+btn('Adjust',`adjust(${b.id})`)+' '+btn(b.hold?'Release':'Quarantine',`hold(${b.id})`)]))}
+state.counts ||= []; state.audit ||= []; state.products.forEach(p=>{p.barcode ||= '';p.manufacturer ||= '';p.safety ??= 5;p.daily ??= 1});
+const baseRender=renderInventory, baseNotify=notify;
+notify=function(message){state.audit.unshift({date:new Date().toLocaleString(),actor:'Demo staff',action:message});baseNotify(message)};
+const incoming=p=>state.orders.filter(o=>o.pid===p.id&&['Requested','Partially received','Approved'].includes(o.status)).reduce((n,o)=>n+o.qty-o.received,0);
+const point=p=>Math.max(p.min,Math.ceil(p.daily*(sup(p.supplier)?.lead||3)+p.safety));
+const suggested=p=>Math.max(0,Math.ceil(point(p)+p.daily*14-qty(p.id)-incoming(p)));
+function planning(id){let p=prod(id);modal('Medicine master & planning',field('barcode','Barcode',p.barcode)+field('manufacturer','Manufacturer',p.manufacturer)+field('daily','Estimated daily demand',p.daily,'number','min="0" step="0.1" required')+field('safety','Safety stock',p.safety,'number','min="0" step="1" required'),v=>{Object.assign(p,v,{daily:Number(v.daily),safety:number(v.safety)});notify('Planning parameters updated')})}
+function dispense(){modal('Record stock issue — FEFO',select('pid','Medicine',medicines())+field('qty','Units to issue',1,'number','min="1" step="1" required')+field('ref','Transaction reference','','text','required'),v=>{let p=prod(v.pid),n=number(v.qty,1);if(n>qty(p.id))throw Error('Insufficient usable stock');for(let b of lots(p.id).filter(usable).sort((a,b)=>days(a)-days(b))){let take=Math.min(n,b.qty);if(take){b.qty-=take;n-=take;log(p,b,-take,'Sale / FEFO '+v.ref)}if(!n)break}notify('Stock issue recorded using earliest expiry first')})}
+function countBatch(){modal('Record physical stock count',select('bid','Batch',state.batches.map(b=>[b.id,prod(b.pid).name+' / '+b.lot+' / system '+b.qty]))+field('actual','Physical quantity',0,'number','min="0" step="1" required')+field('note','Count notes'),v=>{let b=state.batches.find(b=>b.id===Number(v.bid));state.counts.unshift({id:uid(),bid:b.id,expected:b.qty,actual:number(v.actual),note:v.note,date:today(),status:'Pending review'});notify('Count submitted for review')})}
+function reconcile(id){let c=state.counts.find(c=>c.id===id),b=state.batches.find(b=>b.id===c.bid);if(c.status!=='Pending review')return;if(b.qty!==c.expected){alert('Stock changed since count; record a new count.');return}let delta=c.actual-b.qty;b.qty=c.actual;c.status='Reconciled';log(prod(b.pid),b,delta,'Physical count reconciliation');notify('Count reconciled')}
+function approve(id){let o=state.orders.find(o=>o.id===id);if(o.status==='Draft'){o.status='Approved';notify('Purchase request approved locally')}}
+function bulkRequest(){let list=state.products.filter(p=>qty(p.id)+incoming(p)<=point(p)&&suggested(p)>0&&!state.orders.some(o=>o.pid===p.id&&o.status==='Draft'));if(!list.length)return alert('No new replenishment needs');if(!confirm('Create '+list.length+' draft purchase requests?'))return;list.forEach(p=>state.orders.unshift({id:uid(),pid:p.id,supplier:p.supplier,qty:suggested(p),cost:p.cost,received:0,date:today(),expected:datePlus(sup(p.supplier)?.lead||3),status:'Draft',note:'Replenishment planning'}));notify('Draft replenishment requests created')}
+renderInventory=function(){baseRender();let tabs=['Planning','Stocktake','Expiry control','Procurement desk','Analytics','Audit trail'];$i('inv-tabs').insertAdjacentHTML('beforeend',tabs.map(t=>`<button class="${tab===t?'inv-primary':'inv-btn'}" onclick="switchTab('${t}')">${t}</button>`).join(''));let h='',ps=state.products,bs=state.batches,os=state.orders;
+if(tab==='Planning')h=heading('Replenishment workbench')+btn('Generate draft requests','bulkRequest()')+table(['Medicine / barcode','Manufacturer','Daily demand','Safety stock','Reorder point','Available','Incoming','Suggested order','Action'],ps.map(p=>[E(p.name)+'<br>'+E(p.barcode||'Not assigned'),E(p.manufacturer||'Not recorded'),p.daily,p.safety,point(p),qty(p.id),incoming(p),suggested(p),btn('Configure',`planning(${p.id})`)+' '+btn('Request',`openReorder(${p.id})`)]));
+if(tab==='Stocktake')h=heading('Physical inventory reconciliation')+btn('New count','countBatch()')+' '+btn('Record stock issue (FEFO)','dispense()')+table(['Date','Medicine / batch','System count','Physical count','Variance','Status','Action'],state.counts.map(c=>{let b=bs.find(b=>b.id===c.bid);return [c.date,E(prod(b.pid).name)+' / '+E(b.lot),c.expected,c.actual,c.actual-c.expected,E(c.status),c.status==='Pending review'?btn('Reconcile',`reconcile(${c.id})`):'—']}));
+if(tab==='Expiry control')h=heading('Expiry exposure & quarantine')+`<p class="text-sm mb-4">Stock cost at risk within 90 days: <b>${money(bs.filter(b=>days(b)<=90).reduce((n,b)=>n+b.qty*b.cost,0))}</b></p>`+table(['Medicine','Lot','Expiry','Days left','Units','Cost exposure','Status','Action'],bs.filter(b=>b.qty&&(days(b)<=90||b.hold)).sort((a,b)=>days(a)-days(b)).map(b=>[E(prod(b.pid).name),E(b.lot),b.expiry,days(b),b.qty,money(b.qty*b.cost),b.hold?'Quarantined':days(b)<=0?'Expired':'Expiring',btn('Adjust / return',`adjust(${b.id})`)+' '+btn(b.hold?'Release':'Quarantine',`hold(${b.id})`)]));
+if(tab==='Procurement desk')h=heading('Purchase request approval & delivery tracking')+btn('New request','openReorder()')+table(['Reference','Medicine','Supplier','Outstanding','Due','Status','Actions'],os.map(o=>['PO-'+o.id,E(prod(o.pid).name),E(sup(o.supplier).name),o.qty-o.received,o.expected,E(o.status)+(o.expected<today()&&['Requested','Partially received'].includes(o.status)?' · Overdue':''),o.status==='Draft'?btn('Approve',`approve(${o.id})`):o.status==='Approved'?btn('Copy request',`copyRequest(${o.id})`)+' '+btn('Mark sent',`orderStatus(${o.id},'Requested')`):['Requested','Partially received'].includes(o.status)?btn('Receive',`receivePO(${o.id})`):'—']))+heading('Supplier delivery summary')+table(['Supplier','Orders','Units received','Outstanding units'],state.suppliers.map(s=>{let a=os.filter(o=>o.supplier===s.id);return [E(s.name),a.length,a.reduce((n,o)=>n+o.received,0),a.filter(o=>['Requested','Partially received'].includes(o.status)).reduce((n,o)=>n+o.qty-o.received,0)]}));
+if(tab==='Analytics'){let groups=[['Expired',bs.filter(b=>days(b)<=0)],['1–30 days',bs.filter(b=>days(b)>0&&days(b)<=30)],['31–90 days',bs.filter(b=>days(b)>30&&days(b)<=90)],['Over 90 days',bs.filter(b=>days(b)>90)]];let total=Math.max(1,bs.reduce((n,b)=>n+b.qty,0));h=heading('Expiry distribution — physical units')+groups.map(([label,a])=>{let n=a.reduce((n,b)=>n+b.qty,0);return `<div class="mb-4"><div class="flex justify-between text-sm"><b>${label}</b><span>${n} units</span></div><div style="background:#e2e8f0;height:14px;border-radius:4px"><div style="background:#0d9488;height:14px;width:${100*n/total}%"></div></div></div>`}).join('')+heading('Recorded sales movement')+table(['Medicine','Units issued','Available units'],ps.map(p=>[E(p.name),state.logs.filter(l=>l.medicine===p.name&&l.reason.startsWith('Sale')).reduce((n,l)=>n-l.change,0),qty(p.id)]).sort((a,b)=>b[1]-a[1]).slice(0,15));}
+if(tab==='Audit trail')h=heading('Local activity history')+btn('Export activity','exportCSV(\'audit\')')+table(['Timestamp','Actor','Action'],state.audit.map(a=>[E(a.date),E(a.actor),E(a.action)]));
+if(tabs.includes(tab))$i('inv-content').innerHTML=h;
+};
+save();renderInventory();
 </script>
 </body>
 </html>
